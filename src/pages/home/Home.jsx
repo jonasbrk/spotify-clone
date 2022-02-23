@@ -19,7 +19,6 @@ const Home = () => {
                     <Header />
                     <Display />
                 </div>
-
             </div>
             <Player />
         </main>
