@@ -1,11 +1,10 @@
 import React from 'react';
+import './Header.styles.css'
 
-const Header = () => {
+export const Header = () => {
     return (
-        <div>
-            <div className='navBtnWrapper'></div>
-        </div>
+        <header>
+
+        </header>
     );
 };
-
-export default Header;

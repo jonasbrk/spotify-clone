@@ -1,12 +1,29 @@
 import React from "react";
 import './Home.styles.css'
-import Header from "../../components/Header/Header";
+import {
+    Header,
+    Display,
+    SideMenu,
+    Player
+} from '../../components/index'
+
 
 
 const Home = () => {
 
     return (
-        <Header />
+        <main>
+            <div className="main__section">
+                <SideMenu />
+                <div className="main__wrapper">
+                    <Header />
+                    <Display />
+                </div>
+
+            </div>
+            <Player />
+        </main>
+
     )
 }
 

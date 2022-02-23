@@ -1,0 +1,7 @@
+.side__nav {
+
+    display: flex;
+    height: 100%;
+    width: 270px;
+    background-color: black;
+}
