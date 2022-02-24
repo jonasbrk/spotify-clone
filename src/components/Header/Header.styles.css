@@ -1,6 +1,22 @@
 header {
 
     display: flex;
+    justify-content: space-between;
+    position: sticky;
     height: 64px;
-    background-color: #121212;
+    /* background-color: #121212; */
+    padding: 16px 32px;
+    box-sizing: border-box;
+}
+
+.header__wrapper {
+
+    display: flex;
+    gap: 16px;
+}
+
+.header__wrapper .button--icon {
+
+    height: 32px;
+    width: 32px;
 }

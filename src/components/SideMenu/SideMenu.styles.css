@@ -5,6 +5,7 @@
     height: 100%;
     width: 270px;
     min-width: 130px;
+    max-width: 395px;
     padding-top: 24px;
     box-sizing: border-box;
     background-color: black;
@@ -39,6 +40,7 @@
 .menu__wrapper .button--nav {
 
     height: 40px;
+    padding: 0 24px;
 }
 
 .create__playlist .button__icon svg, .liked__songs .button__icon svg {

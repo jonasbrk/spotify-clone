@@ -1,0 +1,126 @@
+.user__menu__btn {
+
+    height: 100%;
+    width: 180px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px;
+    border-radius: 50px;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    fill: white;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    
+}
+
+.user__menu__btn:hover {
+
+    background-color: #282828;
+}
+
+
+.user__picture {
+
+    height: 100%;
+    min-height: 100%;
+}
+
+.user__picture img {
+
+    height: 100%;
+    border-radius: 50%;
+}
+
+.user__name {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    
+}
+
+.user__name span {
+    font-size: 0.875rem;
+    height: 1rem;
+    max-width: 110px;
+    overflow: hidden;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user__icon {
+
+    height: 100%;
+    min-height: 100%;
+    margin-right: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user__menu__options {
+
+    position: absolute;
+    width: 180px;
+    border-radius: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    inset: 0px 0px auto auto;
+    background-color: #282828;
+    transform: translate(-31.7969px, 56px);
+    box-shadow: 0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.user--open {
+
+    opacity: 1;
+    visibility: inherit;
+}
+
+.menu__list,  .menu__list a{
+
+    text-decoration: none;
+    outline: none;
+    list-style: none;
+}
+
+.menu__list li,.menu__list li a {
+
+    width: 100%;
+    height: 40px;
+    color: white;
+}
+
+.menu__list {
+
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+.menu__list li {
+
+    display: flex;
+    border-radius: 4px;
+}
+.menu__list li  a{
+
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.menu__list li:hover {
+
+    background-color: rgba(255,255,255,.1);
+}

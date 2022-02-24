@@ -5,7 +5,6 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 0 24px;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
@@ -53,3 +52,24 @@
     box-sizing: border-box;
 }
 
+
+.button--icon {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 32px;
+    width: 32px;
+    border-radius: 100px;
+    background-color: black;
+    color: white;
+    fill: white;
+    opacity: 0.7;
+    transition: all 0.3s ease; 
+}
+
+.button--icon:hover {
+
+    opacity: 1;
+}
