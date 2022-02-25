@@ -1,10 +1,7 @@
 import React from 'react';
-import './Player.styles.css'
+import './Player.styles.css';
 
 export const Player = () => {
-    return (
-        <div className='player'>
-
-        </div>
-    );
+  const name = 'jorge';
+  return <div className="player"></div>;
 };

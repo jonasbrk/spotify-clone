@@ -1,10 +1,6 @@
 import React from 'react';
-import './Display.styles.css'
+import './Display.styles.css';
 
 export const Display = () => {
-    return (
-        <div className='display'>
-
-        </div>
-    );
+  return <div className="display"></div>;
 };
