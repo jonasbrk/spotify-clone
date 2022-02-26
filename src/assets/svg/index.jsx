@@ -17,4 +17,7 @@ export { PlayImg } from './Play.img';
 export { QueueImg } from './Queue.img';
 export { RandomImg } from './Random.img';
 export { ScreenImg } from './Screen.img';
-export { VolumeImg } from './Volume.img';
+export { VolumeHightImg } from './VolumeHightImg.img';
+export { VolumeMediumImg } from './VolumeMedium.img';
+export { VolumeLowImg } from './VolumeLow.img';
+export { VolumeMuteImg } from './VolumeMute.img';

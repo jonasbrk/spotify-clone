@@ -1,0 +1,5 @@
+.volume__button {
+  display: flex;
+  align-items: center;
+  width: 125px;
+}

@@ -2,24 +2,22 @@ import React, { useEffect, useState } from 'react';
 import './RangeSlider.styles.css';
 
 export const RangeSlider = (props) => {
-  const { inputMin, inputMax, handle } = props;
+  const { inputMin, inputMax, handle, progress, inputValue } = props;
   const [progressValue, setProgressValue] = useState('');
-  const [progressPercent, setProgressPercent] = useState('');
   const [marginLeft, setMarginLeft] = useState('');
-  const [inputValue, setInputValue] = useState('');
 
   const handleRangeProgress = (e) => {
     setProgressValue(e.target.value);
   };
 
   useEffect(() => {
-    const percentage = ((progressValue * 100) / inputMax).toFixed(4);
-    setProgressPercent(percentage);
-    setInputValue(progressValue);
-    const centerThumb = (12 / 100) * percentage * -1;
-    setMarginLeft(centerThumb);
     handle(progressValue);
   }, [progressValue]);
+
+  useEffect(() => {
+    const centerThumb = (12 / 100) * progress * -1;
+    setMarginLeft(centerThumb);
+  }, [progress, inputValue]);
   return (
     <div className="rangeSlider">
       <input
@@ -33,13 +31,13 @@ export const RangeSlider = (props) => {
         <div
           className="progressFill"
           style={{
-            transform: `translate(-${100 - progressPercent}%)`,
+            transform: `translate(-${100 - progress}%)`,
           }}
         ></div>
       </div>
       <div
         className="progressNode"
-        style={{ left: `${progressPercent}%`, marginLeft: `${marginLeft}px` }}
+        style={{ left: `${progress}%`, marginLeft: `${marginLeft}px` }}
       ></div>
     </div>
   );

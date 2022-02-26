@@ -2,7 +2,7 @@ import React from 'react';
 import './Button.styles.css';
 
 export const Button = (props) => {
-  const { type, custom, src, children } = props;
+  const { type, custom, src, children, onClick } = props;
 
   return (
     <>
@@ -20,7 +20,11 @@ export const Button = (props) => {
       )}
 
       {type === 'player' && (
-        <button href="#" className={`button--player ${custom ? custom : ''}`}>
+        <button
+          href="#"
+          onClick={onClick}
+          className={`button--player ${custom ? custom : ''}`}
+        >
           <div className="button__icon">{src}</div>
         </button>
       )}

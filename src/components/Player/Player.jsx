@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Player.styles.css';
-import { Button, RangeSlider } from '..';
+import { Button, RangeSlider, VolumeButton } from '..';
 import {
   RandomImg,
   BackTrackImg,
@@ -18,10 +18,18 @@ export const Player = () => {
   const [audioMinLength, setAudioMinLength] = useState(0);
   const [audioMaxLength, setAudioMaxLength] = useState(195);
   const [audioPlayedLength, setAudioPlayedLength] = useState(0);
+  const [AudioValue, setAudioValue] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   const handleProgressValue = (value) => {
+    setAudioValue(value);
     setAudioPlayedLength((value / 60).toFixed(2));
   };
+
+  useEffect(() => {
+    const percentage = ((AudioValue * 100) / audioMaxLength).toFixed(4);
+    setProgress(percentage);
+  }, [AudioValue]);
   return (
     <div className="player">
       <div className="player__display">
@@ -42,6 +50,8 @@ export const Player = () => {
             inputMin={audioMinLength}
             inputMax={audioMaxLength}
             handle={handleProgressValue}
+            progress={progress}
+            inputValue={AudioValue}
           />
           <div className="time-section--2">{audioMaxLength / 60}</div>
         </div>
@@ -50,6 +60,7 @@ export const Player = () => {
         <Button type="player" src={<MicImg />} />
         <Button type="player" src={<QueueImg />} />
         <Button type="player" src={<PcImg />} />
+        <VolumeButton />
       </div>
     </div>
   );

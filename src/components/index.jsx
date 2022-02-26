@@ -5,6 +5,7 @@ export { Player } from './Player/Player';
 export { Button } from './Button/Button';
 export { UserMenu } from './UserMenu/UserMenu';
 export { RangeSlider } from './RangeSlider/RangeSlider';
+export { VolumeButton } from './VolumeButton/VolumeButton';
 
 //hooks
 
