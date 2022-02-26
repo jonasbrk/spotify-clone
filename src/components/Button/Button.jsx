@@ -18,6 +18,12 @@ export const Button = (props) => {
           <div className="button__icon">{src}</div>
         </a>
       )}
+
+      {type === 'player' && (
+        <button href="#" className={`button--player ${custom ? custom : ''}`}>
+          <div className="button__icon">{src}</div>
+        </button>
+      )}
     </>
   );
 };

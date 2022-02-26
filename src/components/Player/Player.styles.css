@@ -1,6 +1,56 @@
 .player {
+  display: flex;
+  height: 91px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  background-color: #181818;
+}
+.player__display,
+.player__options,
+.player__controls,
+.player__section--1,
+.player__section--2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.player__controls {
+  width: 40%;
+  flex-direction: column;
+}
 
-    display: flex;
-    height: 91px;
-    background-color: #181818;
+.player__display,
+.player__options {
+  width: 30%;
+}
+
+.player__display {
+  justify-content: flex-start;
+}
+.player__options {
+  justify-content: flex-end;
+}
+.player__section--1 {
+  height: 32px;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.player__section--2 {
+  height: 16px;
+  gap: 16px;
+  width: 100%;
+  color: white;
+  font-size: 0.6875rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.player__controls .Play--buton {
+  background-color: white;
+  opacity: 1;
+}
+.player__controls .Play--buton svg {
+  fill: black;
 }

@@ -1,36 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useComponentVisible } from '../index';
 import './UserMenu.styles.css';
 import { ArrowDownMenuImg } from '../../assets/svg/index';
 
 export const UserMenu = () => {
-  const OptionsRef = useRef(null);
-  const menuRef = useRef(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleOpenMenu = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        OptionsRef.current &&
-        !OptionsRef.current.contains(event.target)
-      ) {
-        setMenuOpen(false);
-        console.log('oi');
-      }
-    };
-    document.addEventListener('mousedown', handleOpenMenu);
-    return () => {
-      document.removeEventListener('mousedown', handleOpenMenu);
-    };
-  }, [menuRef, OptionsRef]);
+  const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
 
   return (
     <>
       <button
-        ref={menuRef}
+        ref={ref1}
         className="user__menu__btn"
-        onClick={() => (!menuOpen ? setMenuOpen(true) : setMenuOpen(false))}
+        onClick={() => {
+          setIsComponentVisible((isComponentVisible) => !isComponentVisible);
+          console.log(isComponentVisible);
+        }}
       >
         <div className="user__picture">
           <img
@@ -50,8 +35,10 @@ export const UserMenu = () => {
         </div>
       </button>
       <div
-        ref={OptionsRef}
-        className={`user__menu__options ${menuOpen ? 'user--open' : ''}`}
+        ref={ref2}
+        className={`user__menu__options ${
+          isComponentVisible ? 'user--open' : ''
+        }`}
       >
         <ul className="menu__list">
           <li>
