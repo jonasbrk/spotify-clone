@@ -39,12 +39,33 @@
 }
 .player__section--2 {
   height: 16px;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
   color: white;
   font-size: 0.6875rem;
   text-transform: none;
   letter-spacing: normal;
+}
+
+.player__section--2 .time-section--1,
+.player__section--2 .time-section--2 {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  box-sizing: border-box;
+  width: 40px;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  text-transform: none;
+  letter-spacing: normal;
+  display: flex;
+  align-items: center;
+  color: #a7a7a7;
+}
+
+.player__section--2 .time-section--1 {
+  justify-content: flex-end;
+}
+.player__section--2 .time-section--2 {
+  justify-content: flex-start;
 }
 
 .player__controls .Play--buton {

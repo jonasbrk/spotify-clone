@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Player.styles.css';
 import { Button, RangeSlider } from '..';
 import {
@@ -15,6 +15,13 @@ import {
 } from '../../assets/svg/index';
 
 export const Player = () => {
+  const [audioMinLength, setAudioMinLength] = useState(0);
+  const [audioMaxLength, setAudioMaxLength] = useState(195);
+  const [audioPlayedLength, setAudioPlayedLength] = useState(0);
+
+  const handleProgressValue = (value) => {
+    setAudioPlayedLength((value / 60).toFixed(2));
+  };
   return (
     <div className="player">
       <div className="player__display">
@@ -30,7 +37,13 @@ export const Player = () => {
           <Button type="player" src={<LoopTrackImg />} />
         </div>
         <div className="player__section--2">
-          <RangeSlider />
+          <div className="time-section--1">{audioPlayedLength}</div>
+          <RangeSlider
+            inputMin={audioMinLength}
+            inputMax={audioMaxLength}
+            handle={handleProgressValue}
+          />
+          <div className="time-section--2">{audioMaxLength / 60}</div>
         </div>
       </div>
       <div className="player__options">
