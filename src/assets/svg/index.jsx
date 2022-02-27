@@ -8,6 +8,7 @@ export { ArrowUpImg } from './ArrowUp.img';
 export { ArrowLeftImg } from './ArrowLeft.img';
 export { ArrowRigthImg } from './ArrowRigth.img';
 export { ArrowDownMenuImg } from './ArrowDownMenu.img';
+export { ArrowUpMenuImg } from './ArrowUpMenu.img';
 export { BackTrackImg } from './BackTrack.img';
 export { NextTrackImg } from './NextTrack.img';
 export { LoopTrackImg } from './LoopTrack.img';
