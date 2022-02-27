@@ -14,7 +14,7 @@ export const MockedData = [
         imgLargeUrl:
           'https://i.scdn.co/image/ab67616d00001e025cb0ad54ecbe843607632fdd',
         liked: true,
-        isPlaying: true,
+        isPlaying: false,
         timeLength: 240000,
         playedTime: 0,
       },

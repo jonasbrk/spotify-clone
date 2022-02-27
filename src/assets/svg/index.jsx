@@ -15,6 +15,7 @@ export { LoopTrackImg } from './LoopTrack.img';
 export { MicImg } from './Mic.img';
 export { PcImg } from './Pc.img';
 export { PlayImg } from './Play.img';
+export { Pause } from './Pause.img';
 export { QueueImg } from './Queue.img';
 export { RandomImg } from './Random.img';
 export { ScreenImg } from './Screen.img';

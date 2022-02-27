@@ -66,6 +66,11 @@
   transform: scale(1);
 }
 
+.card__type--song .play--buton--card--playing {
+  opacity: 1;
+  visibility: inherit;
+  transform: translateY(0px);
+}
 .card__info {
   width: 100%;
   display: flex;

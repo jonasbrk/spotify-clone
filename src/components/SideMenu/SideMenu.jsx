@@ -13,7 +13,7 @@ import {
 } from '../../assets/svg/index';
 
 export const SideMenu = () => {
-  const { coverOpen, setCoverOpen } = useContext(CreateContext);
+  const { coverOpen, setCoverOpen, isPlaying } = useContext(CreateContext);
   return (
     <div className="side__nav">
       <div className="logo__container">
@@ -46,10 +46,7 @@ export const SideMenu = () => {
             coverOpen && 'cover__side--wrapper--open'
           }`}
         >
-          <img
-            src="	https://i.scdn.co/image/ab67616d00001e0299b303d231b6c96cef035a6b"
-            alt=""
-          />
+          <img src={isPlaying.imgLargeUrl} alt="" />
           <Button
             onClick={() => setCoverOpen((coverOpen) => !coverOpen)}
             type="icon"
