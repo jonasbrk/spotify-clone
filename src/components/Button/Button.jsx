@@ -14,9 +14,13 @@ export const Button = (props) => {
       )}
 
       {type === 'icon' && (
-        <a href="#" className={`button--icon ${custom ? custom : ''}`}>
+        <button
+          href="#"
+          onClick={onClick}
+          className={`button--icon ${custom ? custom : ''}`}
+        >
           <div className="button__icon">{src}</div>
-        </a>
+        </button>
       )}
 
       {type === 'player' && (

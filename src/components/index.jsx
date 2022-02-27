@@ -6,6 +6,7 @@ export { Button } from './Button/Button';
 export { UserMenu } from './UserMenu/UserMenu';
 export { RangeSlider } from './RangeSlider/RangeSlider';
 export { VolumeButton } from './VolumeButton/VolumeButton';
+export { SongButton } from './SongButton/SongButton';
 
 //hooks
 

@@ -28,6 +28,7 @@
 
 .player__display {
   justify-content: flex-start;
+  transition: transform 0.3s ease;
 }
 .player__options {
   justify-content: flex-end;
@@ -74,4 +75,8 @@
 }
 .player__controls .Play--buton svg {
   fill: black;
+}
+
+.player__display--close {
+  transform: translate(-72px);
 }

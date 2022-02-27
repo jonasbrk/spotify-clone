@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Player.styles.css';
-import { Button, RangeSlider, VolumeButton } from '..';
+import { Button, RangeSlider, VolumeButton, SongButton } from '..';
+import { CreateContext } from '../../pages/home/Home';
 import {
   RandomImg,
   BackTrackImg,
@@ -20,6 +21,7 @@ export const Player = () => {
   const [audioPlayedLength, setAudioPlayedLength] = useState(0);
   const [AudioValue, setAudioValue] = useState(0);
   const [progress, setProgress] = useState(0);
+  const { coverOpen, setCoverOpen } = useContext(CreateContext);
 
   const handleProgressValue = (value) => {
     setAudioValue(value);
@@ -32,7 +34,10 @@ export const Player = () => {
   }, [AudioValue]);
   return (
     <div className="player">
-      <div className="player__display">
+      <div
+        className={`player__display ${coverOpen && 'player__display--close'}`}
+      >
+        <SongButton src="https://i.scdn.co/image/ab67616d0000485199b303d231b6c96cef035a6b" />
         <Button type="player" src={<LikeImg />} />
         <Button type="player" src={<ScreenImg />} />
       </div>

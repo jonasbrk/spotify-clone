@@ -58,7 +58,8 @@
   transition: all 0.3s ease;
 }
 
-.button--player {
+.button--player,
+.button--icon {
   cursor: auto;
   border: none;
 }

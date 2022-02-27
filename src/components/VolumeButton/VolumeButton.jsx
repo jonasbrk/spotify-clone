@@ -10,7 +10,6 @@ import {
 
 export const VolumeButton = () => {
   const [volume, setVolume] = useState(50);
-  const [volumeValue, setVolumeValue] = useState(50);
   const [volumeImg, setVolumeImg] = useState(50);
   const [progress, setProgress] = useState(0);
   const [buttonClick, setButtonClick] = useState(false);
@@ -42,7 +41,6 @@ export const VolumeButton = () => {
         inputMax={100}
         handle={handleVolume}
         progress={progress}
-        // buttonClick={buttonClick}
       />
     </div>
   );
