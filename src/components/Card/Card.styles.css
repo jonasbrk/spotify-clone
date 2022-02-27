@@ -1,0 +1,108 @@
+.card__type--song {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 180px;
+  max-width: 220px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #181818;
+  border-radius: 8px;
+  gap: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.card__type--song:hover {
+  background-color: #282828;
+}
+
+.card__img,
+.card__img img {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+}
+
+.card__img img {
+  border-radius: 8px;
+}
+
+.play--buton--card {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 48px;
+  height: 48px;
+  background-color: #1ed760;
+  box-shadow: 0 8px 8px rgb(0 0 0 / 30%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+}
+
+.play--buton--card svg {
+  fill: #000;
+  height: 17px;
+}
+
+.card__type--song:hover .play--buton--card {
+  opacity: 1;
+  visibility: inherit;
+  transform: translateY(0px);
+}
+
+.card__type--song .play--buton--card:hover {
+  transform: scale(1.04);
+  background-color: #1fdf64;
+  transition: none;
+}
+
+.card__type--song .play--buton--card:active {
+  transform: scale(0.8);
+  background-color: #169c46;
+  box-shadow: none;
+  transform: scale(1);
+}
+
+.card__info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.card__info a,
+.card__info {
+  color: white;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-transform: none;
+  letter-spacing: normal;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.card__info .card__autor a,
+.card__info .card__autor {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #a7a7a7;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  text-transform: none;
+  letter-spacing: normal;
+  box-sizing: border-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.card__info a:hover {
+  text-decoration: underline;
+  color: white;
+}
