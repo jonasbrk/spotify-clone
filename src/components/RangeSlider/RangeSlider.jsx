@@ -3,8 +3,8 @@ import './RangeSlider.styles.css';
 
 export const RangeSlider = (props) => {
   const { inputMin, inputMax, handle, progress, inputValue } = props;
-  const [progressValue, setProgressValue] = useState('');
-  const [marginLeft, setMarginLeft] = useState('');
+  const [progressValue, setProgressValue] = useState(progress);
+  const [marginLeft, setMarginLeft] = useState(0);
 
   const handleRangeProgress = (e) => {
     setProgressValue(e.target.value);

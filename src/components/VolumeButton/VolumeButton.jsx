@@ -11,7 +11,7 @@ import {
 export const VolumeButton = () => {
   const [volume, setVolume] = useState(50);
   const [volumeImg, setVolumeImg] = useState(50);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(50);
   const [buttonClick, setButtonClick] = useState(false);
 
   const handleVolume = (e) => {
@@ -26,6 +26,7 @@ export const VolumeButton = () => {
     if (percentage >= 1 && percentage <= 33) setVolumeImg(<VolumeLowImg />);
     if (percentage > 33 && percentage < 66) setVolumeImg(<VolumeMediumImg />);
     if (percentage >= 66) setVolumeImg(<VolumeHightImg />);
+    console.log(volume);
   }, [volume, buttonClick]);
 
   return (
@@ -36,7 +37,7 @@ export const VolumeButton = () => {
         src={volumeImg}
       />
       <RangeSlider
-        CustomValue={volume}
+        inputValue={volume}
         inputMin={0}
         inputMax={100}
         handle={handleVolume}
