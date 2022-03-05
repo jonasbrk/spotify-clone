@@ -1,4 +1,5 @@
 export { LogoImg } from './Logo.img';
+export { LogoSmallImg } from './LogoSmall.img';
 export { HomeImg } from './Home.img';
 export { SearchImg } from './Search.img';
 export { LibraryImg } from './Library.img';

@@ -1,26 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import './DisplayRow.styles.css';
-import { Card } from '..';
+import { Card } from '../index';
 
 export const DisplayRow = (props) => {
-  const { title, description, itens, id, itensLength } = props;
+  const { title, data, displayRef } = props;
+  const rowRef = useRef(null);
+  const [itensLength, setItensLength] = useState('');
+  const [newArray, setNewArray] = useState(
+    data.filter((e, index) => index < itensLength - 1),
+  );
 
-  const [newArray, setNewArray] = useState([]);
+  const handleLength = () => {
+    if (Math.floor(rowRef.current.offsetWidth / 196) != itensLength) {
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 196));
+    }
+  };
 
   useEffect(() => {
-    if (itensLength < 2) return itens.filter((e) => e == 0);
-    setNewArray(itens.filter((e, index) => index < itensLength - 1));
-  }, [itensLength]);
+    if (!itensLength) {
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 196));
+    }
+
+    window.addEventListener('resize', () => handleLength());
+    return () => {
+      window.removeEventListener('resize', () => handleLength());
+    };
+  });
+
+  useEffect(() => {
+    if (itensLength < 2) return data.filter((e) => e == 0);
+    if (data) {
+      setNewArray(data.filter((e, index) => index < itensLength - 1));
+    }
+    console.log('oi');
+  }, [itensLength, data]);
+
   return (
-    <div className="main__row">
+    <div ref={rowRef} className="main__row">
       <div className="main__row--header">
         <h2>{title}</h2>
-        {itens.length < itensLength ? '' : <a href="#">VER TUDO</a>}
+        {data.length < itensLength ? '' : <a href="#">VER TUDO</a>}
       </div>
       <div className="main__row--main">
-        {newArray.map((e) => {
-          return <Card itemInfo={e} key={e.index} />;
-        })}
+        {newArray ? (
+          newArray.map((e, index) => {
+            return <Card itemInfo={e} key={index} />;
+          })
+        ) : (
+          <h1>loading</h1>
+        )}
       </div>
     </div>
   );

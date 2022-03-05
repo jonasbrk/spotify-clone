@@ -26,7 +26,6 @@ export const VolumeButton = () => {
     if (percentage >= 1 && percentage <= 33) setVolumeImg(<VolumeLowImg />);
     if (percentage > 33 && percentage < 66) setVolumeImg(<VolumeMediumImg />);
     if (percentage >= 66) setVolumeImg(<VolumeHightImg />);
-    console.log(volume);
   }, [volume, buttonClick]);
 
   return (

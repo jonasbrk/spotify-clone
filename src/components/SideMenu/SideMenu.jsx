@@ -46,7 +46,7 @@ export const SideMenu = () => {
             coverOpen && 'cover__side--wrapper--open'
           }`}
         >
-          <img src={isPlaying.imgLargeUrl} alt="" />
+          <img src={isPlaying.album.images[1].url} alt="" />
           <Button
             onClick={() => setCoverOpen((coverOpen) => !coverOpen)}
             type="icon"
