@@ -32,16 +32,19 @@ export const Display = (props) => {
   return (
     <>
       <div className="display" ref={displayRef}>
-        {/* <DisplayRow
-        data={loadData.recentPlayedData.items.filter((e) => {
-          e.track;
-        })}
-      /> */}
         <DisplayRow
+          title="Tocado recentemente"
+          data={loadData.recentPlayedData.items.map((e) => {
+            return e.track;
+          })}
+        />
+        <DisplayRow
+          title="Feito para você"
           displayRef={displayRef}
           data={loadData.recommendationsData.tracks}
         />
         <DisplayRow
+          title="As mais ouvidas por você"
           displayRef={displayRef}
           data={loadData.topUserItemsTracks.items}
         />

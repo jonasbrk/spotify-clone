@@ -7,11 +7,34 @@ import { axios } from 'axios';
 
 export const CreateContext = createContext();
 const Home = (props) => {
-  const { recentPlaylist, loadData, SpotifyApi } = props;
+  const { recentPlaylist, loadData, SpotifyApi, accessToken } = props;
   const [coverOpen, setCoverOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(
     loadData.recentPlayedData.items[0].track,
   );
+
+  const [playbackState, setPlaybackState] = useState({
+    loading: false,
+    play: false,
+    shuffle: false,
+    repeat: false,
+    progress: 0,
+    duration: 0,
+    track_window: {
+      current_track: '',
+      previous_tracks: [''],
+      next_tracks: [''],
+    },
+  });
+  const [player, setPlayer] = useState(undefined);
+  const [playerCurrentProgress, setPlayerCurrentProgress] = useState('');
+  // const [is_paused, setPaused] = useState(false);
+  // const [is_active, setActive] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(
+    loadData.recentPlayedData.items[0].track,
+  );
+
+  const [currentDeviceId, setCurrentDeviceId] = useState('');
   useEffect(() => {
     console.log(loadData);
   }, [loadData]);
@@ -25,6 +48,15 @@ const Home = (props) => {
         setCoverOpen,
         isPlaying,
         setIsPlaying,
+        accessToken,
+        setCurrentDeviceId,
+        currentDeviceId,
+        setPlayer,
+        player,
+        setPlaybackState,
+        playbackState,
+        setCurrentTrack,
+        currentTrack,
       }}
     >
       <main ref={props.homeRef} className="home">

@@ -13,7 +13,8 @@ import {
 } from '../../assets/svg/index';
 
 export const SideMenu = () => {
-  const { coverOpen, setCoverOpen, isPlaying } = useContext(CreateContext);
+  const { coverOpen, setCoverOpen, isPlaying, currentTrack } =
+    useContext(CreateContext);
   return (
     <div className="side__nav">
       <div className="logo__container">
@@ -46,7 +47,7 @@ export const SideMenu = () => {
             coverOpen && 'cover__side--wrapper--open'
           }`}
         >
-          <img src={isPlaying.album.images[1].url} alt="" />
+          <img src={currentTrack.album.images[0].url} alt="" />
           <Button
             onClick={() => setCoverOpen((coverOpen) => !coverOpen)}
             type="icon"

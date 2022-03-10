@@ -40,7 +40,7 @@ const App = () => {
     axios(URL, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + btoa(client_id + ':' + accessToken),
+        Authorization: 'Bearer ' + accessToken,
       },
       data: Body,
       method: Type,
@@ -64,7 +64,11 @@ const App = () => {
             isLoading ? (
               <h1 ref={homeRef}>loading</h1>
             ) : (
-              <Home SpotifyApi={SpotifyApi} loadData={loadData} />
+              <Home
+                accessToken={accessToken}
+                SpotifyApi={SpotifyApi}
+                loadData={loadData}
+              />
             )
           }
         />

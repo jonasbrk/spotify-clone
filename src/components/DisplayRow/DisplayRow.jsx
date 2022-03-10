@@ -11,14 +11,14 @@ export const DisplayRow = (props) => {
   );
 
   const handleLength = () => {
-    if (Math.floor(rowRef.current.offsetWidth / 196) != itensLength) {
-      setItensLength(Math.floor(rowRef.current.offsetWidth / 196));
+    if (Math.floor(rowRef.current.offsetWidth / 192) != itensLength) {
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 192));
     }
   };
 
   useEffect(() => {
     if (!itensLength) {
-      setItensLength(Math.floor(rowRef.current.offsetWidth / 196));
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 192));
     }
 
     window.addEventListener('resize', () => handleLength());
@@ -32,7 +32,6 @@ export const DisplayRow = (props) => {
     if (data) {
       setNewArray(data.filter((e, index) => index < itensLength - 1));
     }
-    console.log('oi');
   }, [itensLength, data]);
 
   return (

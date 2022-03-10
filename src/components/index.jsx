@@ -9,8 +9,10 @@ export { RangeSlider } from './RangeSlider/RangeSlider';
 export { VolumeButton } from './VolumeButton/VolumeButton';
 export { SongButton } from './SongButton/SongButton';
 export { Card } from './Card/Card';
+export { DeviceButton } from './DeviceButton/DeviceButton';
 
 //hooks
 
 export { useComponentVisible } from './Hooks/useOutsideClick';
 export { useContainerDimensions } from './Hooks/useContainerDimensions';
+export { useMinutesString } from './Hooks/useMinutesString';

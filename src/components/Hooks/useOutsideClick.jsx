@@ -15,6 +15,10 @@ export function useComponentVisible(initialIsVisible) {
     ) {
       setIsComponentVisible(false);
     }
+
+    if (ref1.current && !ref2.current && !ref1.current.contains(event.target)) {
+      setIsComponentVisible(false);
+    }
   };
 
   useEffect(() => {

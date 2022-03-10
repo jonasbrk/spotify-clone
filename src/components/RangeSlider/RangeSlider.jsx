@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './RangeSlider.styles.css';
 
 export const RangeSlider = (props) => {
-  const { inputMin, inputMax, handle, progress, inputValue } = props;
+  const {
+    inputMin,
+    inputMax,
+    handle,
+    progress,
+    inputValue,
+    onMouseDown,
+    onMouseUp,
+  } = props;
   const [progressValue, setProgressValue] = useState(progress);
   const [marginLeft, setMarginLeft] = useState(0);
 
@@ -26,6 +34,8 @@ export const RangeSlider = (props) => {
         max={inputMax}
         value={inputValue}
         onChange={(e) => handleRangeProgress(e)}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
       />
       <div className="progressBar">
         <div

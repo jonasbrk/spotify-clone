@@ -3,10 +3,37 @@ import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { CreateContext } from '../../pages/home/Home';
+import { Player } from '../Player/Player';
 
 export const Card = (props) => {
-  const { setIsPlaying } = useContext(CreateContext);
+  const { SpotifyApi, currentDeviceId, currentTrack, player } =
+    useContext(CreateContext);
   const { itemInfo } = props;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const handlePlay = () => {
+    if (currentTrack.uri != itemInfo.uri) {
+      SpotifyApi(
+        'PUT',
+        'https://api.spotify.com/v1/me/player/play?device_id=' +
+          currentDeviceId,
+        {
+          context_uri: itemInfo.album.uri,
+          offset: { position: itemInfo.track_number - 1 },
+          position_ms: 0,
+        },
+      );
+    } else {
+      player.togglePlay().then(() => {
+        console.log('Toggled playback!');
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
+      setIsPlaying(true);
+    } else setIsPlaying(false);
+  }, [currentTrack]);
 
   return (
     <div className="card__type--song">
@@ -14,31 +41,36 @@ export const Card = (props) => {
         <img src={itemInfo.album.images[1].url} alt="" />
         <Button
           onClick={() => {
-            setIsPlaying(itemInfo);
+            handlePlay();
+            console.log(itemInfo.id);
+            console.log(itemInfo.album.id);
+            console.log(currentTrack.id);
+            console.log(currentTrack);
+            console.log(itemInfo);
           }}
           type="player"
           custom={`play--buton--card ${
-            !itemInfo.isPlaying && 'play--buton--card--playing'
+            isPlaying && 'play--buton--card--playing'
           }`}
-          src={itemInfo.isPlaying ? <PlayImg /> : <Pause />}
+          src={isPlaying ? <PlayImg /> : <Pause />}
         />
       </div>
       <div className="card__info">
         <span className="card__title">
           {itemInfo.album.href ? (
-            <a href={itemInfo.album.href}>{itemInfo.album.name}</a>
+            <a href={itemInfo.album.href}>{itemInfo.name}</a>
           ) : (
             itemInfo.album.name
           )}
         </span>
         <span className="card__autor">
-          {itemInfo.album.artists.href ? (
-            <a href={itemInfo.album.artists.href}>
-              {itemInfo.album.artists[0].name}
-            </a>
-          ) : (
-            itemInfo.album.artists[0].name
-          )}
+          {itemInfo.artists.map((e, index) => {
+            return (
+              <a key={index} href={e.href}>
+                {e.name}
+              </a>
+            );
+          })}
         </span>
       </div>
     </div>
