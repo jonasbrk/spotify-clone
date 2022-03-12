@@ -1,11 +1,12 @@
 .player {
   display: flex;
-  height: 91px;
+  height: 10%;
   padding: 0 16px;
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
   background-color: #181818;
+  border-top: 1px solid #282828;
 }
 .player__display,
 .player__options,
@@ -79,4 +80,22 @@
 
 .player__display--close {
   transform: translate(-72px);
+}
+
+.player__controls .button__player--active {
+  fill: #1db954;
+  position: relative;
+}
+
+.player__controls .button__player--active::after {
+  background-color: #1db954;
+  border-radius: 50%;
+  bottom: 0;
+  content: '';
+  display: block;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 4px;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useComponentVisible } from '../index';
+import { useComponentVisible } from '../../utils/useOutsideClick';
 import './UserMenu.styles.css';
-import { ArrowDownMenuImg } from '../../assets/svg/index';
+import { ArrowDownMenuImg, ArrowUpMenuImg } from '../../assets/svg/index';
 
 export const UserMenu = () => {
   const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
@@ -31,7 +31,7 @@ export const UserMenu = () => {
           <span>João Pedro Tome Caires Lopes</span>
         </div>
         <div className="user__icon">
-          <ArrowDownMenuImg />
+          {isComponentVisible ? <ArrowUpMenuImg /> : <ArrowDownMenuImg />}
         </div>
       </button>
       <div

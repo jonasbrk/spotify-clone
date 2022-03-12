@@ -6,6 +6,7 @@ header {
   /* background-color: #121212; */
   padding: 16px 32px;
   box-sizing: border-box;
+  z-index: 2;
 }
 
 .header__wrapper {

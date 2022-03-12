@@ -7,7 +7,14 @@ export const Button = (props) => {
   return (
     <>
       {type === 'nav' && (
-        <a href="#" className={`button--nav ${custom ? custom : ''}`}>
+        <a className={`button--nav ${custom ? custom : ''}`}>
+          <div className="button__icon">{src}</div>
+          {children && <span className="button__title">{children}</span>}
+        </a>
+      )}
+
+      {type === 'login' && (
+        <a onClick={onClick} className={`button--nav ${custom ? custom : ''}`}>
           <div className="button__icon">{src}</div>
           {children && <span className="button__title">{children}</span>}
         </a>
