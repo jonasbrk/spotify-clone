@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useComponentVisible } from '../index';
+import { useComponentVisible } from '../../utils/useOutsideClick';
 import './UserMenu.styles.css';
 import { ArrowDownMenuImg, ArrowUpMenuImg } from '../../assets/svg/index';
 

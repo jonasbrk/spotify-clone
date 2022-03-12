@@ -8,13 +8,14 @@ import {
   VolumeMuteImg,
 } from '../../assets/svg/index';
 import { CreateContext } from '../../pages/home/Home';
+import { PlayerContext } from '../../utils/context';
 
 export const VolumeButton = () => {
   const [volume, setVolume] = useState(50);
   const [volumeImg, setVolumeImg] = useState(<VolumeMediumImg />);
   const [progress, setProgress] = useState(50);
   const [buttonClick, setButtonClick] = useState(false);
-  const { player } = useContext(CreateContext);
+  const { player } = useContext(PlayerContext);
 
   useEffect(() => {
     if (player) {

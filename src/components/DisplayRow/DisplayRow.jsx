@@ -3,7 +3,7 @@ import './DisplayRow.styles.css';
 import { Card } from '../index';
 
 export const DisplayRow = (props) => {
-  const { title, data, displayRef } = props;
+  const { title, data } = props;
   const rowRef = useRef(null);
   const [itensLength, setItensLength] = useState('');
   const [newArray, setNewArray] = useState(
@@ -11,14 +11,14 @@ export const DisplayRow = (props) => {
   );
 
   const handleLength = () => {
-    if (Math.floor(rowRef.current.offsetWidth / 192) != itensLength) {
-      setItensLength(Math.floor(rowRef.current.offsetWidth / 192));
+    if (Math.floor(rowRef.current.offsetWidth / 204) != itensLength) {
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 204));
     }
   };
 
   useEffect(() => {
     if (!itensLength) {
-      setItensLength(Math.floor(rowRef.current.offsetWidth / 192));
+      setItensLength(Math.floor(rowRef.current.offsetWidth / 204));
     }
 
     window.addEventListener('resize', () => handleLength());

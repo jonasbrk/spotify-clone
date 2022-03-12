@@ -3,19 +3,15 @@ import { Button } from '../Button/Button';
 import { PcImg, PcDeviceImg, DevicePlayingImg } from '../../assets/svg';
 import './DeviceButton.styles.css';
 import { CreateContext } from '../../pages/home/Home';
-import { useComponentVisible } from '../Hooks/useOutsideClick';
+import { useComponentVisible } from '../../utils/useOutsideClick';
 import axios from 'axios';
+import { DeviceContext, TokenContext } from '../../utils/context';
 
 export const DeviceButton = () => {
-  const {
-    SpotifyApi,
-    devices,
-    accessToken,
-    currentDeviceId,
-    setCurrentDeviceId,
-  } = useContext(CreateContext);
   const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+  const { accessToken } = useContext(TokenContext);
+  const { currentDeviceId, setCurrentDeviceId } = useContext(DeviceContext);
 
   const [devicesList, setDevicesList] = useState([]);
   const [showDevices, setShowDevices] = useState(false);

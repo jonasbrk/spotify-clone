@@ -4,18 +4,31 @@ import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { CreateContext } from '../../pages/home/Home';
 import { Player } from '../Player/Player';
+import { SpotifyApi } from '../../utils/getByToken';
+import {
+  DeviceContext,
+  PlayerContext,
+  TokenContext,
+  TrackContext,
+} from '../../utils/context';
 
 export const Card = (props) => {
-  const { SpotifyApi, currentDeviceId, currentTrack, player } =
-    useContext(CreateContext);
+  const { currentDeviceId } = useContext(DeviceContext);
+  const { currentTrack } = useContext(TrackContext);
+  const { player } = useContext(PlayerContext);
+  const { accessToken } = useContext(TokenContext);
+
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
   const handlePlay = () => {
+    console.log(currentDeviceId);
     if (currentTrack.uri != itemInfo.uri) {
       SpotifyApi(
         'PUT',
+        accessToken,
         'https://api.spotify.com/v1/me/player/play?device_id=' +
           currentDeviceId,
+
         {
           context_uri: itemInfo.album.uri,
           offset: { position: itemInfo.track_number - 1 },
@@ -46,6 +59,7 @@ export const Card = (props) => {
             console.log(itemInfo.album.id);
             console.log(currentTrack.id);
             console.log(currentTrack);
+            console.log(itemInfo);
             console.log(itemInfo);
           }}
           type="player"

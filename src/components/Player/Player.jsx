@@ -6,9 +6,15 @@ import {
   VolumeButton,
   SongButton,
   DeviceButton,
-  useMinutesString,
 } from '..';
 import { CreateContext } from '../../pages/home/Home';
+import {
+  DeviceContext,
+  isCoverOpen,
+  PlayerContext,
+  TokenContext,
+  TrackContext,
+} from '../../utils/context';
 import {
   RandomImg,
   BackTrackImg,
@@ -23,30 +29,36 @@ import {
   Pause,
 } from '../../assets/svg/index';
 import axios from 'axios';
+import { SpotifyApi } from '../../utils/getByToken';
 
-export const Player = () => {
-  const [audioMinLength, setAudioMinLength] = useState(0);
-  const [audioMaxLength, setAudioMaxLength] = useState(195);
+import { useMinutesString } from '../../utils/useMinutesString';
+
+export const Player = (props) => {
+  const [audioMaxLength, setAudioMaxLength] = useState(0);
   const [audioPlayedLength, setAudioPlayedLength] = useState(0);
   const [audioValue, setAudioValue] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [playbackState, setPlaybackState] = useState({});
+  // const {
+  //   // isPlaying,
+  //   // accessToken,
+  //   // setCurrentTrack,
+  //   // currentTrack,
+  //   // SpotifyApi,
+  //   // setCurrentDeviceId,
+  //   // currentDeviceId,
+  //   // setPlayer,
+  //   // player,
+  //   // setPlaybackState,
+  //   // playbackState,
+  // } = useContext(CreateContext);
 
-  const {
-    coverOpen,
-    setCoverOpen,
-    isPlaying,
-    accessToken,
-    setCurrentTrack,
-    currentTrack,
-    SpotifyApi,
-    setCurrentDeviceId,
-    currentDeviceId,
-    setPlayer,
-    player,
-    setPlaybackState,
-    playbackState,
-  } = useContext(CreateContext);
+  const { accessToken } = useContext(TokenContext);
+  const { coverOpen } = useContext(isCoverOpen);
+  const { player, setPlayer } = useContext(PlayerContext);
+  const { currentTrack, setCurrentTrack } = useContext(TrackContext);
+  const { currentDeviceId, setCurrentDeviceId } = useContext(DeviceContext);
 
   const handleProgressValue = (value) => {
     setAudioValue(Number(value));
@@ -55,12 +67,14 @@ export const Player = () => {
   useEffect(() => {
     if (playbackState.loading) {
       setAudioValue(playbackState.progress);
-      setAudioMaxLength(useMinutesString(playbackState.duration));
+      setAudioMaxLength(useMinutesString(currentTrack.duration_ms));
     }
   }, [playbackState]);
 
   useEffect(() => {
-    const percentage = ((audioValue * 100) / playbackState.duration).toFixed(4);
+    const percentage = ((audioValue * 100) / currentTrack.duration_ms).toFixed(
+      4,
+    );
     setProgress(percentage);
     setAudioPlayedLength(useMinutesString(audioValue));
   }, [audioValue]);
@@ -185,15 +199,17 @@ export const Player = () => {
 
   useEffect(() => {
     // initialize script
-    loadScript();
-    // getPlayerInfo();
-    window.onSpotifyWebPlaybackSDKReady = () => InitializePlayer();
-    // get current state of the player
+    if (accessToken) {
+      loadScript();
+      // getPlayerInfo();
+      window.onSpotifyWebPlaybackSDKReady = () => InitializePlayer();
+      // get current state of the player
+    }
     return () => {
       // fireyPlayer.disconnect();
     };
     // eslint-disable-next-line
-}, []);
+}, [accessToken]);
 
 
 
@@ -206,8 +222,8 @@ export const Player = () => {
 
   useEffect(() => {
     if (
-      playbackState.play &&
-      audioValue <= playbackState.duration &&
+      currentTrack.play &&
+      audioValue <= currentTrack.duration_ms &&
       !isDragging
     ) {
       const Counter = setTimeout(() => {
@@ -251,7 +267,7 @@ export const Player = () => {
       <div
         className={`player__display ${coverOpen && 'player__display--close'}`}
       >
-        <SongButton isPlaying={isPlaying} />
+        <SongButton />
         <Button type="player" src={<LikeImg />} />
       </div>
       <div className="player__controls">
@@ -274,7 +290,7 @@ export const Player = () => {
           <Button
             type="player"
             custom="Play--buton"
-            src={!playbackState.play ? <PlayImg /> : <Pause />}
+            src={!currentTrack.play ? <PlayImg /> : <Pause />}
             onClick={() => {
               player.togglePlay().then(() => {
                 console.log('Toggled playback!');
@@ -301,7 +317,7 @@ export const Player = () => {
           <div className="time-section--1">{audioPlayedLength}</div>
           <RangeSlider
             inputMin={0}
-            inputMax={playbackState.duration}
+            inputMax={currentTrack.duration_ms}
             handle={handleProgressValue}
             progress={progress}
             inputValue={audioValue}

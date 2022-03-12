@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import './SideMenu.styles.css';
 import { Button } from '../index';
-import { CreateContext } from '../../pages/home/Home';
+import { isCoverOpen, TrackContext } from '../../utils/context';
 import {
   LogoImg,
   HomeImg,
@@ -12,9 +12,10 @@ import {
   ArrowUpImg,
 } from '../../assets/svg/index';
 
-export const SideMenu = () => {
-  const { coverOpen, setCoverOpen, isPlaying, currentTrack } =
-    useContext(CreateContext);
+export const SideMenu = (props) => {
+  // const { isPlaying, currentTrack } = useContext(CreateContext);
+  const { coverOpen, setCoverOpen } = useContext(isCoverOpen);
+  const { currentTrack } = useContext(TrackContext);
   return (
     <div className="side__nav">
       <div className="logo__container">
@@ -47,7 +48,9 @@ export const SideMenu = () => {
             coverOpen && 'cover__side--wrapper--open'
           }`}
         >
-          <img src={currentTrack.album.images[0].url} alt="" />
+          {currentTrack && (
+            <img src={currentTrack.album.images[0].url} alt="" />
+          )}
           <Button
             onClick={() => setCoverOpen((coverOpen) => !coverOpen)}
             type="icon"
