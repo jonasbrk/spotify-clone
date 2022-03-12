@@ -10,7 +10,7 @@
 </p>
 
 <h1>About</h1>
-Reacreating Spotify UI with React JS and consuming its API
+<p>Reacreating Spotify UI with React JS and consuming its API</p>
 <img src="src/assets/images/homepage.png" style="height:350px" >
 
   <h1>Built With</h1>
@@ -24,9 +24,9 @@ Reacreating Spotify UI with React JS and consuming its API
 
 <h2>Player</h2>
 
-spotify player, with all controls.
+Spotify player, with all controls.
 
-<video src="src/assets/images/homepage.mp4" controls style="height:350px">
+<img src="src/assets/images/player.gif" style="height:350px">
 
-<h1 style="text-align: center;">🚧 work in progress 🚧</h1>
-<h2 style="text-align: center;">this is'ant the done ptoject</h2>
+<h2 >🚧 work in progress 🚧</h2>
+<h3 >this is not the finished project yet</h3>

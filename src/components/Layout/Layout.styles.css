@@ -6,6 +6,7 @@
   width: 100vw;
   overflow: hidden;
   background-color: #242424;
+  z-index: 1;
 }
 
 .main__section {
