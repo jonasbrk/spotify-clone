@@ -66,7 +66,7 @@ export const Card = (props) => {
           custom={`play--buton--card ${
             isPlaying && 'play--buton--card--playing'
           }`}
-          src={isPlaying ? <PlayImg /> : <Pause />}
+          src={isPlaying ? <Pause /> : <PlayImg />}
         />
       </div>
       <div className="card__info">

@@ -10,13 +10,14 @@ import './Home.styles.css';
 import { DisplayRow } from '../../components/index';
 import { handleRedirect } from '../../services/client';
 import axios from 'axios';
-import { TokenContext } from '../../utils/context';
+import { TokenContext, TrackContext } from '../../utils/context';
 import qs from 'qs';
 
 export const CreateContext = createContext();
 const Home = (props) => {
   const HomeRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
+  const { setCurrentTrack } = useContext(TrackContext);
   const [loading, setLoading] = useState(true);
   const [homeData, setHomeData] = useState({});
 
@@ -129,12 +130,12 @@ const Home = (props) => {
                     recommendation: e.data,
                   });
 
+                  setCurrentTrack(recent_played.data.items[0].track);
+
                   setLoading(false);
                 })
                 .catch((e) => console.log(e.response));
             });
-
-          console.log(data, 'askdhslkdnfg');
         })
         .catch((e) => {
           console.log(e.response);
