@@ -7,7 +7,6 @@ import {
   SongButton,
   DeviceButton,
 } from '..';
-import { CreateContext } from '../../pages/home/Home';
 import {
   DeviceContext,
   isCoverOpen,
@@ -21,38 +20,21 @@ import {
   PlayImg,
   NextTrackImg,
   LoopTrackImg,
-  MicImg,
   QueueImg,
-  PcImg,
   LikeImg,
-  ScreenImg,
   Pause,
 } from '../../assets/svg/index';
-import axios from 'axios';
 import { SpotifyApi } from '../../utils/getByToken';
-
 import { useMinutesString } from '../../utils/useMinutesString';
+import axios from 'axios';
 
 export const Player = (props) => {
-  const [audioMaxLength, setAudioMaxLength] = useState(0);
+  const [audioMaxLength, setAudioMaxLength] = useState(useMinutesString(0));
   const [audioPlayedLength, setAudioPlayedLength] = useState(0);
   const [audioValue, setAudioValue] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [playbackState, setPlaybackState] = useState({});
-  // const {
-  //   // isPlaying,
-  //   // accessToken,
-  //   // setCurrentTrack,
-  //   // currentTrack,
-  //   // SpotifyApi,
-  //   // setCurrentDeviceId,
-  //   // currentDeviceId,
-  //   // setPlayer,
-  //   // player,
-  //   // setPlaybackState,
-  //   // playbackState,
-  // } = useContext(CreateContext);
+  const [playbackState, setPlaybackState] = useState('');
 
   const { accessToken } = useContext(TokenContext);
   const { coverOpen } = useContext(isCoverOpen);
@@ -79,42 +61,43 @@ export const Player = (props) => {
     setAudioPlayedLength(useMinutesString(audioValue));
   }, [audioValue]);
 
-  // let fireyPlayer = useRef(null);
-
-  // const getPlayerInfo = (_) => {
-  //   const getFunc = async () => {
-  //     try {
-  //       const response = await SpotifyApi(
-  //         'GET',
-  //         'https://api.spotify.com/v1/me/player',
-  //       );
-  //       if (response.status === 200) {
-  //         console.log('kdfbekjbtgjbgjksddflkghnsdkfnskldfng');
-  //         const { data } = response;
-  //         const { is_playing, item, progress_ms, repeat_state, shuffle_state } =
-  //           data;
-  //         setCurrentTrack({ ...item, play: is_playing });
-  //         setPlaybackState((state) => ({
-  //           ...state,
-  //           play: is_playing,
-  //           shuffle: shuffle_state,
-  //           repeat: repeat_state !== 'off',
-  //           duration: item.duration_ms,
-  //           progress: progress_ms,
-  //         }));
-  //       } else if (response.status === 204) {
-  //         console.log(
-  //           'Please select a device to start listening on FIREY SPOTIFY 🔥',
-  //         );
-  //       } else {
-  //         console.log('Error from Spotify Server');
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getFunc();
-  // };
+  const getPlayerInfo = () => {
+    const getFunc = async () => {
+      try {
+        const response = await axios.get(
+          'https://api.spotify.com/v1/me/player',
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          },
+        );
+        if (response.status === 200) {
+          const { data } = response;
+          const { is_playing, item, progress_ms, repeat_state, shuffle_state } =
+            data;
+          setCurrentTrack({ ...item, play: is_playing });
+          setPlaybackState((state) => ({
+            ...state,
+            play: is_playing,
+            shuffle: shuffle_state,
+            repeat_state: repeat_state !== 'off',
+            duration: item.duration_ms,
+            progress: progress_ms,
+          }));
+        } else if (response.status === 204) {
+          console.log(
+            'Please select a device to start listening on SPOTIFY CLONE',
+          );
+        } else {
+          console.log('Error from Spotify Server');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFunc();
+  };
 
   const loadScript = () => {
     const script = document.createElement('script');
@@ -170,7 +153,7 @@ export const Player = (props) => {
             loading: loading,
             play: !paused,
             shuffle: shuffle,
-            repeat: repeat_mode !== 0,
+            repeat_state: repeat_mode !== 0,
             progress: position,
             duration: duration,
             track_window: {
@@ -201,13 +184,13 @@ export const Player = (props) => {
     // initialize script
     if (accessToken) {
       loadScript();
-      // getPlayerInfo();
+      getPlayerInfo();
       window.onSpotifyWebPlaybackSDKReady = () => InitializePlayer();
       // get current state of the player
     }
-    return () => {
-      // fireyPlayer.disconnect();
-    };
+    // return () => {
+    //   player.disconnect();
+    // };
     // eslint-disable-next-line
 }, [accessToken]);
 
@@ -238,14 +221,16 @@ export const Player = (props) => {
   }, [audioValue, playbackState.play, isDragging]);
 
   const handleRepeatMode = () => {
-    if (!playbackState.repeat) {
+    if (!playbackState.repeat_state) {
       SpotifyApi(
         'PUT',
+        accessToken,
         'https://api.spotify.com/v1/me/player/repeat?state=context',
       );
     } else {
       SpotifyApi(
         'PUT',
+        accessToken,
         'https://api.spotify.com/v1/me/player/repeat?state=off',
       );
     }
@@ -255,6 +240,7 @@ export const Player = (props) => {
   const handleShuffleMode = () => {
     SpotifyApi(
       'PUT',
+      accessToken,
       'https://api.spotify.com/v1/me/player/shuffle?state=' +
         !playbackState.shuffle,
     );
@@ -262,13 +248,44 @@ export const Player = (props) => {
     console.log('ativando repeat');
   };
 
+  const handlePlay = () => {
+    if (!playbackState) {
+      axios(
+        'https://api.spotify.com/v1/me/player/play?device_id=' +
+          currentDeviceId,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+          data: {
+            context_uri: currentTrack.album.uri,
+            offset: { position: currentTrack.track_number - 1 },
+            position_ms: 0,
+          },
+          method: 'PUT',
+        },
+      ).then(() => {
+        player.pause().then(() => {
+          console.log('Paused!');
+        });
+      });
+    } else {
+      player.togglePlay().then(() => {
+        console.log('Toggled playback!');
+      });
+    }
+  };
   return (
     <div className="player">
       <div
         className={`player__display ${coverOpen && 'player__display--close'}`}
       >
-        <SongButton />
-        <Button type="player" src={<LikeImg />} />
+        {currentTrack && (
+          <>
+            <SongButton />
+            <Button type="player" src={<LikeImg />} />
+          </>
+        )}
       </div>
       <div className="player__controls">
         <div className="player__section--1">
@@ -292,9 +309,7 @@ export const Player = (props) => {
             custom="Play--buton"
             src={!currentTrack.play ? <PlayImg /> : <Pause />}
             onClick={() => {
-              player.togglePlay().then(() => {
-                console.log('Toggled playback!');
-              });
+              handlePlay();
             }}
           />
           <Button
@@ -310,7 +325,7 @@ export const Player = (props) => {
             type="player"
             src={<LoopTrackImg />}
             onClick={() => handleRepeatMode()}
-            custom={playbackState.repeat && 'button__player--active'}
+            custom={playbackState.repeat_state && 'button__player--active'}
           />
         </div>
         <div className="player__section--2">

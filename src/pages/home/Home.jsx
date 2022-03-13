@@ -1,19 +1,14 @@
-import React, {
-  useState,
-  createContext,
-  useRef,
-  useEffect,
-  lazy,
-  useContext,
-} from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import './Home.styles.css';
-import { DisplayRow } from '../../components/index';
-import { handleRedirect } from '../../services/client';
+import { DisplayRow, Loading, Player } from '../../components/index';
 import axios from 'axios';
-import { TokenContext, TrackContext } from '../../utils/context';
+import {
+  DeviceContext,
+  PlayerContext,
+  TokenContext,
+  TrackContext,
+} from '../../utils/context';
 import qs from 'qs';
-
-export const CreateContext = createContext();
 const Home = (props) => {
   const HomeRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
@@ -130,7 +125,10 @@ const Home = (props) => {
                     recommendation: e.data,
                   });
 
-                  setCurrentTrack(recent_played.data.items[0].track);
+                  setCurrentTrack({
+                    ...recent_played.data.items[0].track,
+                    init_load: true,
+                  });
 
                   setLoading(false);
                 })
@@ -146,7 +144,7 @@ const Home = (props) => {
   return (
     <>
       {loading ? (
-        <h1>loading</h1>
+        <Loading />
       ) : (
         <div className="home">
           <DisplayRow

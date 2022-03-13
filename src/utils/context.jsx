@@ -23,8 +23,8 @@ export const PlayerContext = createContext({});
 
 export const PlaybackContext = createContext({});
 
-export const AlbumContext = createContext({});
-
 export const PlayContext = createContext(() => {});
+
+export const AlbumContext = createContext({});
 
 export const isCoverOpen = createContext(false);

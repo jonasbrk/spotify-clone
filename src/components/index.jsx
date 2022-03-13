@@ -1,5 +1,5 @@
 export { Header } from './Header/Header';
-export { Display } from './Display/Display';
+// export { Display } from './Display/Display';
 export { DisplayRow } from './DisplayRow/DisplayRow';
 export { SideMenu } from './SideMenu/SideMenu';
 export { Player } from './Player/Player';
@@ -11,3 +11,4 @@ export { SongButton } from './SongButton/SongButton';
 export { Card } from './Card/Card';
 export { DeviceButton } from './DeviceButton/DeviceButton';
 export { Layout } from './Layout/Layout';
+export { Loading } from './Loading/Loading';

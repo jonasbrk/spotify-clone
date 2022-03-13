@@ -1,9 +1,7 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
-import { CreateContext } from '../../pages/home/Home';
-import { Player } from '../Player/Player';
 import { SpotifyApi } from '../../utils/getByToken';
 import {
   DeviceContext,
@@ -17,12 +15,12 @@ export const Card = (props) => {
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
   const { accessToken } = useContext(TokenContext);
-
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
+
   const handlePlay = () => {
-    console.log(currentDeviceId);
-    if (currentTrack.uri != itemInfo.uri) {
+    console.log(currentTrack);
+    if (currentTrack.uri != itemInfo.uri || currentTrack.init_load) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -55,12 +53,6 @@ export const Card = (props) => {
         <Button
           onClick={() => {
             handlePlay();
-            console.log(itemInfo.id);
-            console.log(itemInfo.album.id);
-            console.log(currentTrack.id);
-            console.log(currentTrack);
-            console.log(itemInfo);
-            console.log(itemInfo);
           }}
           type="player"
           custom={`play--buton--card ${
