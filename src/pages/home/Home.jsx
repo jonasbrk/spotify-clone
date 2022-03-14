@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Home.styles.css';
-import { DisplayRow, Loading, Player } from '../../components/index';
+import { DisplayRow, Loading } from '../../components/index';
 import axios from 'axios';
 import { TokenContext, TrackContext } from '../../utils/context';
 import qs from 'qs';
@@ -22,7 +22,6 @@ const Home = () => {
             Authorization: 'Bearer ' + accessToken,
           },
         }),
-
         axios.get('https://api.spotify.com/v1/me/top/tracks', {
           headers: {
             Authorization: 'Bearer ' + accessToken,
@@ -143,9 +142,13 @@ const Home = () => {
         <div className="home">
           <DisplayRow
             title="Tocado recentemente"
-            data={homeData.recent_played.items.map((e) => {
-              return e.track;
-            })}
+            data={homeData.recent_played.items
+              .map((e) => {
+                return e.track;
+              })
+              .filter((value, index, self) => {
+                return index === self.findIndex((t) => t.id === value.id);
+              })}
           />
           <DisplayRow
             title="Feito para você"
