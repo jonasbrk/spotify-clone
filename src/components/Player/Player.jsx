@@ -2,10 +2,11 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import './Player.styles.css';
 import {
   Button,
-  RangeSlider,
   VolumeButton,
-  SongButton,
+  SongInfo,
   DeviceButton,
+  Controls,
+  PlaybackProgress,
 } from '..';
 import {
   DeviceContext,
@@ -14,52 +15,17 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
-import {
-  RandomImg,
-  BackTrackImg,
-  PlayImg,
-  NextTrackImg,
-  LoopTrackImg,
-  QueueImg,
-  LikeImg,
-  Pause,
-} from '../../assets/svg/index';
-import { SpotifyApi } from '../../utils/getByToken';
-import { useMinutesString } from '../../utils/useMinutesString';
+import { QueueImg, LikeImg } from '../../assets/svg/index';
 import axios from 'axios';
 
 export const Player = (props) => {
-  const [audioMaxLength, setAudioMaxLength] = useState(useMinutesString(0));
-  const [audioPlayedLength, setAudioPlayedLength] = useState(0);
-  const [audioValue, setAudioValue] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
   const [playbackState, setPlaybackState] = useState('');
 
   const { accessToken } = useContext(TokenContext);
   const { coverOpen } = useContext(isCoverOpen);
-  const { player, setPlayer } = useContext(PlayerContext);
+  const { setPlayer } = useContext(PlayerContext);
   const { currentTrack, setCurrentTrack } = useContext(TrackContext);
-  const { currentDeviceId, setCurrentDeviceId } = useContext(DeviceContext);
-
-  const handleProgressValue = (value) => {
-    setAudioValue(Number(value));
-  };
-
-  useEffect(() => {
-    if (playbackState.loading) {
-      setAudioValue(playbackState.progress);
-      setAudioMaxLength(useMinutesString(currentTrack.duration_ms));
-    }
-  }, [playbackState]);
-
-  useEffect(() => {
-    const percentage = ((audioValue * 100) / currentTrack.duration_ms).toFixed(
-      4,
-    );
-    setProgress(percentage);
-    setAudioPlayedLength(useMinutesString(audioValue));
-  }, [audioValue]);
+  const { setCurrentDeviceId } = useContext(DeviceContext);
 
   const getPlayerInfo = () => {
     const getFunc = async () => {
@@ -188,93 +154,9 @@ export const Player = (props) => {
       window.onSpotifyWebPlaybackSDKReady = () => InitializePlayer();
       // get current state of the player
     }
-    // return () => {
-    //   player.disconnect();
-    // };
     // eslint-disable-next-line
 }, [accessToken]);
 
-
-
-  const onMouseUp = () => {
-    player.seek(audioValue).then(() => {
-      console.log('Changed position!');
-      setIsDragging(false);
-    });
-  };
-
-  useEffect(() => {
-    if (
-      currentTrack.play &&
-      audioValue <= currentTrack.duration_ms &&
-      !isDragging
-    ) {
-      const Counter = setTimeout(() => {
-        player.getCurrentState().then((state) => {
-          setAudioValue(state.position);
-        });
-      }, 1000);
-      return () => {
-        clearTimeout(Counter);
-      };
-    }
-  }, [audioValue, playbackState.play, isDragging]);
-
-  const handleRepeatMode = () => {
-    if (!playbackState.repeat_state) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/repeat?state=context',
-      );
-    } else {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/repeat?state=off',
-      );
-    }
-    console.log('ativando repeat');
-  };
-
-  const handleShuffleMode = () => {
-    SpotifyApi(
-      'PUT',
-      accessToken,
-      'https://api.spotify.com/v1/me/player/shuffle?state=' +
-        !playbackState.shuffle,
-    );
-
-    console.log('ativando repeat');
-  };
-
-  const handlePlay = () => {
-    if (!playbackState) {
-      axios(
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-          data: {
-            context_uri: currentTrack.album.uri,
-            offset: { position: currentTrack.track_number - 1 },
-            position_ms: 0,
-          },
-          method: 'PUT',
-        },
-      ).then(() => {
-        player.pause().then(() => {
-          console.log('Paused!');
-        });
-      });
-    } else {
-      player.togglePlay().then(() => {
-        console.log('Toggled playback!');
-      });
-    }
-  };
   return (
     <div className="player">
       <div
@@ -282,65 +164,14 @@ export const Player = (props) => {
       >
         {currentTrack && (
           <>
-            <SongButton />
+            <SongInfo />
             <Button type="player" src={<LikeImg />} />
           </>
         )}
       </div>
       <div className="player__controls">
-        <div className="player__section--1">
-          <Button
-            type="player"
-            src={<RandomImg />}
-            onClick={() => handleShuffleMode()}
-            custom={playbackState.shuffle && 'button__player--active'}
-          />
-          <Button
-            type="player"
-            src={<BackTrackImg />}
-            onClick={() => {
-              player.previousTrack().then(() => {
-                console.log('Set to previous track!');
-              });
-            }}
-          />
-          <Button
-            type="player"
-            custom="Play--buton"
-            src={!currentTrack.play ? <PlayImg /> : <Pause />}
-            onClick={() => {
-              handlePlay();
-            }}
-          />
-          <Button
-            type="player"
-            src={<NextTrackImg />}
-            onClick={() => {
-              player.nextTrack().then(() => {
-                console.log('Skipped to next track!');
-              });
-            }}
-          />
-          <Button
-            type="player"
-            src={<LoopTrackImg />}
-            onClick={() => handleRepeatMode()}
-            custom={playbackState.repeat_state && 'button__player--active'}
-          />
-        </div>
-        <div className="player__section--2">
-          <div className="time-section--1">{audioPlayedLength}</div>
-          <RangeSlider
-            inputMin={0}
-            inputMax={currentTrack.duration_ms}
-            handle={handleProgressValue}
-            progress={progress}
-            inputValue={audioValue}
-            onMouseDown={() => setIsDragging(true)}
-            onMouseUp={() => onMouseUp()}
-          />
-          <div className="time-section--2">{audioMaxLength}</div>
-        </div>
+        <Controls playbackState={playbackState} />
+        <PlaybackProgress playbackState={playbackState} />
       </div>
       <div className="player__options">
         <Button type="player" src={<QueueImg />} />

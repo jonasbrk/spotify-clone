@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
-import { SpotifyApi } from '../../utils/getByToken';
+import { SpotifyApi } from '../../utils/';
 import {
   DeviceContext,
   PlayerContext,

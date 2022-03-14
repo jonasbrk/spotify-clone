@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button } from '../Button/Button';
 import { PcImg, PcDeviceImg, DevicePlayingImg } from '../../assets/svg';
 import './DeviceButton.styles.css';
-import { CreateContext } from '../../pages/home/Home';
-import { useComponentVisible } from '../../utils/useOutsideClick';
+import { useComponentVisible } from '../../utils/';
 import axios from 'axios';
 import { DeviceContext, TokenContext } from '../../utils/context';
 
@@ -15,7 +14,6 @@ export const DeviceButton = () => {
 
   const [devicesList, setDevicesList] = useState([]);
   const [showDevices, setShowDevices] = useState(false);
-  const [deviceID, setDeviceID] = useState('');
 
   useEffect(() => {
     console.log(isComponentVisible);
@@ -37,10 +35,6 @@ export const DeviceButton = () => {
         });
     }
   }, [isComponentVisible]);
-
-  useEffect(() => {
-    console.log(deviceID);
-  }, [deviceID]);
 
   return (
     <div className="devices__wrapper" ref={ref1}>

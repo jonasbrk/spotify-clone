@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import './SongButton.styles.css';
+import './SongInfo.styles.css';
 import { Button } from '..';
 import { ArrowUpImg } from '../../assets/svg/index';
 import { isCoverOpen, TrackContext } from '../../utils/context';
 
-export const SongButton = (props) => {
+export const SongInfo = (props) => {
   const { src } = props;
   const { coverOpen, setCoverOpen } = useContext(isCoverOpen);
   const { currentTrack } = useContext(TrackContext);

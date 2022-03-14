@@ -2,15 +2,9 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import './Home.styles.css';
 import { DisplayRow, Loading, Player } from '../../components/index';
 import axios from 'axios';
-import {
-  DeviceContext,
-  PlayerContext,
-  TokenContext,
-  TrackContext,
-} from '../../utils/context';
+import { TokenContext, TrackContext } from '../../utils/context';
 import qs from 'qs';
-const Home = (props) => {
-  const HomeRef = useRef(null);
+const Home = () => {
   const { accessToken } = useContext(TokenContext);
   const { setCurrentTrack } = useContext(TrackContext);
   const [loading, setLoading] = useState(true);
