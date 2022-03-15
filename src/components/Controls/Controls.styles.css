@@ -1,0 +1,31 @@
+.player__section--1 {
+  height: 32px;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.player__controls .Play--buton {
+  background-color: white;
+  opacity: 1;
+}
+.player__controls .Play--buton svg {
+  fill: black;
+}
+
+.player__controls .button__player--active {
+  fill: #1db954;
+  position: relative;
+}
+
+.player__controls .button__player--active::after {
+  background-color: #1db954;
+  border-radius: 50%;
+  bottom: 0;
+  content: '';
+  display: block;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 4px;
+}

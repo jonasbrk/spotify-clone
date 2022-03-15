@@ -10,7 +10,7 @@ import {
   TrackContext,
 } from '../../utils/context';
 
-export const Card = (props) => {
+export const CardPlaylist = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
@@ -28,8 +28,8 @@ export const Card = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.album.uri,
-          offset: { position: itemInfo.track_number - 1 },
+          context_uri: itemInfo.uri,
+          offset: { position: 0 },
           position_ms: 0,
         },
       );
@@ -49,7 +49,7 @@ export const Card = (props) => {
   return (
     <div className="card__type--song">
       <div className="card__img">
-        <img src={itemInfo.album.images[1].url} alt="" />
+        <img src={itemInfo.images[0].url} alt="" />
         <Button
           onClick={() => {
             handlePlay();
@@ -63,21 +63,13 @@ export const Card = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          {itemInfo.album.href ? (
-            <a href={itemInfo.album.href}>{itemInfo.name}</a>
+          {itemInfo.href ? (
+            <a href={itemInfo.href}>{itemInfo.name}</a>
           ) : (
-            itemInfo.album.name
+            itemInfo.name
           )}
         </span>
-        <span className="card__autor">
-          {itemInfo.artists.map((e, index) => {
-            return (
-              <a key={index} href={e.href}>
-                {e.name}
-              </a>
-            );
-          })}
-        </span>
+        <span className="card__autor">{itemInfo.description}</span>
       </div>
     </div>
   );

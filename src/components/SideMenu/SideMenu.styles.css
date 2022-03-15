@@ -118,3 +118,9 @@
 .cover__side--wrapper .expand__cover--side:hover {
   transform: scale(1.1);
 }
+
+.userPlaylist__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}

@@ -34,68 +34,7 @@
 .player__options {
   justify-content: flex-end;
 }
-.player__section--1 {
-  height: 32px;
-  gap: 16px;
-  margin-bottom: 8px;
-}
-.player__section--2 {
-  height: 16px;
-  gap: 8px;
-  width: 100%;
-  color: white;
-  font-size: 0.6875rem;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.player__section--2 .time-section--1,
-.player__section--2 .time-section--2 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  box-sizing: border-box;
-  width: 40px;
-  font-size: 0.6875rem;
-  line-height: 1rem;
-  text-transform: none;
-  letter-spacing: normal;
-  display: flex;
-  align-items: center;
-  color: #a7a7a7;
-}
-
-.player__section--2 .time-section--1 {
-  justify-content: flex-end;
-}
-.player__section--2 .time-section--2 {
-  justify-content: flex-start;
-}
-
-.player__controls .Play--buton {
-  background-color: white;
-  opacity: 1;
-}
-.player__controls .Play--buton svg {
-  fill: black;
-}
 
 .player__display--close {
   transform: translate(-72px);
-}
-
-.player__controls .button__player--active {
-  fill: #1db954;
-  position: relative;
-}
-
-.player__controls .button__player--active::after {
-  background-color: #1db954;
-  border-radius: 50%;
-  bottom: 0;
-  content: '';
-  display: block;
-  height: 4px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  width: 4px;
 }

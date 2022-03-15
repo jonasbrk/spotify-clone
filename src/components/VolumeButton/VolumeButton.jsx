@@ -7,7 +7,6 @@ import {
   VolumeMediumImg,
   VolumeMuteImg,
 } from '../../assets/svg/index';
-import { CreateContext } from '../../pages/home/Home';
 import { PlayerContext } from '../../utils/context';
 
 export const VolumeButton = () => {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import './DisplayRow.styles.css';
-import { Card } from '../index';
+import { Card, CardPlaylist } from '../index';
 
 export const DisplayRow = (props) => {
-  const { title, data } = props;
+  const { title, data, type } = props;
   const rowRef = useRef(null);
   const [itensLength, setItensLength] = useState('');
   const [newArray, setNewArray] = useState(
@@ -43,7 +43,10 @@ export const DisplayRow = (props) => {
       <div className="main__row--main">
         {newArray ? (
           newArray.map((e, index) => {
-            return <Card itemInfo={e} key={index} />;
+            if (type == 'card') return <Card itemInfo={e} key={index} />;
+            if (type == 'playlist') {
+              return <CardPlaylist itemInfo={e} key={index} />;
+            }
           })
         ) : (
           <h1>loading</h1>
