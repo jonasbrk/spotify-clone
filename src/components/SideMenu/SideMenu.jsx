@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './SideMenu.styles.css';
 import { Button } from '../index';
-import { isCoverOpen, TrackContext } from '../../utils/context';
+import { isCoverOpen, TokenContext, TrackContext } from '../../utils/context';
 import {
   LogoImg,
   HomeImg,
@@ -11,11 +11,26 @@ import {
   LikeImg,
   ArrowUpImg,
 } from '../../assets/svg/index';
+import axios from 'axios';
 
 export const SideMenu = (props) => {
-  // const { isPlaying, currentTrack } = useContext(CreateContext);
   const { coverOpen, setCoverOpen } = useContext(isCoverOpen);
+  const { accessToken } = useContext(TokenContext);
   const { currentTrack } = useContext(TrackContext);
+  const [userPlaylists, setUserPlaylists] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('https://api.spotify.com/v1/me/playlists', {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      })
+      .then((e) => {
+        setUserPlaylists(e.data.items);
+      });
+  });
+
   return (
     <div className="side__nav">
       <div className="logo__container">
@@ -42,6 +57,16 @@ export const SideMenu = (props) => {
         </Button>
       </div>
       <div className="divider--bottom--line"></div>
+      <div className="userPlaylist__nav">
+        {userPlaylists &&
+          userPlaylists.map((e, index) => {
+            return (
+              <Button key={index} type="nav">
+                {e.name}
+              </Button>
+            );
+          })}
+      </div>
       <div className="cover__side">
         <div
           className={`cover__side--wrapper ${
