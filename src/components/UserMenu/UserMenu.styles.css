@@ -29,6 +29,17 @@
   border-radius: 50%;
 }
 
+.user__picture .user--default {
+  box-sizing: border-box;
+  height: 100%;
+  width: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #535353;
+}
+
 .user__name {
   display: flex;
   justify-content: center;

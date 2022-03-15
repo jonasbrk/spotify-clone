@@ -1,11 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useComponentVisible } from '../../utils/useOutsideClick';
 import './UserMenu.styles.css';
-import { ArrowDownMenuImg, ArrowUpMenuImg } from '../../assets/svg/index';
+import {
+  ArrowDownMenuImg,
+  ArrowUpMenuImg,
+  UseDefaultImg,
+} from '../../assets/svg/index';
+import { TokenContext } from '../../utils/context';
+import axios from 'axios';
 
 export const UserMenu = () => {
+  const { accessToken } = useContext(TokenContext);
   const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+
+  const [userInfo, setUserInfo] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('https://api.spotify.com/v1/me', {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      })
+      .then((e) => {
+        setUserInfo(e.data);
+      });
+  }, [accessToken]);
 
   return (
     <>
@@ -18,17 +39,22 @@ export const UserMenu = () => {
         }}
       >
         <div className="user__picture">
-          <img
-            aria-hidden="false"
-            draggable="false"
-            loading="eager"
-            src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=722636637892467&amp;height=300&amp;width=300&amp;ext=1648215160&amp;hash=AeSC1UhcZtC_AN20f0M"
-            alt="João Pedro Tomé"
-            className="mMx2LUixlnN_Fu45JpFB zG1A4D_KmJ5_9XpcNKJ7"
-          />
+          {userInfo.images.length == 0 ? (
+            <div className="user--default">
+              <UseDefaultImg />
+            </div>
+          ) : (
+            <img
+              aria-hidden="false"
+              draggable="false"
+              loading="eager"
+              src={userInfo.images[0]}
+              alt={userInfo.display_name}
+            />
+          )}
         </div>
         <div className="user__name">
-          <span>João Pedro Tome Caires Lopes</span>
+          <span>{userInfo.display_name}</span>
         </div>
         <div className="user__icon">
           {isComponentVisible ? <ArrowUpMenuImg /> : <ArrowDownMenuImg />}

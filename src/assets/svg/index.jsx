@@ -26,3 +26,4 @@ export { VolumeLowImg } from './VolumeLow.img';
 export { VolumeMuteImg } from './VolumeMute.img';
 export { PcDeviceImg } from './PcDevice.img';
 export { DevicePlayingImg } from './DevicePlaying.img';
+export { UseDefaultImg } from './UseDefault.img';

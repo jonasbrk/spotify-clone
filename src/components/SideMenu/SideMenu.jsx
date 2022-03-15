@@ -29,7 +29,7 @@ export const SideMenu = (props) => {
       .then((e) => {
         setUserPlaylists(e.data.items);
       });
-  });
+  }, [accessToken]);
 
   return (
     <div className="side__nav">
