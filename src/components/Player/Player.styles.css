@@ -38,3 +38,7 @@
 .player__display--close {
   transform: translate(-72px);
 }
+
+.player__display .liked {
+  fill: #1db954;
+}

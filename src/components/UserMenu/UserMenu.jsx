@@ -30,75 +30,81 @@ export const UserMenu = () => {
 
   return (
     <>
-      <button
-        ref={ref1}
-        className="user__menu__btn"
-        onClick={() => {
-          setIsComponentVisible((isComponentVisible) => !isComponentVisible);
-          console.log(isComponentVisible);
-        }}
-      >
-        <div className="user__picture">
-          {userInfo.images.length == 0 ? (
-            <div className="user--default">
-              <UseDefaultImg />
+      {accessToken && (
+        <>
+          <button
+            ref={ref1}
+            className="user__menu__btn"
+            onClick={() => {
+              setIsComponentVisible(
+                (isComponentVisible) => !isComponentVisible,
+              );
+              console.log(isComponentVisible);
+            }}
+          >
+            <div className="user__picture">
+              {userInfo.images == [] ? (
+                <img
+                  aria-hidden="false"
+                  draggable="false"
+                  loading="eager"
+                  src={userInfo.images[0]}
+                  alt={userInfo.display_name}
+                />
+              ) : (
+                <div className="user--default">
+                  <UseDefaultImg />
+                </div>
+              )}
             </div>
-          ) : (
-            <img
-              aria-hidden="false"
-              draggable="false"
-              loading="eager"
-              src={userInfo.images[0]}
-              alt={userInfo.display_name}
-            />
-          )}
-        </div>
-        <div className="user__name">
-          <span>{userInfo.display_name}</span>
-        </div>
-        <div className="user__icon">
-          {isComponentVisible ? <ArrowUpMenuImg /> : <ArrowDownMenuImg />}
-        </div>
-      </button>
-      <div
-        ref={ref2}
-        className={`user__menu__options ${
-          isComponentVisible ? 'user--open' : ''
-        }`}
-      >
-        <ul className="menu__list">
-          <li>
-            <a href="#">
-              <span>Conta</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <span>Perfil</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <span>Premium</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <span>Suporte</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <span>Baixar</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <span>Sair</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+            <div className="user__name">
+              <span>{userInfo.display_name}</span>
+            </div>
+            <div className="user__icon">
+              {isComponentVisible ? <ArrowUpMenuImg /> : <ArrowDownMenuImg />}
+            </div>
+          </button>
+          <div
+            ref={ref2}
+            className={`user__menu__options ${
+              isComponentVisible ? 'user--open' : ''
+            }`}
+          >
+            <ul className="menu__list">
+              <li>
+                <a href="#">
+                  <span>Conta</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span>Perfil</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span>Premium</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span>Suporte</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span>Baixar</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span>Sair</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
     </>
   );
 };

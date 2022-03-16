@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Button.styles.css';
 
 export const Button = (props) => {
-  const { type, custom, src, children, onClick } = props;
+  const { type, custom, src, children, onClick, to } = props;
 
   return (
     <>
       {type === 'nav' && (
-        <a className={`button--nav ${custom ? custom : ''}`}>
+        <Link to={to} className={`button--nav ${custom ? custom : ''}`}>
           {src && <div className="button__icon">{src}</div>}
           {children && <span className="button__title">{children}</span>}
-        </a>
+        </Link>
       )}
 
       {type === 'login' && (

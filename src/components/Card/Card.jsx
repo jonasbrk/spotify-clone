@@ -3,6 +3,7 @@ import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { SpotifyApi } from '../../utils/';
+import { useNavigate } from 'react-router-dom';
 import {
   DeviceContext,
   PlayerContext,
@@ -46,8 +47,15 @@ export const Card = (props) => {
     } else setIsPlaying(false);
   }, [currentTrack]);
 
+  const navigate = useNavigate();
+
   return (
-    <div className="card__type--song">
+    <div
+      className="card__type--song"
+      onClick={() => {
+        navigate('/album/' + itemInfo.album.id);
+      }}
+    >
       <div className="card__img">
         <img src={itemInfo.album.images[1].url} alt="" />
         <Button

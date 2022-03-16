@@ -38,21 +38,31 @@ export const SideMenu = (props) => {
       </div>
 
       <div className="menu__wrapper">
-        <Button src={<HomeImg />} type="nav">
+        <Button to="/" src={<HomeImg />} type="nav">
           Início
         </Button>
-        <Button src={<SearchImg />} type="nav">
+        <Button to="/search" src={<SearchImg />} type="nav">
           Buscar
         </Button>
-        <Button src={<LibraryImg />} type="nav">
+        <Button to="/library" src={<LibraryImg />} type="nav">
           Sua Biblioteca
         </Button>
       </div>
       <div className="menu__wrapper divider--top ">
-        <Button custom={'create__playlist'} src={<PlusImg />} type="nav">
+        <Button
+          to="/createPlaylist"
+          custom={'create__playlist'}
+          src={<PlusImg />}
+          type="nav"
+        >
           Criar playlist
         </Button>
-        <Button custom={'liked__songs'} src={<LikeImg />} type="nav">
+        <Button
+          to="/collection/tracks"
+          custom={'liked__songs'}
+          src={<LikeImg />}
+          type="nav"
+        >
           Músicas Curtidas
         </Button>
       </div>
@@ -61,7 +71,7 @@ export const SideMenu = (props) => {
         {userPlaylists &&
           userPlaylists.map((e, index) => {
             return (
-              <Button key={index} type="nav">
+              <Button to={`/playlist/${e.id}`} key={index} type="nav">
                 {e.name}
               </Button>
             );

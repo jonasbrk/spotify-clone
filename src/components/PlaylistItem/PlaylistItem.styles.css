@@ -1,0 +1,119 @@
+.playlist__item {
+  display: grid;
+  height: 56px;
+  grid-gap: 16px;
+  padding: 0 16px;
+  border-radius: 4px;
+  grid-template-columns: [index] 16px [first] 6fr [var1] 4fr [var2] 3fr [last] minmax(
+      120px,
+      1fr
+    );
+  color: #b3b3b3;
+}
+
+.playlist__item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.playlist__item div span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+}
+.playlist__index,
+.playlist__info,
+.playlist__img,
+.playlist__album,
+.playlist__added,
+.playlist__time {
+  display: flex;
+  align-items: center;
+}
+
+.playlist__index {
+  position: relative;
+}
+.playlist__index span {
+  z-index: 1;
+}
+.playlist__item:hover .playlist__index span {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.playlist__item:hover .playlist__index .playlist__item__button {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.playlist__item .playlist__item__button--active {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.playlist__item__button {
+  position: absolute;
+  left: -12px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 2;
+}
+
+.playlist__item .playlist__info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.playlist__item .playlist__img {
+  height: 40px;
+  min-height: 40px;
+  width: 40px;
+  min-width: 40px;
+}
+
+.playlist__item .playlist__img img {
+  width: 100%;
+}
+
+.playlist__item .playlist__title {
+  display: grid;
+  grid-template:
+    'title title'
+    'badges subtitle' / auto 1fr;
+}
+
+.item__title {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #fff;
+  grid-area: title;
+  grid-column-start: title;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: unset;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+.item__artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: unset;
+  word-break: break-all;
+  white-space: nowrap;
+  grid-area: subtitle;
+  grid-column-start: badges;
+}
+
+.playlist__item a {
+  text-decoration: none;
+  color: inherit;
+}
+.playlist__item a:hover {
+  text-decoration: underline;
+  color: white;
+}

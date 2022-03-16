@@ -18,14 +18,14 @@ import {
 import { QueueImg, LikeImg } from '../../assets/svg/index';
 import axios from 'axios';
 
-export const Player = (props) => {
-  const [playbackState, setPlaybackState] = useState('');
-
+export const Player = () => {
   const { accessToken } = useContext(TokenContext);
-  const { coverOpen } = useContext(isCoverOpen);
   const { setPlayer } = useContext(PlayerContext);
-  const { currentTrack, setCurrentTrack } = useContext(TrackContext);
   const { setCurrentDeviceId } = useContext(DeviceContext);
+  const { currentTrack, setCurrentTrack } = useContext(TrackContext);
+  const [playbackState, setPlaybackState] = useState('');
+  const { coverOpen } = useContext(isCoverOpen);
+  const [isLiked, setIsLiked] = useState(false);
 
   const getPlayerInfo = () => {
     const getFunc = async () => {
@@ -110,9 +110,15 @@ export const Player = (props) => {
             repeat_mode,
             shuffle,
             track_window,
+            context,
           } = state;
+          console.log(state);
           const { current_track, previous_tracks, next_tracks } = track_window;
-          setCurrentTrack({ ...current_track, play: !paused });
+          setCurrentTrack({
+            ...current_track,
+            play: !paused,
+            context: context,
+          });
           console.log(repeat_mode);
           setPlaybackState((state) => ({
             ...state,
@@ -157,6 +163,21 @@ export const Player = (props) => {
     // eslint-disable-next-line
 }, [accessToken]);
 
+  useEffect(() => {
+    axios
+      .get(
+        'https://api.spotify.com/v1/me/tracks/contains?ids=' + currentTrack.id,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        },
+      )
+      .then((e) => {
+        setIsLiked(e.data[0]);
+      });
+  }, [currentTrack]);
+
   return (
     <div className="player">
       <div
@@ -165,7 +186,11 @@ export const Player = (props) => {
         {currentTrack && (
           <>
             <SongInfo />
-            <Button type="player" src={<LikeImg />} />
+            <Button
+              type="player"
+              src={<LikeImg />}
+              custom={isLiked && 'liked'}
+            />
           </>
         )}
       </div>
