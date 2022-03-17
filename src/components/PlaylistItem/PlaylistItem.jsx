@@ -23,7 +23,7 @@ export const PlaylistItem = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = () => {
-    if (currentTrack.uri != data.track.uri || currentTrack.init_load) {
+    if (currentTrack.uri != data.uri || currentTrack.init_load) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -43,7 +43,7 @@ export const PlaylistItem = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == data.track.uri && currentTrack.play) {
+    if (currentTrack.uri == data.uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
@@ -67,23 +67,27 @@ export const PlaylistItem = (props) => {
         />
       </div>
       <div className="playlist__info">
-        <div className="playlist__img">
-          <img src={data.track.album.images[2].url} alt="" />
-        </div>
+        {!(playlist.type == 'album') && (
+          <div className="playlist__img">
+            <img src={data.album.images[2].url} alt="" />
+          </div>
+        )}
+
         <div className="playlist__title">
           <span
             className={`item__title ${isPlaying && 'playlist__item--active'}`}
           >
-            {data.track.name}
+            {data.name}
           </span>
+
           <span className="item__artist">
-            {data.track.artists.map((e, index) => {
+            {data.artists.map((e, index) => {
               return (
                 <>
                   <Link key={index} to={'/artist/' + e.id}>
                     {e.name}
                   </Link>
-                  {index < data.track.artists.length - 1 && ', '}
+                  {index < data.artists.length - 1 && ', '}
                 </>
               );
             })}
@@ -93,9 +97,7 @@ export const PlaylistItem = (props) => {
       {var1 && (
         <div className="playlist__album">
           <span>
-            <Link to={'/album/' + data.track.album.id}>
-              {data.track.album.name}
-            </Link>
+            <Link to={'/album/' + data.album.id}>{data.album.name}</Link>
           </span>
         </div>
       )}
@@ -105,7 +107,7 @@ export const PlaylistItem = (props) => {
         </div>
       )}
       <div className="playlist__time">
-        <span>{useMinutesString(data.track.duration_ms)}</span>
+        <span>{useMinutesString(data.duration_ms)}</span>
       </div>
     </div>
   );

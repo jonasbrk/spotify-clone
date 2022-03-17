@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './PlaylistTemplate.styles.css';
+import './AlbumTemplate.styles.css';
 import { Loading, PageBanner, TrackList } from '../../components';
 import { generateRandomColor } from '../../utils';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { SpotifyApi } from '../../utils';
 
-export const PlaylistTemplate = () => {
+export const AlbumTemplate = () => {
   const { accessToken } = useContext(TokenContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,23 +26,22 @@ export const PlaylistTemplate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api.spotify.com/v1/playlists/${id}`, {
+      .get(`https://api.spotify.com/v1/albums/${id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       })
       .then((e) => {
-        const { name, images, type, owner, uri, tracks } = e.data;
+        const { name, images, type, artists, total_tracks, tracks, id, uri } =
+          e.data;
         setData({
           uri: uri,
           name: name,
           id: id,
           type: type,
-          tracks: tracks.items.map((e) => {
-            return e.track;
-          }),
+          tracks: tracks.items,
         });
-
+        console.log(e.data);
         setPageData({
           color: generateRandomColor(),
           title: type,
@@ -50,7 +49,8 @@ export const PlaylistTemplate = () => {
           name: name,
           cover: images,
           type: type,
-          owner: owner,
+          owner: artists != 'undefined' ? { ...artists, type: 'artist' } : [],
+          total_tracks: total_tracks,
         });
         setLoading(false);
       });
@@ -93,7 +93,7 @@ export const PlaylistTemplate = () => {
         <div className="playlist__template">
           <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
           <div className="main__template__container">
-            <TrackList var1="ÁLBUM" data={data} />
+            <TrackList data={data} />
           </div>
         </div>
       )}

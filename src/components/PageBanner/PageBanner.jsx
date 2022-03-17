@@ -13,7 +13,7 @@ export const PageBanner = ({ pageData, play }) => {
           style={{ backgroundColor: color }}
         ></div>
         <div className="pageBanner__gradient"></div>
-        {owner.type != 'artist' && (
+        {type != 'artist' && (
           <div className="cover__container">
             <img src={cover[0].url} />
           </div>
@@ -26,7 +26,9 @@ export const PageBanner = ({ pageData, play }) => {
             <h2>{name}</h2>
           </div>
           <div className="page__info">
-            <span>{owner.type != 'artist' && owner.display_name}</span>
+            <span>
+              {owner.type == 'user' ? owner.display_name : owner[0].name}
+            </span>
           </div>
         </div>
       </div>

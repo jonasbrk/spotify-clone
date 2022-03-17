@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Home from './pages/home/Home';
-import { PlaylistTemplate } from './templates/index';
+import { PlaylistTemplate, AlbumTemplate } from './templates/index';
 import { Login } from './pages/login/Login';
 import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
@@ -63,14 +63,14 @@ const App = () => {
         <Layout>
           <Route exact path="/" element={<Home />} />
           <Route path="/playlist/:id" element={<PlaylistTemplate />} />
+          <Route path="/album/:id" element={<AlbumTemplate />} />
           {/* <Route path="/search" component={SearchPage} />
           <Route path="/collection/playlists" component={CollectionPlaylists} />
           <Route path="/collection/tracks" component={CollectionTracks} />
           <Route path="/collection/artists" component={CollectionArtists} />
           <Route path="/collection/albums" component={CollectionAlbums} />
-          <Route path="/album/:id" component={AlbumTemplate} />
-          <Route path="/artist/:id" component={ArtistTemplate} />
-          <Route path="/genre/:id" component={GenreTemplate} /> */}
+          <Route path="/genre/:id" element={GenreTemplate} /> 
+        <Route path="/artist/:id" component={ArtistTemplate} />*/}
           <Route path="/login" element={<Login useLogin={useLogin} />} />
         </Layout>
 

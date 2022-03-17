@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PlaylistTemplate.styles.css';
 import { Loading, PageBanner, TrackList } from '../../components';
-import { generateRandomColor } from '../../utils';
+
 import axios from 'axios';
 import {
   DeviceContext,
@@ -32,19 +32,10 @@ export const PlaylistTemplate = () => {
         },
       })
       .then((e) => {
-        const { name, images, type, owner, uri, tracks } = e.data;
-        setData({
-          uri: uri,
-          name: name,
-          id: id,
-          type: type,
-          tracks: tracks.items.map((e) => {
-            return e.track;
-          }),
-        });
-
+        const { name, images, type, owner } = e.data;
+        setData(e.data);
         setPageData({
-          color: generateRandomColor(),
+          color: 'rgb(32, 120, 160)',
           title: type,
           description: 'oi',
           name: name,
@@ -93,7 +84,7 @@ export const PlaylistTemplate = () => {
         <div className="playlist__template">
           <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
           <div className="main__template__container">
-            <TrackList var1="ÁLBUM" data={data} />
+            <TrackList var1="ÁLBUM" var2="ADICIONADO EM" data={data} />
           </div>
         </div>
       )}

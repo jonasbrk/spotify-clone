@@ -29,12 +29,13 @@ export const TrackList = ({ data, var1, var2 }) => {
           </span>
         </div>
       </div>
-      {data.tracks.items.map((e, index) => {
+      {data.tracks.map((e, index) => {
+        console.log(e);
         return (
           <PlaylistItem
             playlist={data}
-            var1={true}
-            var2={true}
+            var1={var1}
+            var2={var2}
             key={index}
             index={index}
             data={e}
