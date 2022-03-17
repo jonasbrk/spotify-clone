@@ -1,8 +1,13 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Home from './pages/home/Home';
+import {
+  PlaylistTemplate,
+  AlbumTemplate,
+  ArtistTemplate,
+} from './templates/index';
 import { Login } from './pages/login/Login';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import { client_id, client_secret, uri, scope } from './credentials';
@@ -59,25 +64,23 @@ const App = () => {
   return (
     <>
       <TokenContext.Provider value={{ accessToken }}>
-        <Router>
-          <Layout>
-            <Route exact path="/" element={<Home />} />
-            {/* <Route path="/search" component={SearchPage} />
+        <Layout>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/playlist/:id" element={<PlaylistTemplate />} />
+          <Route path="/album/:id" element={<AlbumTemplate />} />
+          <Route path="/artist/:id" element={<ArtistTemplate />} />
+          {/* <Route path="/search" component={SearchPage} />
           <Route path="/collection/playlists" component={CollectionPlaylists} />
           <Route path="/collection/tracks" component={CollectionTracks} />
           <Route path="/collection/artists" component={CollectionArtists} />
           <Route path="/collection/albums" component={CollectionAlbums} />
-          <Route path="/playlist/:id" component={PlaylistTemplate} />
-          <Route path="/album/:id" component={AlbumTemplate} />
-          <Route path="/artist/:id" component={ArtistTemplate} />
-          <Route path="/genre/:id" component={GenreTemplate} /> */}
-            <Route path="/login" element={<Login useLogin={useLogin} />} />
-          </Layout>
+          <Route path="/genre/:id" element={GenreTemplate} /> */}
+          <Route path="/login" element={<Login useLogin={useLogin} />} />
+        </Layout>
 
-          {/* <Routes>
+        {/* <Routes>
   
           </Routes> */}
-        </Router>
       </TokenContext.Provider>
     </>
   );

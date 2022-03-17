@@ -6,7 +6,7 @@ import { TokenContext, TrackContext } from '../../utils/context';
 import qs from 'qs';
 const Home = () => {
   const { accessToken } = useContext(TokenContext);
-  const { setCurrentTrack } = useContext(TrackContext);
+  const { currentTrack, setCurrentTrack } = useContext(TrackContext);
   const [loading, setLoading] = useState(true);
   const [homeData, setHomeData] = useState({});
 
@@ -184,12 +184,14 @@ const Home = () => {
                 mood_category: mood_category.data.playlists,
                 recommendation: recommendation.data,
               });
-
-              setCurrentTrack({
-                ...recent_played.data.items[0].track,
-                init_load: true,
-              });
-
+              if (!currentTrack) {
+                setCurrentTrack({
+                  ...recent_played.data.items[0].track,
+                  init_load: true,
+                  context: recent_played.data.items[0].context,
+                });
+              }
+              console.log(recent_played);
               setLoading(false);
             })
             .catch((e) => console.log(e.response));

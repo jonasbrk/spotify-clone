@@ -9,6 +9,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
+import { useNavigate } from 'react-router-dom';
 
 export const CardPlaylist = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
@@ -46,8 +47,14 @@ export const CardPlaylist = (props) => {
     } else setIsPlaying(false);
   }, [currentTrack]);
 
+  const navigate = useNavigate();
   return (
-    <div className="card__type--song">
+    <div
+      onClick={() => {
+        navigate('/playlist/' + itemInfo.id);
+      }}
+      className="card__type--song"
+    >
       <div className="card__img">
         <img src={itemInfo.images[0].url} alt="" />
         <Button
