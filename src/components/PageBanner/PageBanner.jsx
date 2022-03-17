@@ -10,7 +10,11 @@ export const PageBanner = ({ pageData, play }) => {
       <div className="pageBanner">
         <div
           className="pageBanner__color"
-          style={{ backgroundColor: color }}
+          style={
+            type == 'artist'
+              ? { backgroundImage: `url(${cover[0].url})` }
+              : { backgroundColor: color }
+          }
         ></div>
         <div className="pageBanner__gradient"></div>
         {type != 'artist' && (
