@@ -128,4 +128,37 @@
 }
 .playlist__item .playlist__time {
   grid-column: last;
+  justify-self: end;
+}
+
+.playlist__time button {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.playlist__item:hover .playlist__time button {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.playlist__item--active {
+  color: #1db954;
+  fill: #1db954;
+}
+@media (max-width: 1050px) and (min-width: 801px) {
+  .playlist__added {
+    display: none;
+  }
+  .playlist__album {
+    grid-column: var2;
+  }
+}
+
+@media (max-width: 800px) {
+  .playlist__item .playlist__album {
+    display: none;
+  }
+  .playlist__item .playlist__added {
+    display: none;
+  }
 }

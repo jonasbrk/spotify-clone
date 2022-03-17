@@ -1,12 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PlaylistTemplate.styles.css';
-import {
-  Button,
-  PlaylistItem,
-  Loading,
-  PageBanner,
-  TrackList,
-} from '../../components';
+import { Loading, PageBanner, TrackList } from '../../components';
 
 import axios from 'axios';
 import {
@@ -50,7 +44,6 @@ export const PlaylistTemplate = () => {
           owner: owner,
         });
         setLoading(false);
-        console.log(e);
       });
   }, [id]);
 
@@ -76,9 +69,11 @@ export const PlaylistTemplate = () => {
   };
 
   useEffect(() => {
-    if (currentTrack.context.uri == data.uri && currentTrack.play) {
-      setIsPlaying(true);
-    } else setIsPlaying(false);
+    if (currentTrack.context) {
+      if (currentTrack.context.uri == data.uri && currentTrack.play) {
+        setIsPlaying(true);
+      } else setIsPlaying(false);
+    }
   }, [currentTrack]);
 
   return (

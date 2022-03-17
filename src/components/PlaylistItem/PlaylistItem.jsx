@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './PlaylistItem.styles.css';
 import { useMinutesString, useDateFormater } from '../../utils';
 import { Button } from '../';
-import { PlayImg, Pause } from '../../assets/svg';
+import { PlayImg, Pause, LikeImg } from '../../assets/svg';
 import { SpotifyApi } from '../../utils';
 import {
   DeviceContext,
@@ -11,6 +11,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
+import axios from 'axios';
 
 export const PlaylistItem = (props) => {
   const { data, index, playlist, var1, var2 } = props;
@@ -48,7 +49,12 @@ export const PlaylistItem = (props) => {
   }, [currentTrack]);
 
   return (
-    <div className="playlist__item">
+    <div
+      className="playlist__item"
+      onDoubleClick={() => {
+        handlePlay();
+      }}
+    >
       <div className="playlist__index">
         {!isPlaying && <span>{index + 1}</span>}
         <Button
@@ -65,7 +71,11 @@ export const PlaylistItem = (props) => {
           <img src={data.track.album.images[2].url} alt="" />
         </div>
         <div className="playlist__title">
-          <span className="item__title">{data.track.name}</span>
+          <span
+            className={`item__title ${isPlaying && 'playlist__item--active'}`}
+          >
+            {data.track.name}
+          </span>
           <span className="item__artist">
             {data.track.artists.map((e, index) => {
               return (

@@ -49,4 +49,23 @@
 }
 .last {
   grid-column: last;
+  justify-self: end;
+}
+
+@media (max-width: 1050px) and (min-width: 801px) {
+  .template__list__header .var2 {
+    display: none;
+  }
+  .template__list__header .var1 {
+    grid-column: unset;
+  }
+}
+
+@media (max-width: 800px) {
+  .template__list__header .var2 {
+    display: none;
+  }
+  .template__list__header .var1 {
+    display: none;
+  }
 }
