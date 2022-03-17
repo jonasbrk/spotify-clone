@@ -188,8 +188,9 @@ const Home = () => {
               setCurrentTrack({
                 ...recent_played.data.items[0].track,
                 init_load: true,
+                context: recent_played.data.items[0].context,
               });
-
+              console.log(recent_played);
               setLoading(false);
             })
             .catch((e) => console.log(e.response));

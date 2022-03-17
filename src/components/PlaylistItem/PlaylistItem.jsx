@@ -13,7 +13,7 @@ import {
 } from '../../utils/context';
 
 export const PlaylistItem = (props) => {
-  const { data, index, playlist } = props;
+  const { data, index, playlist, var1, var2 } = props;
   const { currentTrack } = useContext(TrackContext);
   const { accessToken } = useContext(TokenContext);
   const { currentDeviceId } = useContext(DeviceContext);
@@ -28,7 +28,6 @@ export const PlaylistItem = (props) => {
         accessToken,
         'https://api.spotify.com/v1/me/player/play?device_id=' +
           currentDeviceId,
-
         {
           context_uri: playlist.uri,
           offset: { position: index },
@@ -43,11 +42,9 @@ export const PlaylistItem = (props) => {
   };
 
   useEffect(() => {
-    if (!currentTrack.init_load) {
-      if (currentTrack.uri == data.track.uri && currentTrack.play) {
-        setIsPlaying(true);
-      } else setIsPlaying(false);
-    }
+    if (currentTrack.uri == data.track.uri && currentTrack.play) {
+      setIsPlaying(true);
+    } else setIsPlaying(false);
   }, [currentTrack]);
 
   return (
@@ -83,16 +80,20 @@ export const PlaylistItem = (props) => {
           </span>
         </div>
       </div>
-      <div className="playlist__album">
-        <span>
-          <Link to={'/album/' + data.track.album.id}>
-            {data.track.album.name}
-          </Link>
-        </span>
-      </div>
-      <div className="playlist__added">
-        <span>{useDateFormater(data.added_at)}</span>
-      </div>
+      {var1 && (
+        <div className="playlist__album">
+          <span>
+            <Link to={'/album/' + data.track.album.id}>
+              {data.track.album.name}
+            </Link>
+          </span>
+        </div>
+      )}
+      {var2 && (
+        <div className="playlist__added">
+          <span>{useDateFormater(data.added_at)}</span>
+        </div>
+      )}
       <div className="playlist__time">
         <span>{useMinutesString(data.track.duration_ms)}</span>
       </div>

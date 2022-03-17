@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PlaylistTemplate.styles.css';
-import { Button, PlaylistItem, Loading } from '../../components';
-import { Pause, PlayImg } from '../../assets/svg';
+import {
+  Button,
+  PlaylistItem,
+  Loading,
+  PageBanner,
+  TrackList,
+} from '../../components';
+
 import axios from 'axios';
 import {
   DeviceContext,
@@ -15,11 +21,12 @@ import { SpotifyApi } from '../../utils';
 export const PlaylistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playlistData, setPlaylistData] = useState('');
   const [loading, setLoading] = useState(true);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const [data, setData] = useState('');
+  const [pageData, setPageData] = useState('');
 
   const { id } = useParams();
 
@@ -31,41 +38,47 @@ export const PlaylistTemplate = () => {
         },
       })
       .then((e) => {
-        setPlaylistData(e.data);
+        const { name, images, type, owner } = e.data;
+        setData(e.data);
+        setPageData({
+          color: 'rgb(32, 120, 160)',
+          title: type,
+          description: 'oi',
+          name: name,
+          cover: images,
+          type: type,
+          owner: owner,
+        });
         setLoading(false);
         console.log(e);
       });
   }, [id]);
 
   const handlePlay = () => {
-    if (!currentTrack.init_load) {
-      if (currentTrack.context.uri != playlistData.uri) {
-        SpotifyApi(
-          'PUT',
-          accessToken,
-          'https://api.spotify.com/v1/me/player/play?device_id=' +
-            currentDeviceId,
+    if (currentTrack.context.uri != data.uri || currentTrack.init_load) {
+      SpotifyApi(
+        'PUT',
+        accessToken,
+        'https://api.spotify.com/v1/me/player/play?device_id=' +
+          currentDeviceId,
 
-          {
-            context_uri: playlistData.uri,
-            offset: { position: 0 },
-            position_ms: 0,
-          },
-        );
-      } else {
-        player.togglePlay().then(() => {
-          console.log('Toggled playback!');
-        });
-      }
+        {
+          context_uri: data.uri,
+          offset: { position: 0 },
+          position_ms: 0,
+        },
+      );
+    } else {
+      player.togglePlay().then(() => {
+        console.log('Toggled playback!');
+      });
     }
   };
 
   useEffect(() => {
-    if (!currentTrack.init_load) {
-      if (currentTrack.context.uri == playlistData.uri && currentTrack.play) {
-        setIsPlaying(true);
-      } else setIsPlaying(false);
-    }
+    if (currentTrack.context.uri == data.uri && currentTrack.play) {
+      setIsPlaying(true);
+    } else setIsPlaying(false);
   }, [currentTrack]);
 
   return (
@@ -74,64 +87,9 @@ export const PlaylistTemplate = () => {
         <Loading />
       ) : (
         <div className="playlist__template">
-          <div className="header__template__container">
-            <div className="header__cover__container">
-              <img src={playlistData.images[0].url} />
-            </div>
-            <div className="header__info__container">
-              <div className="template__type">
-                <span>{playlistData.type}</span>
-              </div>
-              <div className="template__name">
-                <h2>{playlistData.name}</h2>
-              </div>
-              <div className="template__info">
-                <span>{playlistData.owner.display_name}</span>
-              </div>
-            </div>
-          </div>
+          <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
           <div className="main__template__container">
-            <div className="main__template__header">
-              <Button
-                onClick={() => {
-                  handlePlay();
-                }}
-                type="player"
-                custom={`play--buton--album ${
-                  isPlaying && 'play--buton--card--album'
-                }`}
-                src={isPlaying ? <Pause /> : <PlayImg />}
-              />
-            </div>
-            <div className="main__template__list">
-              <div className="template__list__header">
-                <div>
-                  <span>#</span>
-                </div>
-                <div>
-                  <span>TÍTULO</span>
-                </div>
-                <div>
-                  <span>ÁLBUM</span>
-                </div>
-                <div>
-                  <span>ADICIONADO EM</span>
-                </div>
-                <div>
-                  <span>🕘</span>
-                </div>
-              </div>
-              {playlistData.tracks.items.map((e, index) => {
-                return (
-                  <PlaylistItem
-                    playlist={playlistData}
-                    key={index}
-                    index={index}
-                    data={e}
-                  />
-                );
-              })}
-            </div>
+            <TrackList var1="ÁLBUM" var2="ADICIONADO EM" data={data} />
           </div>
         </div>
       )}

@@ -33,6 +33,7 @@
 
 .playlist__index {
   position: relative;
+  grid-column: index;
 }
 .playlist__index span {
   z-index: 1;
@@ -64,6 +65,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  grid-column: first;
 }
 
 .playlist__item .playlist__img {
@@ -116,4 +118,14 @@
 .playlist__item a:hover {
   text-decoration: underline;
   color: white;
+}
+
+.playlist__item .playlist__album {
+  grid-column: var1;
+}
+.playlist__item .playlist__added {
+  grid-column: var2;
+}
+.playlist__item .playlist__time {
+  grid-column: last;
 }
