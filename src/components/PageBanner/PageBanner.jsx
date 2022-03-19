@@ -4,8 +4,7 @@ import { Pause, PlayImg } from '../../assets/svg';
 import { Button } from '../';
 import { Link } from 'react-router-dom';
 export const PageBanner = ({ pageData, play }) => {
-  const { color, title, description, name, cover, type, owner, total_tracks } =
-    pageData;
+  const { color, title, name, cover, type, owner, total_tracks } = pageData;
   const [handlePlay, isPlaying] = play;
   return (
     <>

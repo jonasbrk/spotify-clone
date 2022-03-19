@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { SpotifyApi } from '../../utils/';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   DeviceContext,
   PlayerContext,
@@ -19,7 +19,8 @@ export const Card = (props) => {
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const handlePlay = () => {
+  const cardRef = useRef(null);
+  const handlePlay = (e) => {
     console.log(currentTrack);
     if (currentTrack.uri != itemInfo.uri || currentTrack.init_load) {
       SpotifyApi(
@@ -49,11 +50,23 @@ export const Card = (props) => {
 
   const navigate = useNavigate();
 
+  const navigateTo = (url, target) => {
+    console.log(cardRef, target);
+    if (
+      (cardRef.current &&
+        target.target.className == cardRef.current.className) ||
+      target.target.offsetParent.className == 'card__img'
+    ) {
+      navigate('/album/' + url);
+    }
+  };
+
   return (
     <div
+      ref={cardRef}
       className="card__type--song"
-      onClick={() => {
-        navigate('/album/' + itemInfo.album.id);
+      onClick={(e) => {
+        navigateTo(itemInfo.album.id, e);
       }}
     >
       <div className="card__img">
@@ -71,20 +84,17 @@ export const Card = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          {itemInfo.album.href ? (
-            <a href={itemInfo.album.href}>{itemInfo.name}</a>
-          ) : (
-            itemInfo.album.name
-          )}
+          <Link to={`/album/${itemInfo.album.id}`}>{itemInfo.album.name}</Link>
         </span>
         <span className="card__autor">
-          {itemInfo.artists.map((e, index) => {
-            return (
-              <a key={index} href={e.href}>
+          {itemInfo.artists.map((e, index) => (
+            <>
+              <Link key={index} to={'/artist/' + e.id}>
                 {e.name}
-              </a>
-            );
-          })}
+              </Link>
+              {index < itemInfo.artists.length - 1 && ', '}
+            </>
+          ))}
         </span>
       </div>
     </div>

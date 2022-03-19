@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
@@ -9,7 +9,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const CardPlaylist = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
@@ -18,6 +18,7 @@ export const CardPlaylist = (props) => {
   const { accessToken } = useContext(TokenContext);
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
+  const cardRef = useRef(null);
 
   const handlePlay = () => {
     console.log(currentTrack);
@@ -48,12 +49,24 @@ export const CardPlaylist = (props) => {
   }, [currentTrack]);
 
   const navigate = useNavigate();
+
+  const navigateTo = (id, target) => {
+    console.log(cardRef, target);
+    if (
+      (cardRef.current &&
+        target.target.className == cardRef.current.className) ||
+      target.target.offsetParent.className == 'card__img'
+    ) {
+      navigate('/playlist/' + id);
+    }
+  };
   return (
     <div
-      onClick={() => {
-        navigate('/playlist/' + itemInfo.id);
+      onClick={(e) => {
+        navigateTo(itemInfo.id, e);
       }}
       className="card__type--song"
+      ref={cardRef}
     >
       <div className="card__img">
         <img src={itemInfo.images[0].url} alt="" />
@@ -70,11 +83,7 @@ export const CardPlaylist = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          {itemInfo.href ? (
-            <a href={itemInfo.href}>{itemInfo.name}</a>
-          ) : (
-            itemInfo.name
-          )}
+          <Link to={`/playlist/${itemInfo.id}`}>{itemInfo.name}</Link>
         </span>
         <span className="card__autor">{itemInfo.description}</span>
       </div>
