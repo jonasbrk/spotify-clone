@@ -14,11 +14,11 @@ import { SpotifyApi } from '../../utils';
 
 export const PlaylistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
   const [pageData, setPageData] = useState('');
 
@@ -50,7 +50,7 @@ export const PlaylistTemplate = () => {
           name: name,
           cover: images,
           type: type,
-          owner: owner,
+          owner: owner.display_name,
         });
         setLoading(false);
       });

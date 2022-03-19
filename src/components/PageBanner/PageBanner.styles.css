@@ -80,6 +80,16 @@
   letter-spacing: normal;
 }
 
+.page__info a {
+  text-decoration: none;
+  color: white;
+}
+
+.page__info a::after {
+  content: '•';
+  margin: 0px 4px;
+}
+
 .cover__container,
 .info__container {
   z-index: 1;

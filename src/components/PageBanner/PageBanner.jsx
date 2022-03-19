@@ -2,8 +2,10 @@ import React from 'react';
 import './PageBanner.styles.css';
 import { Pause, PlayImg } from '../../assets/svg';
 import { Button } from '../';
+import { Link } from 'react-router-dom';
 export const PageBanner = ({ pageData, play }) => {
-  const { color, title, description, name, cover, type, owner } = pageData;
+  const { color, title, description, name, cover, type, owner, total_tracks } =
+    pageData;
   const [handlePlay, isPlaying] = play;
   return (
     <>
@@ -30,8 +32,25 @@ export const PageBanner = ({ pageData, play }) => {
             <h2>{name}</h2>
           </div>
           <div className="page__info">
-            <span>
-              {owner.type == 'user' ? owner.display_name : owner[0].name}
+            <span className="page__owner">
+              {type == 'artist' || type == 'playlist' ? (
+                owner
+              ) : (
+                <>
+                  {owner.map((e, index) => (
+                    <>
+                      <Link key={index} to={'/artist/' + e.id}>
+                        {e.name}
+                      </Link>
+                    </>
+                  ))}
+                  <span>
+                    {`${total_tracks} ${
+                      total_tracks > 1 ? 'músicas' : 'música'
+                    }`}
+                  </span>
+                </>
+              )}
             </span>
           </div>
         </div>

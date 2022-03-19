@@ -49,9 +49,10 @@ export const AlbumTemplate = () => {
           name: name,
           cover: images,
           type: type,
-          owner: artists != 'undefined' ? { ...artists, type: 'artist' } : [],
+          owner: artists != 'undefined' ? artists : [],
           total_tracks: total_tracks,
         });
+        console.log(pageData);
         setLoading(false);
       });
   }, [id]);

@@ -41,9 +41,7 @@ export const ArtistTemplate = () => {
             name: name,
             cover: images,
             type: type,
-            owner: [
-              { name: `${followers.total} Subscriptions`, type: 'artist' },
-            ],
+            owner: `${followers.total} Subscriptions`,
           });
         }),
 
