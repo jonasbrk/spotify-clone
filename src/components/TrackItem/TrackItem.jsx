@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './PlaylistItem.styles.css';
+import './TrackItem.styles.css';
 import { useMinutesString, useDateFormater } from '../../utils';
-import { Button } from '../';
+import { Button } from '..';
 import { PlayImg, Pause, LikeImg } from '../../assets/svg';
 import { SpotifyApi } from '../../utils';
 import {
@@ -11,10 +11,9 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
-import axios from 'axios';
 
-export const PlaylistItem = (props) => {
-  const { data, index, playlist, var1, var2 } = props;
+export const TrackItem = (props) => {
+  const { data, index, trackList, var1, var2 } = props;
   const { currentTrack } = useContext(TrackContext);
   const { accessToken } = useContext(TokenContext);
   const { currentDeviceId } = useContext(DeviceContext);
@@ -30,7 +29,7 @@ export const PlaylistItem = (props) => {
         'https://api.spotify.com/v1/me/player/play?device_id=' +
           currentDeviceId,
         {
-          context_uri: playlist.uri,
+          context_uri: trackList.uri,
           offset: { position: index },
           position_ms: 0,
         },
@@ -50,33 +49,31 @@ export const PlaylistItem = (props) => {
 
   return (
     <div
-      className="playlist__item"
+      className="track__item"
       onDoubleClick={() => {
         handlePlay();
       }}
     >
-      <div className="playlist__index">
+      <div className="track__index">
         {!isPlaying && <span>{index + 1}</span>}
         <Button
           src={isPlaying ? <Pause /> : <PlayImg />}
           type="player"
-          custom={`playlist__item__button ${
-            isPlaying && 'playlist__item__button--active'
+          custom={`track__item__button ${
+            isPlaying && 'track__item__button--active'
           }`}
           onClick={() => handlePlay()}
         />
       </div>
-      <div className="playlist__info">
-        {!(playlist.type == 'album') && (
-          <div className="playlist__img">
+      <div className="track__info">
+        {!(trackList.type == 'album') && (
+          <div className="track__img">
             <img src={data.album.images[2].url} alt="" />
           </div>
         )}
 
-        <div className="playlist__title">
-          <span
-            className={`item__title ${isPlaying && 'playlist__item--active'}`}
-          >
+        <div className="track__title">
+          <span className={`item__title ${isPlaying && 'track__item--active'}`}>
             {data.name}
           </span>
 
@@ -95,18 +92,18 @@ export const PlaylistItem = (props) => {
         </div>
       </div>
       {var1 && (
-        <div className="playlist__album">
+        <div className="track__album">
           <span>
             <Link to={'/album/' + data.album.id}>{data.album.name}</Link>
           </span>
         </div>
       )}
       {var2 && (
-        <div className="playlist__added">
+        <div className="track__added">
           <span>{useDateFormater(data.added_at)}</span>
         </div>
       )}
-      <div className="playlist__time">
+      <div className="track__time">
         <span>{useMinutesString(data.duration_ms)}</span>
       </div>
     </div>

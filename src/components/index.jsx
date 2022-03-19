@@ -14,6 +14,6 @@ export { Layout } from './Layout/Layout';
 export { Loading } from './Loading/Loading';
 export { Controls } from './Controls/Controls';
 export { PlaybackProgress } from './PlaybackProgress/PlaybackProgress';
-export { PlaylistItem } from './PlaylistItem/PlaylistItem';
 export { PageBanner } from './PageBanner/PageBanner';
 export { TrackList } from './TrackList/TrackList';
+export { TrackItem } from './TrackItem/TrackItem';

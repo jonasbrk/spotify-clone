@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { PlaylistItem } from '../';
+import { TrackItem } from '../';
 import { ClockImg } from '../../assets/svg';
 import './TrackList.styles.css';
 
@@ -32,8 +32,8 @@ export const TrackList = ({ data, var1, var2 }) => {
       {data.tracks.map((e, index) => {
         console.log(e);
         return (
-          <PlaylistItem
-            playlist={data}
+          <TrackItem
+            trackList={data}
             var1={var1}
             var2={var2}
             key={index}
