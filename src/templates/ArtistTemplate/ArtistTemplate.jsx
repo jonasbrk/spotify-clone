@@ -71,12 +71,11 @@ export const ArtistTemplate = () => {
 
   const handlePlay = () => {
     if (
-      (!currentTrack.context.uri &&
-        !data.tracks
-          .map((e) => {
-            return e.uri;
-          })
-          .includes(currentTrack.uri)) ||
+      !data.tracks
+        .map((e) => {
+          return e.uri;
+        })
+        .includes(currentTrack.uri) ||
       currentTrack.init_load
     ) {
       SpotifyApi(
