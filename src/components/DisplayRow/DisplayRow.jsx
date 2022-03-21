@@ -38,7 +38,6 @@ export const DisplayRow = (props) => {
     <div ref={rowRef} className="main__row">
       <div className="main__row--header">
         <h2>{title}</h2>
-        {data.length < itensLength ? '' : <a href="#">VER TUDO</a>}
       </div>
       <div className="main__row--main">
         {newArray ? (

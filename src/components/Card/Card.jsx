@@ -51,7 +51,6 @@ export const Card = (props) => {
   const navigate = useNavigate();
 
   const navigateTo = (url, target) => {
-    console.log(cardRef, target);
     if (
       (cardRef.current &&
         target.target.className == cardRef.current.className) ||
@@ -89,9 +88,7 @@ export const Card = (props) => {
         <span className="card__autor">
           {itemInfo.artists.map((e, index) => (
             <>
-              <Link key={index} to={'/artist/' + e.id}>
-                {e.name}
-              </Link>
+              {e.name}
               {index < itemInfo.artists.length - 1 && ', '}
             </>
           ))}

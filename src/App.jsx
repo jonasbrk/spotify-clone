@@ -5,6 +5,7 @@ import {
   PlaylistTemplate,
   AlbumTemplate,
   ArtistTemplate,
+  CollectionTracks,
 } from './templates/index';
 import { Login } from './pages/login/Login';
 import { Routes, Route } from 'react-router-dom';
@@ -69,9 +70,9 @@ const App = () => {
           <Route path="/playlist/:id" element={<PlaylistTemplate />} />
           <Route path="/album/:id" element={<AlbumTemplate />} />
           <Route path="/artist/:id" element={<ArtistTemplate />} />
+          <Route path="/collection/tracks" element={<CollectionTracks />} />
           {/* <Route path="/search" component={SearchPage} />
           <Route path="/collection/playlists" component={CollectionPlaylists} />
-          <Route path="/collection/tracks" component={CollectionTracks} />
           <Route path="/collection/artists" component={CollectionArtists} />
           <Route path="/collection/albums" component={CollectionAlbums} />
           <Route path="/genre/:id" element={GenreTemplate} /> */}

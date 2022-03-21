@@ -6,15 +6,14 @@ import {
   ArrowUpMenuImg,
   UseDefaultImg,
 } from '../../assets/svg/index';
-import { TokenContext } from '../../utils/context';
+import { TokenContext, UserContext } from '../../utils/context';
 import axios from 'axios';
 
 export const UserMenu = () => {
   const { accessToken } = useContext(TokenContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
-
-  const [userInfo, setUserInfo] = useState('');
 
   useEffect(() => {
     axios
@@ -24,7 +23,7 @@ export const UserMenu = () => {
         },
       })
       .then((e) => {
-        setUserInfo(e.data);
+        setCurrentUser(e.data);
       });
   }, [accessToken]);
 
@@ -43,13 +42,13 @@ export const UserMenu = () => {
             }}
           >
             <div className="user__picture">
-              {userInfo.images == [] ? (
+              {currentUser.images == [] ? (
                 <img
                   aria-hidden="false"
                   draggable="false"
                   loading="eager"
-                  src={userInfo.images[0]}
-                  alt={userInfo.display_name}
+                  src={currentUser.images[0]}
+                  alt={currentUser.display_name}
                 />
               ) : (
                 <div className="user--default">
@@ -58,7 +57,7 @@ export const UserMenu = () => {
               )}
             </div>
             <div className="user__name">
-              <span>{userInfo.display_name}</span>
+              <span>{currentUser.display_name}</span>
             </div>
             <div className="user__icon">
               {isComponentVisible ? <ArrowUpMenuImg /> : <ArrowDownMenuImg />}
