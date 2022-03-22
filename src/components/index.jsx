@@ -15,5 +15,6 @@ export { Loading } from './Loading/Loading';
 export { Controls } from './Controls/Controls';
 export { PlaybackProgress } from './PlaybackProgress/PlaybackProgress';
 export { PageBanner } from './PageBanner/PageBanner';
+export { PageHeader } from './PageBanner/PageHeader';
 export { TrackList } from './TrackList/TrackList';
 export { TrackItem } from './TrackItem/TrackItem';

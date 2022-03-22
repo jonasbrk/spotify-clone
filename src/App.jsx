@@ -5,10 +5,10 @@ import {
   PlaylistTemplate,
   AlbumTemplate,
   ArtistTemplate,
-  CollectionTracks,
 } from './templates/index';
+import { CollectionTracks, CollectionPlaylists } from './pages/library';
 import { Login } from './pages/login/Login';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import { client_id, client_secret, uri, scope } from './credentials';
@@ -71,8 +71,15 @@ const App = () => {
           <Route path="/album/:id" element={<AlbumTemplate />} />
           <Route path="/artist/:id" element={<ArtistTemplate />} />
           <Route path="/collection/tracks" element={<CollectionTracks />} />
+          <Route
+            path="/collection/playlists"
+            element={<CollectionPlaylists />}
+          />
+          <Route
+            path="/collection/"
+            element={<Navigate to="/collection/playlists" replace />}
+          />
           {/* <Route path="/search" component={SearchPage} />
-          <Route path="/collection/playlists" component={CollectionPlaylists} />
           <Route path="/collection/artists" component={CollectionArtists} />
           <Route path="/collection/albums" component={CollectionAlbums} />
           <Route path="/genre/:id" element={GenreTemplate} /> */}

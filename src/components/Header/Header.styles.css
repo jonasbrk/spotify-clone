@@ -1,12 +1,13 @@
 header {
   display: flex;
   justify-content: space-between;
-  position: sticky;
+  position: absolute;
   height: 64px;
   /* background-color: #121212; */
   padding: 16px 32px;
   box-sizing: border-box;
-  z-index: 2;
+  z-index: 3;
+  width: 100%;
 }
 
 .header__wrapper {

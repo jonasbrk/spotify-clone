@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './CollectionTracks.styles.css';
+import './styles/CollectionTracks.styles.css';
 import { Loading, PageBanner, TrackList } from '../../components';
-import { generateRandomColor } from '../../utils';
 import axios from 'axios';
 import {
   DeviceContext,
@@ -10,7 +9,6 @@ import {
   TrackContext,
   UserContext,
 } from '../../utils/context';
-import { useParams } from 'react-router-dom';
 import { SpotifyApi } from '../../utils';
 
 export const CollectionTracks = () => {

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import './Home.styles.css';
-import { DisplayRow, Loading } from '../../components/index';
+import { DisplayRow, Loading, PageHeader } from '../../components/index';
 import axios from 'axios';
 import { TokenContext, TrackContext } from '../../utils/context';
 import qs from 'qs';
 const Home = () => {
+  const homeRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
   const { currentTrack, setCurrentTrack } = useContext(TrackContext);
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,8 @@ const Home = () => {
 
   useEffect(() => {
     console.log(homeData);
-  }, [homeData]);
+    console.log(homeRef);
+  }, [homeData, homeRef]);
 
   useEffect(() => {
     if (accessToken) {
@@ -207,51 +209,55 @@ const Home = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="home">
-          <DisplayRow
-            title="Tocado recentemente"
-            type="card"
-            data={homeData.recent_played.items
-              .map((e) => {
-                return e.track;
-              })
-              .filter((value, index, self) => {
-                return (
-                  index === self.findIndex((t) => t.album.id === value.album.id)
-                );
-              })}
-          />
-          <DisplayRow
-            title="Recomendados de hoje"
-            type="card"
-            data={homeData.recommendation.tracks}
-          />
-          <DisplayRow
-            title="As mais ouvidas por você"
-            type="card"
-            data={homeData.top_user_tracks.items}
-          />
-          <DisplayRow
-            title="Pop"
-            type="playlist"
-            data={homeData.top_genre_playlists.items}
-          />
-          <DisplayRow
-            title="Seu astral"
-            type="playlist"
-            data={homeData.mood_category.items}
-          />
-          <DisplayRow
-            title="Tops do momento"
-            type="playlist"
-            data={homeData.top_list_category.items}
-          />
-          <DisplayRow
-            title="Lançamentos"
-            type="playlist"
-            data={homeData.new_releases.albums.items}
-          />
-        </div>
+        <>
+          <PageHeader bgColor={'white'} pageRef={homeRef} />
+          <div className="home" ref={homeRef}>
+            <DisplayRow
+              title="Tocado recentemente"
+              type="card"
+              data={homeData.recent_played.items
+                .map((e) => {
+                  return e.track;
+                })
+                .filter((value, index, self) => {
+                  return (
+                    index ===
+                    self.findIndex((t) => t.album.id === value.album.id)
+                  );
+                })}
+            />
+            <DisplayRow
+              title="Recomendados de hoje"
+              type="card"
+              data={homeData.recommendation.tracks}
+            />
+            <DisplayRow
+              title="As mais ouvidas por você"
+              type="card"
+              data={homeData.top_user_tracks.items}
+            />
+            <DisplayRow
+              title="Pop"
+              type="playlist"
+              data={homeData.top_genre_playlists.items}
+            />
+            <DisplayRow
+              title="Seu astral"
+              type="playlist"
+              data={homeData.mood_category.items}
+            />
+            <DisplayRow
+              title="Tops do momento"
+              type="playlist"
+              data={homeData.top_list_category.items}
+            />
+            <DisplayRow
+              title="Lançamentos"
+              type="playlist"
+              data={homeData.new_releases.albums.items}
+            />
+          </div>
+        </>
       )}
     </>
   );
