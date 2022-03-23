@@ -4,6 +4,7 @@
   margin-bottom: 16px;
   min-height: 300px;
   min-width: 100%;
+  z-index: 1;
 }
 
 .main__row--header {

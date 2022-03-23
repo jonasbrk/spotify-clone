@@ -91,10 +91,12 @@ export const AlbumTemplate = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="playlist__template">
+        <div className="page__wrapper">
           <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
-          <div className="main__template__container">
-            <TrackList data={data} />
+          <div className="playlist__template">
+            <div className="main__template__container">
+              <TrackList data={data} />
+            </div>
           </div>
         </div>
       )}

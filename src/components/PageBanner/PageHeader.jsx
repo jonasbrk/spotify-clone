@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './PageBanner.styles.css';
-export const PageHeader = ({ bgColor, pageRef }) => {
+export const PageHeader = ({ bgColor }) => {
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
   const [opacity, setOpacity] = useState(0);
@@ -19,18 +19,19 @@ export const PageHeader = ({ bgColor, pageRef }) => {
   };
 
   useEffect(() => {
-    pageRef.current.parentElement.addEventListener('scroll', () =>
+    console.log(headerBgRef);
+    headerBgRef.current.parentNode.addEventListener('scroll', () =>
       opacityHandler(),
     );
     return () => {
-      pageRef.current.parentElement.removeEventListener('scroll', () =>
+      headerBgRef.current.parentNode.removeEventListener('scroll', () =>
         opacityHandler(),
       );
     };
-  });
+  }, [headerBgRef]);
   return (
     <>
-      <div className="pageBanner__header">
+      <div className="page__header" ref={headerBgRef}>
         <div
           ref={headerGradientRef}
           className="pageBanner__header__gradient"
@@ -38,8 +39,7 @@ export const PageHeader = ({ bgColor, pageRef }) => {
         ></div>
       </div>
       <div
-        ref={headerBgRef}
-        className="pageBanner__header__sticky"
+        className="page__header__sticky"
         style={{ backgroundColor: bgColor, opacity: opacity }}
       >
         <div className="pageBanner__header__sticky__gradient"></div>

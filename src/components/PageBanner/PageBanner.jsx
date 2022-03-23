@@ -1,13 +1,53 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './PageBanner.styles.css';
 import { Pause, PlayImg } from '../../assets/svg';
+import { PageHeader } from './PageHeader';
 import { Button } from '../';
 import { Link } from 'react-router-dom';
-export const PageBanner = ({ pageData, play }) => {
+export const PageBanner = ({ pageData, play, disabled, bgColor }) => {
   const { color, title, name, cover, type, owner, total_tracks } = pageData;
   const [handlePlay, isPlaying] = play;
+  const headerBgRef = useRef(null);
+  const headerGradientRef = useRef(null);
+  const [opacity, setOpacity] = useState(0);
+
+  const opacityHandler = () => {
+    const grandienInfo = headerGradientRef.current.getBoundingClientRect();
+    const opacitiyPercent = (
+      1 -
+      ((grandienInfo.bottom - 64) * 100) / ((grandienInfo.height - 64) * 100)
+    ).toFixed(2);
+    console.log(opacitiyPercent);
+
+    if (opacitiyPercent >= 1) setOpacity(1);
+    if (opacitiyPercent > 0 && opacitiyPercent < 1) setOpacity(opacitiyPercent);
+    if (opacitiyPercent <= 0) setOpacity(0);
+  };
+
+  useEffect(() => {
+    console.log(headerBgRef);
+    headerBgRef.current.parentNode.addEventListener('scroll', () =>
+      opacityHandler(),
+    );
+    return () => {
+      headerBgRef.current.parentNode.removeEventListener('scroll', () =>
+        opacityHandler(),
+      );
+    };
+  }, [headerBgRef]);
   return (
     <>
+      <div
+        ref={headerBgRef}
+        className="pageBanner__header"
+        style={{
+          backgroundColor: color,
+          opacity: opacity,
+        }}
+      >
+        <div className="pageBanner__header__sticky__gradient"></div>
+      </div>
+
       <div className="pageBanner">
         <div
           className="pageBanner__color"
@@ -17,7 +57,7 @@ export const PageBanner = ({ pageData, play }) => {
               : { backgroundColor: color }
           }
         ></div>
-        <div className="pageBanner__gradient"></div>
+        <div ref={headerGradientRef} className="pageBanner__gradient"></div>
         {type != 'artist' && (
           <div className="cover__container">
             <img src={cover[0].url} />
