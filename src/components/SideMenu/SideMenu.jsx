@@ -44,7 +44,7 @@ export const SideMenu = (props) => {
         <Button to="/search" src={<SearchImg />} type="nav">
           Buscar
         </Button>
-        <Button to="/library" src={<LibraryImg />} type="nav">
+        <Button to="/collection" src={<LibraryImg />} type="nav">
           Sua Biblioteca
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './PageBanner.styles.css';
-export const PageHeader = ({ bgColor }) => {
+export const PageHeader = ({ bgColor, disabled, children }) => {
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
   const [opacity, setOpacity] = useState(0);
@@ -35,14 +35,18 @@ export const PageHeader = ({ bgColor }) => {
         <div
           ref={headerGradientRef}
           className="pageBanner__header__gradient"
-          style={{ backgroundColor: bgColor }}
+          style={{ backgroundColor: !disabled && bgColor }}
         ></div>
       </div>
-      <div
-        className="page__header__sticky"
-        style={{ backgroundColor: bgColor, opacity: opacity }}
-      >
-        <div className="pageBanner__header__sticky__gradient"></div>
+
+      <div className="page__header__sticky">
+        {children && <div className="page__header__nav">{children}</div>}
+        <div
+          className="page__header__sticky__color"
+          style={{ backgroundColor: bgColor, opacity: opacity }}
+        >
+          <div className="pageBanner__header__sticky__gradient"></div>
+        </div>
       </div>
     </>
   );

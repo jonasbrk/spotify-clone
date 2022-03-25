@@ -11,7 +11,7 @@ import {
 } from '../../utils/context';
 import { Link, useNavigate } from 'react-router-dom';
 
-export const CardPlaylist = (props) => {
+export const CardArtist = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
@@ -31,7 +31,6 @@ export const CardPlaylist = (props) => {
 
         {
           context_uri: itemInfo.uri,
-          offset: { position: 0 },
           position_ms: 0,
         },
       );
@@ -57,7 +56,7 @@ export const CardPlaylist = (props) => {
         target.target.className == cardRef.current.className) ||
       target.target.offsetParent.className == 'card__img'
     ) {
-      navigate('/playlist/' + id);
+      navigate('/artist/' + id);
     }
   };
   return (
@@ -65,7 +64,7 @@ export const CardPlaylist = (props) => {
       onClick={(e) => {
         navigateTo(itemInfo.id, e);
       }}
-      className="card__type--song"
+      className="card__type--song card__type--artist"
       ref={cardRef}
     >
       <div className="card__img">
@@ -83,11 +82,9 @@ export const CardPlaylist = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/playlist/${itemInfo.id}`}>{itemInfo.name}</Link>
+          <Link to={`/artist/${itemInfo.id}`}>{itemInfo.name}</Link>
         </span>
-        <span className="card__autor">
-          {itemInfo.description && itemInfo.description}
-        </span>
+        <span className="card__autor">Artist</span>
       </div>
     </div>
   );

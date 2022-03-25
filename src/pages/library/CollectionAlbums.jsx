@@ -1,48 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
-import { DisplayFull, PageHeader, Loading, CardLiked } from '../../components';
+import { NoAlbumImg } from '../../assets/svg';
+import { DisplayFull, PageHeader, Loading } from '../../components';
 import { TokenContext } from '../../utils/context';
 import './styles/CollectionPlaylists.styles.css';
 
-export const CollectionPlaylists = () => {
+export const CollectionAlbums = () => {
   const { accessToken } = useContext(TokenContext);
   const [loading, setLoading] = useState(true);
-  const [userPlaylists, setUserPlaylists] = useState({});
-  const [userLiked, setUserLiked] = useState('');
+  const [userAlbums, setUserAlbums] = useState({});
 
   useEffect(() => {
-    Promise.all([
-      axios
-        .get('https://api.spotify.com/v1/me/playlists', {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        })
-        .then((e) => {
-          console.log(e.data);
-          setUserPlaylists(e.data);
-        }),
-
-      axios
-        .get('https://api.spotify.com/v1/me/tracks', {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        })
-        .then((e) => {
-          const { items } = e.data;
-          setUserLiked({
-            name: 'Liked Songs',
-            type: 'playlist',
-            tracks: items.map((e) => {
-              return e.track;
-            }),
-          });
-        }),
-    ]).then(() => {
-      setLoading(false);
-    });
+    axios
+      .get('https://api.spotify.com/v1/me/albums', {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      })
+      .then((e) => {
+        setUserAlbums(e.data);
+        setLoading(false);
+      });
   }, [accessToken]);
 
   return (
@@ -80,15 +59,26 @@ export const CollectionPlaylists = () => {
             </div>
           </PageHeader>
           <div className="collection__playlists">
-            <DisplayFull
-              title="Playlists"
-              type="playlist"
-              data={userPlaylists.items.map((e) => {
-                return { ...e, description: `De ${e.owner.display_name}` };
-              })}
-            >
-              <CardLiked itemInfo={userLiked} />
-            </DisplayFull>
+            {userAlbums.items.length ? (
+              <DisplayFull
+                title="Albums"
+                type="albums"
+                data={userAlbums.items}
+              />
+            ) : (
+              <div className="no_info">
+                <div className="no_info__img">
+                  <NoAlbumImg />
+                </div>
+                <div className="no_info__description">
+                  <h2>Siga o seu primeiro álbum</h2>
+                  <span>Para salvar um álbum, clique no ícone de coração.</span>
+                </div>
+                <div className="no_info__button">
+                  <Link to={'/search'}>PROCURAR ÁLBUNS</Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

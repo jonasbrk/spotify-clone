@@ -174,8 +174,26 @@
   left: 0;
   display: block;
 }
+.page__header__sticky__color {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+}
 
 .pageBanner__header__sticky__gradient {
   background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
+  width: 100%;
+}
+
+.page__header__nav {
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 0;
+  left: 144px;
 }

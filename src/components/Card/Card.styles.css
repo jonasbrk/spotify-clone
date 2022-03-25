@@ -1,7 +1,6 @@
 .card__type--song {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
   min-width: 180px;
   max-width: 220px;
@@ -26,6 +25,7 @@
 
 .card__img img {
   border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 50%);
 }
 
 .play--buton--card {
@@ -89,10 +89,10 @@
   transition: all 0.3s ease;
 }
 .card__title {
-  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 100%;
 }
 
 .card__info .card__autor {
@@ -114,4 +114,33 @@
 .card__info a:hover {
   text-decoration: underline;
   color: white;
+}
+
+.card__type--liked {
+  background: linear-gradient(149.46deg, #450af5, #8e8ee5 99.16%);
+  min-height: 275px;
+  max-height: 310px;
+  min-width: 440px;
+  max-width: 440px;
+  justify-content: flex-end;
+  position: relative;
+  padding: 20px;
+}
+
+.card__type--liked .card__info .card__title {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  letter-spacing: -0.04em;
+}
+.card__type--liked .card__info .card__autor {
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: white;
+}
+.card__type--liked .play--buton--card {
+  bottom: 28px;
+  right: 28px;
+}
+.card__type--artist .card__img img {
+  border-radius: 500px;
 }

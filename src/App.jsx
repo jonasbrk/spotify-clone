@@ -1,12 +1,18 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Home from './pages/home/Home';
+import { SearchPage } from './pages/search/SearchPage';
 import {
   PlaylistTemplate,
   AlbumTemplate,
   ArtistTemplate,
 } from './templates/index';
-import { CollectionTracks, CollectionPlaylists } from './pages/library';
+import {
+  CollectionTracks,
+  CollectionPlaylists,
+  CollectionAlbums,
+  CollectionArtists,
+} from './pages/library';
 import { Login } from './pages/login/Login';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
@@ -79,10 +85,10 @@ const App = () => {
             path="/collection/"
             element={<Navigate to="/collection/playlists" replace />}
           />
-          {/* <Route path="/search" component={SearchPage} />
-          <Route path="/collection/artists" component={CollectionArtists} />
-          <Route path="/collection/albums" component={CollectionAlbums} />
-          <Route path="/genre/:id" element={GenreTemplate} /> */}
+          <Route path="/collection/albums" element={<CollectionAlbums />} />
+          <Route path="/collection/artists" element={<CollectionArtists />} />
+          <Route path="/search" element={<SearchPage />} />
+          {/* <Route path="/genre/:id" element={GenreTemplate} /> */}
           <Route path="/login" element={<Login useLogin={useLogin} />} />
         </Layout>
 

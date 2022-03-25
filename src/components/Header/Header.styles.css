@@ -8,11 +8,13 @@ header {
   box-sizing: border-box;
   z-index: 3;
   width: 100%;
+  pointer-events: none;
 }
 
 .header__wrapper {
   display: flex;
   gap: 16px;
+  pointer-events: all;
 }
 
 .header__wrapper .button--icon {
