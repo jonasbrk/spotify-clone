@@ -11,7 +11,7 @@ import {
   TrackContext,
 } from '../../utils/context';
 
-export const Card = (props) => {
+export const CardAlbum = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
@@ -30,8 +30,8 @@ export const Card = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.album.uri,
-          offset: { position: itemInfo.track_number - 1 },
+          context_uri: itemInfo.uri,
+          offset: { position: 0 },
           position_ms: 0,
         },
       );
@@ -65,11 +65,11 @@ export const Card = (props) => {
       ref={cardRef}
       className="card__type--song"
       onClick={(e) => {
-        navigateTo(itemInfo.album.id, e);
+        navigateTo(itemInfo.id, e);
       }}
     >
       <div className="card__img">
-        <img src={itemInfo.album.images[1].url} alt="" />
+        <img src={itemInfo.images[1].url} alt="" />
         <Button
           onClick={() => {
             handlePlay();
@@ -83,7 +83,7 @@ export const Card = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/album/${itemInfo.album.id}`}>{itemInfo.album.name}</Link>
+          <Link to={`/album/${itemInfo.id}`}>{itemInfo.name}</Link>
         </span>
         <span className="card__autor">
           {itemInfo.artists.map((e, index) => (

@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import './DisplayRow.styles.css';
-import { Card, CardPlaylist } from '../index';
+import {
+  Card,
+  CardPlaylist,
+  CardArtist,
+  CardAlbum,
+  CardCategory,
+} from '../index';
 
 export const DisplayRow = (props) => {
   const { title, data, type } = props;
@@ -38,14 +44,22 @@ export const DisplayRow = (props) => {
     <div ref={rowRef} className="main__row">
       <div className="main__row--header">
         <h2>{title}</h2>
-        {data.length < itensLength ? '' : <a href="#">VER TUDO</a>}
       </div>
       <div className="main__row--main">
         {newArray ? (
           newArray.map((e, index) => {
             if (type == 'card') return <Card itemInfo={e} key={index} />;
-            if (type == 'playlist') {
+            if (type == 'playlists') {
               return <CardPlaylist itemInfo={e} key={index} />;
+            }
+            if (type == 'artists') {
+              return <CardArtist itemInfo={e} key={index} />;
+            }
+            if (type == 'albums') {
+              return <CardAlbum itemInfo={e} key={index} />;
+            }
+            if (type == 'category') {
+              return <CardCategory itemInfo={e} key={index} />;
             }
           })
         ) : (

@@ -49,9 +49,10 @@ export const AlbumTemplate = () => {
           name: name,
           cover: images,
           type: type,
-          owner: artists != 'undefined' ? { ...artists, type: 'artist' } : [],
+          owner: artists != 'undefined' ? artists : [],
           total_tracks: total_tracks,
         });
+        console.log(pageData);
         setLoading(false);
       });
   }, [id]);
@@ -90,10 +91,12 @@ export const AlbumTemplate = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="playlist__template">
+        <div className="page__wrapper">
           <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
-          <div className="main__template__container">
-            <TrackList data={data} />
+          <div className="playlist__template">
+            <div className="main__template__container">
+              <TrackList data={data} />
+            </div>
           </div>
         </div>
       )}

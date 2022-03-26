@@ -124,3 +124,7 @@
   flex-direction: column;
   padding: 24px;
 }
+
+.userPlaylist__nav a {
+  height: 40px;
+}

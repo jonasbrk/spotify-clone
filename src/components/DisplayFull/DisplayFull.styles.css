@@ -1,4 +1,4 @@
-.main__row {
+.main__full {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
@@ -7,12 +7,12 @@
   z-index: 1;
 }
 
-.main__row--header {
+.main__full--header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.main__row--header a {
+.main__full--header a {
   font-size: 0.75rem;
   line-height: 1rem;
   letter-spacing: 0.1em;
@@ -21,11 +21,11 @@
   color: #b3b3b3;
 }
 
-.main__row--header a:hover {
+.main__full--header a:hover {
   text-decoration: underline;
 }
 
-.main__row--header h2 {
+.main__full--header h2 {
   font-size: 1.5rem;
   line-height: 1.75rem;
   letter-spacing: -0.04em;
@@ -33,10 +33,10 @@
   color: white;
 }
 
-.main__row--main {
+.main__full--main {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 24px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }

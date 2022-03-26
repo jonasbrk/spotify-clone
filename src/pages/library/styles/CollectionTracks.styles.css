@@ -4,6 +4,7 @@
   position: relative;
   overflow-y: auto;
 }
+
 .playlist__template {
   display: flex;
   flex-direction: column;

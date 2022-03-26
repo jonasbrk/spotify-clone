@@ -1,13 +1,21 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Home from './pages/home/Home';
+import { SearchPage } from './pages/search/SearchPage';
 import {
   PlaylistTemplate,
   AlbumTemplate,
   ArtistTemplate,
+  GenreTemplate,
 } from './templates/index';
+import {
+  CollectionTracks,
+  CollectionPlaylists,
+  CollectionAlbums,
+  CollectionArtists,
+} from './pages/library';
 import { Login } from './pages/login/Login';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import { client_id, client_secret, uri, scope } from './credentials';
@@ -69,12 +77,19 @@ const App = () => {
           <Route path="/playlist/:id" element={<PlaylistTemplate />} />
           <Route path="/album/:id" element={<AlbumTemplate />} />
           <Route path="/artist/:id" element={<ArtistTemplate />} />
-          {/* <Route path="/search" component={SearchPage} />
-          <Route path="/collection/playlists" component={CollectionPlaylists} />
-          <Route path="/collection/tracks" component={CollectionTracks} />
-          <Route path="/collection/artists" component={CollectionArtists} />
-          <Route path="/collection/albums" component={CollectionAlbums} />
-          <Route path="/genre/:id" element={GenreTemplate} /> */}
+          <Route path="/genre/:id" element={<GenreTemplate />} />
+          <Route path="/collection/tracks" element={<CollectionTracks />} />
+          <Route
+            path="/collection/playlists"
+            element={<CollectionPlaylists />}
+          />
+          <Route
+            path="/collection/"
+            element={<Navigate to="/collection/playlists" replace />}
+          />
+          <Route path="/collection/albums" element={<CollectionAlbums />} />
+          <Route path="/collection/artists" element={<CollectionArtists />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<Login useLogin={useLogin} />} />
         </Layout>
 

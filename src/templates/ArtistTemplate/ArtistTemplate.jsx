@@ -41,9 +41,7 @@ export const ArtistTemplate = () => {
             name: name,
             cover: images,
             type: type,
-            owner: [
-              { name: `${followers.total} Subscriptions`, type: 'artist' },
-            ],
+            owner: `${followers.total} Subscriptions`,
           });
         }),
 
@@ -71,12 +69,11 @@ export const ArtistTemplate = () => {
 
   const handlePlay = () => {
     if (
-      (!currentTrack.context.uri &&
-        !data.tracks
-          .map((e) => {
-            return e.uri;
-          })
-          .includes(currentTrack.uri)) ||
+      !data.tracks
+        .map((e) => {
+          return e.uri;
+        })
+        .includes(currentTrack.uri) ||
       currentTrack.init_load
     ) {
       SpotifyApi(
@@ -121,10 +118,12 @@ export const ArtistTemplate = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="playlist__template">
+        <div className="page__wrapper">
           <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
-          <div className="main__template__container">
-            <TrackList var1="ÁLBUM" data={data} />
+          <div className="playlist__template">
+            <div className="main__template__container">
+              <TrackList var1="ÁLBUM" data={data} />
+            </div>
           </div>
         </div>
       )}

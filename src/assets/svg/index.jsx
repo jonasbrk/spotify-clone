@@ -28,3 +28,6 @@ export { PcDeviceImg } from './PcDevice.img';
 export { DevicePlayingImg } from './DevicePlaying.img';
 export { UseDefaultImg } from './UseDefault.img';
 export { ClockImg } from './Clock.img';
+export { NoAlbumImg } from './NoAlbum.img';
+export { NoArtistImg } from './NoArtist.img';
+export { CloseImg } from './Close.img';

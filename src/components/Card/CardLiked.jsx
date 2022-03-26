@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
-import { SpotifyApi } from '../../utils/';
+import { SpotifyApi } from '../../utils';
 import {
   DeviceContext,
   PlayerContext,
@@ -11,7 +11,7 @@ import {
 } from '../../utils/context';
 import { Link, useNavigate } from 'react-router-dom';
 
-export const CardPlaylist = (props) => {
+export const CardLiked = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
@@ -22,7 +22,14 @@ export const CardPlaylist = (props) => {
 
   const handlePlay = () => {
     console.log(currentTrack);
-    if (currentTrack.context.uri != itemInfo.uri || currentTrack.init_load) {
+    if (
+      !itemInfo.tracks
+        .map((e) => {
+          return e.uri;
+        })
+        .includes(currentTrack.uri) ||
+      currentTrack.init_load
+    ) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -30,7 +37,9 @@ export const CardPlaylist = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.uri,
+          uris: itemInfo.tracks.map((e) => {
+            return e.uri;
+          }),
           offset: { position: 0 },
           position_ms: 0,
         },
@@ -43,50 +52,36 @@ export const CardPlaylist = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.context.uri == itemInfo.uri && currentTrack.play) {
+    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
 
   const navigate = useNavigate();
 
-  const navigateTo = (id, target) => {
-    console.log(cardRef, target);
-    if (
-      (cardRef.current &&
-        target.target.className == cardRef.current.className) ||
-      target.target.offsetParent.className == 'card__img'
-    ) {
-      navigate('/playlist/' + id);
-    }
-  };
   return (
     <div
       onClick={(e) => {
-        navigateTo(itemInfo.id, e);
+        navigate('/collection/tracks');
       }}
-      className="card__type--song"
+      className="card__type--song card__type--liked"
       ref={cardRef}
     >
-      <div className="card__img">
-        <img src={itemInfo.images[0].url} alt="" />
-        <Button
-          onClick={() => {
-            handlePlay();
-          }}
-          type="player"
-          custom={`play--buton--card ${
-            isPlaying && 'play--buton--card--playing'
-          }`}
-          src={isPlaying ? <Pause /> : <PlayImg />}
-        />
-      </div>
+      <Button
+        onClick={() => {
+          handlePlay();
+        }}
+        type="player"
+        custom={`play--buton--card ${
+          isPlaying && 'play--buton--card--playing'
+        }`}
+        src={isPlaying ? <Pause /> : <PlayImg />}
+      />
+
       <div className="card__info">
-        <span className="card__title">
-          <Link to={`/playlist/${itemInfo.id}`}>{itemInfo.name}</Link>
-        </span>
+        <span className="card__title">{itemInfo.name}</span>
         <span className="card__autor">
-          {itemInfo.description && itemInfo.description}
+          {itemInfo.tracks.length + ' músicas curtidas'}
         </span>
       </div>
     </div>

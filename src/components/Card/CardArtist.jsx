@@ -3,26 +3,26 @@ import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { SpotifyApi } from '../../utils/';
-import { Link, useNavigate } from 'react-router-dom';
 import {
   DeviceContext,
   PlayerContext,
   TokenContext,
   TrackContext,
 } from '../../utils/context';
+import { Link, useNavigate } from 'react-router-dom';
 
-export const Card = (props) => {
+export const CardArtist = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
   const { accessToken } = useContext(TokenContext);
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
-
   const cardRef = useRef(null);
-  const handlePlay = (e) => {
+
+  const handlePlay = () => {
     console.log(currentTrack);
-    if (currentTrack.uri != itemInfo.uri || currentTrack.init_load) {
+    if (currentTrack.context.uri != itemInfo.uri || currentTrack.init_load) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -30,8 +30,7 @@ export const Card = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.album.uri,
-          offset: { position: itemInfo.track_number - 1 },
+          context_uri: itemInfo.uri,
           position_ms: 0,
         },
       );
@@ -43,33 +42,40 @@ export const Card = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
+    if (currentTrack.context.uri == itemInfo.uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
 
   const navigate = useNavigate();
 
-  const navigateTo = (url, target) => {
+  const navigateTo = (id, target) => {
+    console.log(cardRef, target);
     if (
       (cardRef.current &&
         target.target.className == cardRef.current.className) ||
-      target.target.offsetParent.className == 'card__img'
+      target.target.offsetParent.className == 'card__img__wrapper'
     ) {
-      navigate('/album/' + url);
+      navigate('/artist/' + id);
     }
   };
-
   return (
     <div
-      ref={cardRef}
-      className="card__type--song"
       onClick={(e) => {
-        navigateTo(itemInfo.album.id, e);
+        navigateTo(itemInfo.id, e);
       }}
+      className="card__type--song card__type--artist"
+      ref={cardRef}
     >
       <div className="card__img">
-        <img src={itemInfo.album.images[1].url} alt="" />
+        <div className="card__img__wrapper">
+          <div>
+            <img
+              src={itemInfo.images.length != 0 && itemInfo.images[1].url}
+              alt=""
+            />
+          </div>
+        </div>
         <Button
           onClick={() => {
             handlePlay();
@@ -83,16 +89,9 @@ export const Card = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/album/${itemInfo.album.id}`}>{itemInfo.album.name}</Link>
+          <Link to={`/artist/${itemInfo.id}`}>{itemInfo.name}</Link>
         </span>
-        <span className="card__autor">
-          {itemInfo.artists.map((e, index) => (
-            <>
-              {e.name}
-              {index < itemInfo.artists.length - 1 && ', '}
-            </>
-          ))}
-        </span>
+        <span className="card__autor">Artist</span>
       </div>
     </div>
   );

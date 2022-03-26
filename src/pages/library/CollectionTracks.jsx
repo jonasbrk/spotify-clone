@@ -1,63 +1,70 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './PlaylistTemplate.styles.css';
+import './styles/CollectionTracks.styles.css';
 import { Loading, PageBanner, TrackList } from '../../components';
-import { generateRandomColor } from '../../utils';
 import axios from 'axios';
 import {
   DeviceContext,
   PlayerContext,
   TokenContext,
   TrackContext,
+  UserContext,
 } from '../../utils/context';
-import { useParams } from 'react-router-dom';
 import { SpotifyApi } from '../../utils';
 
-export const PlaylistTemplate = () => {
+export const CollectionTracks = () => {
   const { accessToken } = useContext(TokenContext);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const { currentUser } = useContext(UserContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
   const [pageData, setPageData] = useState('');
 
-  const { id } = useParams();
-
   useEffect(() => {
     axios
-      .get(`https://api.spotify.com/v1/playlists/${id}`, {
+      .get('https://api.spotify.com/v1/me/tracks', {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       })
       .then((e) => {
-        const { name, images, type, owner, uri, tracks } = e.data;
+        const { items } = e.data;
         setData({
-          uri: uri,
-          name: name,
-          id: id,
-          type: type,
-          tracks: tracks.items.map((e) => {
+          name: 'Liked Songs',
+          type: 'playlist',
+          tracks: items.map((e) => {
             return e.track;
           }),
         });
 
         setPageData({
-          color: generateRandomColor(),
-          title: type,
+          color: 'rgb(80, 56, 160)',
+          title: 'playlist',
           description: 'oi',
-          name: name,
-          cover: images,
-          type: type,
-          owner: owner.display_name,
+          name: 'Liked Songs',
+          cover: [
+            {
+              url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
+            },
+          ],
+          type: 'playlist',
+          owner: currentUser.display_name,
         });
         setLoading(false);
       });
-  }, [id]);
+  }, [accessToken]);
 
   const handlePlay = () => {
-    if (currentTrack.context.uri != data.uri || currentTrack.init_load) {
+    if (
+      !data.tracks
+        .map((e) => {
+          return e.uri;
+        })
+        .includes(currentTrack.uri) ||
+      currentTrack.init_load
+    ) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -65,7 +72,9 @@ export const PlaylistTemplate = () => {
           currentDeviceId,
 
         {
-          context_uri: data.uri,
+          uris: data.tracks.map((e) => {
+            return e.uri;
+          }),
           offset: { position: 0 },
           position_ms: 0,
         },
@@ -79,7 +88,15 @@ export const PlaylistTemplate = () => {
 
   useEffect(() => {
     if (currentTrack.context) {
-      if (currentTrack.context.uri == data.uri && currentTrack.play) {
+      if (
+        !currentTrack.context.uri &&
+        data.tracks
+          .map((e) => {
+            return e.uri;
+          })
+          .includes(currentTrack.uri) &&
+        currentTrack.play
+      ) {
         setIsPlaying(true);
       } else setIsPlaying(false);
     }
