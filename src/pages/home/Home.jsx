@@ -239,22 +239,22 @@ const Home = () => {
               />
               <DisplayRow
                 title="Pop"
-                type="playlist"
+                type="playlists"
                 data={homeData.top_genre_playlists.items}
               />
               <DisplayRow
                 title="Seu astral"
-                type="playlist"
+                type="playlists"
                 data={homeData.mood_category.items}
               />
               <DisplayRow
                 title="Tops do momento"
-                type="playlist"
+                type="playlists"
                 data={homeData.top_list_category.items}
               />
               <DisplayRow
                 title="Lançamentos"
-                type="playlist"
+                type="playlists"
                 data={homeData.new_releases.albums.items}
               />
             </div>

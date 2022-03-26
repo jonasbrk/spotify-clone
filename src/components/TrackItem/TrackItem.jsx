@@ -13,7 +13,7 @@ import {
 } from '../../utils/context';
 
 export const TrackItem = (props) => {
-  const { data, index, trackList, var1, var2 } = props;
+  const { data, index, trackList, var1, var2, type } = props;
   const { currentTrack } = useContext(TrackContext);
   const { accessToken } = useContext(TokenContext);
   const { currentDeviceId } = useContext(DeviceContext);
@@ -29,7 +29,7 @@ export const TrackItem = (props) => {
         'https://api.spotify.com/v1/me/player/play?device_id=' +
           currentDeviceId,
         {
-          context_uri: trackList.uri,
+          context_uri: type == 'search' ? data.album.uri : trackList.uri,
           offset: { position: index },
           position_ms: 0,
         },

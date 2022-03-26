@@ -54,7 +54,7 @@ export const CardArtist = (props) => {
     if (
       (cardRef.current &&
         target.target.className == cardRef.current.className) ||
-      target.target.offsetParent.className == 'card__img'
+      target.target.offsetParent.className == 'card__img__wrapper'
     ) {
       navigate('/artist/' + id);
     }
@@ -68,7 +68,14 @@ export const CardArtist = (props) => {
       ref={cardRef}
     >
       <div className="card__img">
-        <img src={itemInfo.images[0].url} alt="" />
+        <div className="card__img__wrapper">
+          <div>
+            <img
+              src={itemInfo.images.length != 0 && itemInfo.images[1].url}
+              alt=""
+            />
+          </div>
+        </div>
         <Button
           onClick={() => {
             handlePlay();

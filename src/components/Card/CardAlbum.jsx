@@ -22,7 +22,7 @@ export const CardAlbum = (props) => {
   const cardRef = useRef(null);
   const handlePlay = (e) => {
     console.log(currentTrack);
-    if (currentTrack.uri != itemInfo.album.uri || currentTrack.init_load) {
+    if (currentTrack.uri != itemInfo.uri || currentTrack.init_load) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -30,8 +30,8 @@ export const CardAlbum = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.album.uri,
-          offset: { position: itemInfo.track_number - 1 },
+          context_uri: itemInfo.uri,
+          offset: { position: 0 },
           position_ms: 0,
         },
       );
@@ -43,7 +43,7 @@ export const CardAlbum = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == itemInfo.album.uri && currentTrack.play) {
+    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
@@ -65,11 +65,11 @@ export const CardAlbum = (props) => {
       ref={cardRef}
       className="card__type--song"
       onClick={(e) => {
-        navigateTo(itemInfo.album.id, e);
+        navigateTo(itemInfo.id, e);
       }}
     >
       <div className="card__img">
-        <img src={itemInfo.album.images[1].url} alt="" />
+        <img src={itemInfo.images[1].url} alt="" />
         <Button
           onClick={() => {
             handlePlay();
@@ -83,13 +83,13 @@ export const CardAlbum = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/album/${itemInfo.album.id}`}>{itemInfo.album.name}</Link>
+          <Link to={`/album/${itemInfo.id}`}>{itemInfo.name}</Link>
         </span>
         <span className="card__autor">
-          {itemInfo.album.artists.map((e, index) => (
+          {itemInfo.artists.map((e, index) => (
             <>
               {e.name}
-              {index < itemInfo.album.artists.length - 1 && ', '}
+              {index < itemInfo.artists.length - 1 && ', '}
             </>
           ))}
         </span>

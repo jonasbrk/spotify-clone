@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import './DisplayFull.styles.css';
-import { Card, CardPlaylist, CardArtist, CardAlbum } from '../index';
+import {
+  Card,
+  CardPlaylist,
+  CardArtist,
+  CardAlbum,
+  CardCategory,
+} from '../index';
 
 export const DisplayFull = (props) => {
   const { title, data, type, children } = props;
@@ -15,7 +21,7 @@ export const DisplayFull = (props) => {
         {data ? (
           data.map((e, index) => {
             if (type == 'card') return <Card itemInfo={e} key={index} />;
-            if (type == 'playlist') {
+            if (type == 'playlists') {
               return <CardPlaylist itemInfo={e} key={index} />;
             }
             if (type == 'artists') {
@@ -23,6 +29,9 @@ export const DisplayFull = (props) => {
             }
             if (type == 'albums') {
               return <CardAlbum itemInfo={e} key={index} />;
+            }
+            if (type == 'category') {
+              return <CardCategory itemInfo={e} key={index} />;
             }
           })
         ) : (

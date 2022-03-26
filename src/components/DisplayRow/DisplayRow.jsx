@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import './DisplayRow.styles.css';
-import { Card, CardPlaylist } from '../index';
+import {
+  Card,
+  CardPlaylist,
+  CardArtist,
+  CardAlbum,
+  CardCategory,
+} from '../index';
 
 export const DisplayRow = (props) => {
   const { title, data, type } = props;
@@ -43,8 +49,17 @@ export const DisplayRow = (props) => {
         {newArray ? (
           newArray.map((e, index) => {
             if (type == 'card') return <Card itemInfo={e} key={index} />;
-            if (type == 'playlist') {
+            if (type == 'playlists') {
               return <CardPlaylist itemInfo={e} key={index} />;
+            }
+            if (type == 'artists') {
+              return <CardArtist itemInfo={e} key={index} />;
+            }
+            if (type == 'albums') {
+              return <CardAlbum itemInfo={e} key={index} />;
+            }
+            if (type == 'category') {
+              return <CardCategory itemInfo={e} key={index} />;
             }
           })
         ) : (

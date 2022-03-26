@@ -13,6 +13,7 @@ export { CardPlaylist } from './Card/CardPlaylist';
 export { CardArtist } from './Card/CardArtist';
 export { CardAlbum } from './Card/CardAlbum';
 export { CardLiked } from './Card/CardLiked';
+export { CardCategory } from './Card/CardCategory';
 export { DeviceButton } from './DeviceButton/DeviceButton';
 export { Layout } from './Layout/Layout';
 export { Loading } from './Loading/Loading';
