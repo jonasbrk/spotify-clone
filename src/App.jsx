@@ -6,6 +6,7 @@ import {
   PlaylistTemplate,
   AlbumTemplate,
   ArtistTemplate,
+  GenreTemplate,
 } from './templates/index';
 import {
   CollectionTracks,
@@ -76,6 +77,7 @@ const App = () => {
           <Route path="/playlist/:id" element={<PlaylistTemplate />} />
           <Route path="/album/:id" element={<AlbumTemplate />} />
           <Route path="/artist/:id" element={<ArtistTemplate />} />
+          <Route path="/genre/:id" element={<GenreTemplate />} />
           <Route path="/collection/tracks" element={<CollectionTracks />} />
           <Route
             path="/collection/playlists"
@@ -88,7 +90,6 @@ const App = () => {
           <Route path="/collection/albums" element={<CollectionAlbums />} />
           <Route path="/collection/artists" element={<CollectionArtists />} />
           <Route path="/search" element={<SearchPage />} />
-          {/* <Route path="/genre/:id" element={GenreTemplate} /> */}
           <Route path="/login" element={<Login useLogin={useLogin} />} />
         </Layout>
 
