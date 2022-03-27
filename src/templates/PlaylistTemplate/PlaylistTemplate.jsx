@@ -8,6 +8,7 @@ import {
   PlayerContext,
   TokenContext,
   TrackContext,
+  UserContext,
 } from '../../utils/context';
 import { useParams } from 'react-router-dom';
 import { SpotifyApi } from '../../utils';
@@ -16,6 +17,7 @@ export const PlaylistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
+  const { currentUser } = useContext(UserContext);
   const { player } = useContext(PlayerContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export const PlaylistTemplate = () => {
         },
       })
       .then((e) => {
-        const { name, images, type, owner, uri, tracks } = e.data;
+        const { name, images, type, owner, uri, tracks, description } = e.data;
         setData({
           uri: uri,
           name: name,
@@ -46,11 +48,12 @@ export const PlaylistTemplate = () => {
         setPageData({
           color: generateRandomColor(),
           title: type,
-          description: 'oi',
+          description: description,
           name: name,
           cover: images,
           type: type,
           owner: owner.display_name,
+          editable: owner.id == currentUser.id,
         });
         setLoading(false);
       });
@@ -91,7 +94,12 @@ export const PlaylistTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
+          <PageBanner
+            id={data.id}
+            pageData={pageData}
+            play={[handlePlay, isPlaying]}
+            editable={pageData.editable}
+          />
           <div className="playlist__template">
             <div className="main__template__container">
               <TrackList var1="ÁLBUM" data={data} />

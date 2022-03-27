@@ -2,14 +2,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import './PageBanner.styles.css';
 import { Pause, PlayImg } from '../../assets/svg';
 import { PageHeader } from './PageHeader';
-import { Button } from '../';
+import { Button, Cover, EditInfo } from '../';
 import { Link } from 'react-router-dom';
-export const PageBanner = ({ pageData, play, disabled, bgColor }) => {
+export const PageBanner = ({
+  pageData,
+  play,
+  disabled,
+  bgColor,
+  editable,
+  id,
+}) => {
   const { color, title, name, cover, type, owner, total_tracks } = pageData;
   const [handlePlay, isPlaying] = play;
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
   const [opacity, setOpacity] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const opacityHandler = () => {
     const grandienInfo = headerGradientRef.current.getBoundingClientRect();
@@ -49,6 +57,12 @@ export const PageBanner = ({ pageData, play, disabled, bgColor }) => {
       </div>
 
       <div className="pageBanner">
+        <EditInfo
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          data={pageData}
+          id={id}
+        />
         <div
           className="pageBanner__color"
           style={
@@ -59,15 +73,24 @@ export const PageBanner = ({ pageData, play, disabled, bgColor }) => {
         ></div>
         <div ref={headerGradientRef} className="pageBanner__gradient"></div>
         {type != 'artist' && (
-          <div className="cover__container">
-            <img src={cover[0].url} />
-          </div>
+          <Cover
+            src={cover[0].url}
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+            editable={editable}
+          />
         )}
         <div className="info__container">
           <div className="page__type">
             <span>{title}</span>
           </div>
-          <div className="page__name">
+          <div
+            className={`page__name ${editable && 'page__name--editable'}`}
+            onClick={() => {
+              editable && setIsOpen(true);
+            }}
+          >
             <h2>{name}</h2>
           </div>
           <div className="page__info">

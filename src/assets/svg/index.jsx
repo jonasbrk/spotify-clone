@@ -31,3 +31,5 @@ export { ClockImg } from './Clock.img';
 export { NoAlbumImg } from './NoAlbum.img';
 export { NoArtistImg } from './NoArtist.img';
 export { CloseImg } from './Close.img';
+export { EditImg } from './Edit.img';
+export { AttentionImg } from './Attention.img';

@@ -35,15 +35,6 @@
     url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1IiBkPSJNMCAwaDMwMHYzMDBIMHoiLz48L3N2Zz4=);
 }
 
-.cover__container {
-  height: 232px;
-  min-width: 232px;
-  width: 232px;
-}
-.cover__container img {
-  height: 100%;
-  width: 100%;
-}
 .info__container {
   display: flex;
   flex-direction: column;
@@ -59,6 +50,10 @@
 }
 .page__name {
   display: flex;
+}
+
+.page__name--editable {
+  cursor: pointer;
 }
 .page__name h2 {
   margin: 0 -0.06em;
@@ -90,7 +85,6 @@
   margin: 0px 4px;
 }
 
-.cover__container,
 .info__container {
   z-index: 1;
 }

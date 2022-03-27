@@ -24,3 +24,6 @@ export { PageHeader } from './PageBanner/PageHeader';
 export { TrackList } from './TrackList/TrackList';
 export { TrackItem } from './TrackItem/TrackItem';
 export { SearchBar } from './SearchBar/SearchBar';
+export { Modal } from './Modal/Modal';
+export { Cover } from './Cover/Cover';
+export { EditInfo } from './EditInfo/EditInfo';
