@@ -29,3 +29,4 @@ export { Cover } from './Cover/Cover';
 export { EditInfo } from './EditInfo/EditInfo';
 export { DropdownMenu } from './DropdownMenu/DropdownMenu';
 export { OptionsDropdown } from './OptionsDropdown/OptionsDropdown';
+export { AddSongs } from './AddSongs/AddSongs';

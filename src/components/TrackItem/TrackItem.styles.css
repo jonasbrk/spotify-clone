@@ -162,3 +162,29 @@
     display: none;
   }
 }
+
+.add__button {
+  background-color: transparent;
+  border: 1px solid #535353;
+  background-color: transparent;
+  border-radius: 500px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 34px;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-transition: all 33ms cubic-bezier(0.3, 0, 0, 1);
+  transition: all 33ms cubic-bezier(0.3, 0, 0, 1);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.add__button:hover {
+  border: 1px solid #fff;
+  transform: scale(1.06);
+}

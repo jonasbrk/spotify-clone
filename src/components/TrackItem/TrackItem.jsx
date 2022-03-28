@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './TrackItem.styles.css';
 import { useMinutesString, useDateFormater } from '../../utils';
 import { Button } from '..';
@@ -11,6 +11,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
+import axios from 'axios';
 
 import { OptionsDropdown } from '../';
 
@@ -20,8 +21,25 @@ export const TrackItem = (props) => {
   const { accessToken } = useContext(TokenContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
-
   const [isPlaying, setIsPlaying] = useState(false);
+  const Navigate = useNavigate(null);
+  const handleAddToPlaylist = () => {
+    axios(
+      `https://api.spotify.com/v1/playlists/${trackList.id}/tracks?uris=` +
+        data.uri,
+      {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+        method: 'POST',
+      },
+    ).then(() => {
+      Navigate('/');
+      setTimeout(() => {
+        Navigate('/playlist/' + trackList.id);
+      }, 0);
+    });
+  };
 
   const handlePlay = () => {
     if (currentTrack.uri != data.uri || currentTrack.init_load) {
@@ -106,8 +124,22 @@ export const TrackItem = (props) => {
         </div>
       )}
       <div className="track__time">
-        <span>{useMinutesString(data.duration_ms)}</span>
-        <OptionsDropdown data={data} />
+        {trackList.type == 'search--playlist' ? (
+          <button
+            className="add__button"
+            onClick={() => {
+              handleAddToPlaylist();
+            }}
+          >
+            {' '}
+            adicionar{' '}
+          </button>
+        ) : (
+          <>
+            <span>{useMinutesString(data.duration_ms)}</span>
+            <OptionsDropdown data={data} />
+          </>
+        )}
       </div>
     </div>
   );

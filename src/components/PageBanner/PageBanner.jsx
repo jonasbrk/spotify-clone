@@ -146,16 +146,18 @@ export const PageBanner = ({
           className="pageBanner__buttons__gradient"
           style={{ backgroundColor: color }}
         ></div>
-        <Button
-          onClick={() => {
-            handlePlay();
-          }}
-          type="player"
-          custom={`play--buton--pageBanner ${
-            isPlaying && 'play--buton--pageBanner--active'
-          }`}
-          src={isPlaying ? <Pause /> : <PlayImg />}
-        />
+        {data.tracks.length && (
+          <Button
+            onClick={() => {
+              handlePlay();
+            }}
+            type="player"
+            custom={`play--buton--pageBanner ${
+              isPlaying && 'play--buton--pageBanner--active'
+            }`}
+            src={isPlaying ? <Pause /> : <PlayImg />}
+          />
+        )}
         {!editable && !colection && (
           <Button
             type="player"

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PlaylistTemplate.styles.css';
-import { Loading, PageBanner, TrackList } from '../../components';
+import { Loading, PageBanner, TrackList, AddSongs } from '../../components';
 import { generateRandomColor } from '../../utils';
 import axios from 'axios';
 import {
@@ -121,6 +121,7 @@ export const PlaylistTemplate = () => {
           <div className="playlist__template">
             <div className="main__template__container">
               <TrackList var1="ÁLBUM" data={data} />
+              {pageData.editable && <AddSongs data={data} id={data.id} />}
             </div>
           </div>
         </div>
