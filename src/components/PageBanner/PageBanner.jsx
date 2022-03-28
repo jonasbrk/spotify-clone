@@ -53,8 +53,7 @@ export const PageBanner = ({
     let url = {
       artist: `https://api.spotify.com/v1/me/following?type=artist&ids=${data.id}`,
       playlist: `https://api.spotify.com/v1/playlists/${data.id}/followers`,
-      album: `https://api.spotify.com/v1/me/albums?id=${data.id}`,
-      track: `https://api.spotify.com/v1/me/tracks?id=${data.id}`,
+      album: `https://api.spotify.com/v1/me/albums?ids=${data.id}`,
     };
 
     axios(url[data.type], {
