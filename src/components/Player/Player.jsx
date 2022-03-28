@@ -178,6 +178,17 @@ export const Player = () => {
       });
   }, [currentTrack]);
 
+  const handleLikeSong = () => {
+    axios('https://api.spotify.com/v1/me/tracks?ids=' + currentTrack.id, {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+      method: isLiked ? 'DELETE' : 'PUT',
+    }).then((e) => {
+      setIsLiked(!isLiked);
+    });
+  };
+
   return (
     <div className="player">
       <div
@@ -190,6 +201,7 @@ export const Player = () => {
               type="player"
               src={<LikeImg />}
               custom={isLiked && 'liked'}
+              onClick={() => handleLikeSong()}
             />
           </>
         )}

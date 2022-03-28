@@ -66,7 +66,7 @@ export const PlaylistTemplate = () => {
         title: type,
         description: description,
         name: name,
-        cover: images.lenght ? images : undefined,
+        cover: images.length ? images : undefined,
         type: type,
         owner: owner.display_name,
         editable: owner.id == currentUser.id,
