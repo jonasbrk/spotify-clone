@@ -33,3 +33,5 @@ export { NoArtistImg } from './NoArtist.img';
 export { CloseImg } from './Close.img';
 export { EditImg } from './Edit.img';
 export { AttentionImg } from './Attention.img';
+export { OptionsImg } from './Options.img';
+export { SongImg } from './Song.img';
