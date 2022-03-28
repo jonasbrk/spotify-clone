@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SideMenu.styles.css';
 import { Button } from '../index';
-import { isCoverOpen, TokenContext, TrackContext } from '../../utils/context';
+import {
+  isCoverOpen,
+  PlaylistContext,
+  TokenContext,
+  TrackContext,
+  UserContext,
+} from '../../utils/context';
 import {
   LogoImg,
   HomeImg,
@@ -17,7 +23,8 @@ export const SideMenu = (props) => {
   const { coverOpen, setCoverOpen } = useContext(isCoverOpen);
   const { accessToken } = useContext(TokenContext);
   const { currentTrack } = useContext(TrackContext);
-  const [userPlaylists, setUserPlaylists] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { userPlaylists, setUserPlaylists } = useContext(PlaylistContext);
 
   useEffect(() => {
     axios
@@ -30,6 +37,20 @@ export const SideMenu = (props) => {
         setUserPlaylists(e.data.items);
       });
   }, [accessToken]);
+
+  const handleAddPlaylist = () => {
+    axios(`https://api.spotify.com/v1/users/${currentUser.id}/playlists`, {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+      method: 'POST',
+      data: {
+        name: `Minha Playlist nº ${userPlaylists.length + 1}`,
+      },
+    }).then((e) => {
+      setUserPlaylists([e.data, ...userPlaylists]);
+    });
+  };
 
   return (
     <div className="side__nav">
@@ -50,7 +71,9 @@ export const SideMenu = (props) => {
       </div>
       <div className="menu__wrapper divider--top ">
         <Button
-          to="/createPlaylist"
+          onClick={() => {
+            handleAddPlaylist();
+          }}
           custom={'create__playlist'}
           src={<PlusImg />}
           type="nav"
