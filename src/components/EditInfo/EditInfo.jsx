@@ -27,7 +27,7 @@ export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
     if (!isOpen) {
       setTitleInput(data.name);
       setDescriptionInput(data.description);
-      setImgInput(data.cover[0].url);
+      setImgInput(data.cover && data.cover[0].url);
       setAlert('');
       console.log(isOpen);
     }

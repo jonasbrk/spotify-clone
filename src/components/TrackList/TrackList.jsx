@@ -54,7 +54,7 @@ export const TrackList = ({ data, var1, var2 }) => {
       ) : (
         <>
           {data.tracks.map((e, index) => {
-            console.log(e);
+            // console.log(e);
             return (
               <TrackItem
                 trackList={data}

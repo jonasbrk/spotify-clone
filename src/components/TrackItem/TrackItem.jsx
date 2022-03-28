@@ -12,6 +12,8 @@ import {
   TrackContext,
 } from '../../utils/context';
 
+import { OptionsDropdown } from '../';
+
 export const TrackItem = (props) => {
   const { data, index, trackList, var1, var2, type } = props;
   const { currentTrack } = useContext(TrackContext);
@@ -105,6 +107,7 @@ export const TrackItem = (props) => {
       )}
       <div className="track__time">
         <span>{useMinutesString(data.duration_ms)}</span>
+        <OptionsDropdown data={data} />
       </div>
     </div>
   );

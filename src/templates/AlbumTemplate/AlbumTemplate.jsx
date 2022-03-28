@@ -25,36 +25,52 @@ export const AlbumTemplate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get(`https://api.spotify.com/v1/albums/${id}`, {
+    Promise.all([
+      axios.get(`https://api.spotify.com/v1/albums/${id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
-      })
-      .then((e) => {
-        const { name, images, type, artists, total_tracks, tracks, id, uri } =
-          e.data;
-        setData({
-          uri: uri,
-          name: name,
-          id: id,
-          type: type,
-          tracks: tracks.items,
-        });
-        console.log(e.data);
-        setPageData({
-          color: generateRandomColor(),
-          title: type,
-          description: 'oi',
-          name: name,
-          cover: images,
-          type: type,
-          owner: artists != 'undefined' ? artists : [],
-          total_tracks: total_tracks,
-        });
-        console.log(pageData);
-        setLoading(false);
+      }),
+      axios.get(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }),
+    ]).then((e) => {
+      const [data, isLiked] = e;
+      const {
+        name,
+        description,
+        images,
+        type,
+        artists,
+        total_tracks,
+        tracks,
+        id,
+        uri,
+      } = data.data;
+      setData({
+        uri: uri,
+        name: name,
+        id: id,
+        type: type,
+        tracks: tracks.items,
+        isLiked: isLiked.data[0],
       });
+      console.log(e.data);
+      setPageData({
+        color: generateRandomColor(),
+        title: type,
+        description: description,
+        name: name,
+        cover: images,
+        type: type,
+        owner: artists != 'undefined' ? artists : [],
+        total_tracks: total_tracks,
+      });
+      console.log(pageData);
+      setLoading(false);
+    });
   }, [id]);
 
   const handlePlay = () => {
@@ -92,7 +108,12 @@ export const AlbumTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
+          <PageBanner
+            id={data.id}
+            pageData={pageData}
+            play={[handlePlay, isPlaying]}
+            data={data}
+          />
           <div className="playlist__template">
             <div className="main__template__container">
               <TrackList data={data} />

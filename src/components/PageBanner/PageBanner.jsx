@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './PageBanner.styles.css';
-import { Pause, PlayImg } from '../../assets/svg';
-import { PageHeader } from './PageHeader';
-import { Button, Cover, EditInfo } from '../';
+import { LikeImg, Pause, PlayImg } from '../../assets/svg';
+import { Button, Cover, EditInfo, OptionsDropdown } from '../';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { TokenContext } from '../../utils/context';
 export const PageBanner = ({
   pageData,
   play,
@@ -11,13 +12,17 @@ export const PageBanner = ({
   bgColor,
   editable,
   id,
+  data,
+  colection,
 }) => {
   const { color, title, name, cover, type, owner, total_tracks } = pageData;
   const [handlePlay, isPlaying] = play;
+  const { accessToken } = useContext(TokenContext);
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
   const [opacity, setOpacity] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(data && data.isLiked);
 
   const opacityHandler = () => {
     const grandienInfo = headerGradientRef.current.getBoundingClientRect();
@@ -43,6 +48,25 @@ export const PageBanner = ({
       );
     };
   }, [headerBgRef]);
+
+  const handleFollow = () => {
+    let url = {
+      artist: `https://api.spotify.com/v1/me/following?type=artist&ids=${data.id}`,
+      playlist: `https://api.spotify.com/v1/playlists/${data.id}/followers`,
+      album: `https://api.spotify.com/v1/me/albums?id=${data.id}`,
+      track: `https://api.spotify.com/v1/me/tracks?id=${data.id}`,
+    };
+
+    axios(url[data.type], {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+      method: isLiked ? 'DELETE' : 'PUT',
+    }).then(() => {
+      setIsLiked(!isLiked);
+    });
+  };
+
   return (
     <>
       <div
@@ -74,7 +98,7 @@ export const PageBanner = ({
         <div ref={headerGradientRef} className="pageBanner__gradient"></div>
         {type != 'artist' && (
           <Cover
-            src={cover[0].url}
+            src={cover == undefined ? cover : cover[0].url}
             onClick={() => {
               setIsOpen(!isOpen);
             }}
@@ -132,6 +156,26 @@ export const PageBanner = ({
           }`}
           src={isPlaying ? <Pause /> : <PlayImg />}
         />
+        {!editable && !colection && (
+          <Button
+            type="player"
+            src={<LikeImg />}
+            custom={`button__pageBanner ${isLiked && 'liked'}`}
+            onClick={() => {
+              handleFollow();
+            }}
+          />
+        )}
+        {data && (
+          <OptionsDropdown
+            data={data}
+            editable={editable}
+            openModal={setIsOpen}
+            isLiked={isLiked}
+            setIsLiked={setIsLiked}
+            custom={'button__pageBanner'}
+          />
+        )}
       </div>
     </>
   );

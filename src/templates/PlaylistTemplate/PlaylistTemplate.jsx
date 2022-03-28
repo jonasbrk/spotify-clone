@@ -27,36 +27,53 @@ export const PlaylistTemplate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get(`https://api.spotify.com/v1/playlists/${id}`, {
+    setData('');
+    setPageData('');
+    setLoading(true);
+
+    Promise.all([
+      axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
-      })
-      .then((e) => {
-        const { name, images, type, owner, uri, tracks, description } = e.data;
-        setData({
-          uri: uri,
-          name: name,
-          id: id,
-          type: type,
-          tracks: tracks.items.map((e) => {
-            return e.track;
-          }),
-        });
+      }),
+      axios.get(
+        `https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${currentUser.id}`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        },
+      ),
+    ]).then((e) => {
+      const [data, isLiked] = e;
+      const { name, images, type, owner, uri, tracks, description } = data.data;
 
-        setPageData({
-          color: generateRandomColor(),
-          title: type,
-          description: description,
-          name: name,
-          cover: images,
-          type: type,
-          owner: owner.display_name,
-          editable: owner.id == currentUser.id,
-        });
-        setLoading(false);
+      console.log(e);
+      setData({
+        uri: uri,
+        name: name,
+        id: id,
+        type: type,
+        tracks: tracks.items.map((e) => {
+          return e.track;
+        }),
+        isLiked: isLiked.data[0],
       });
+
+      setPageData({
+        color: generateRandomColor(),
+        title: type,
+        description: description,
+        name: name,
+        cover: images.lenght ? images : undefined,
+        type: type,
+        owner: owner.display_name,
+        editable: owner.id == currentUser.id,
+      });
+
+      setLoading(false);
+    });
   }, [id]);
 
   const handlePlay = () => {
@@ -99,6 +116,7 @@ export const PlaylistTemplate = () => {
             pageData={pageData}
             play={[handlePlay, isPlaying]}
             editable={pageData.editable}
+            data={data}
           />
           <div className="playlist__template">
             <div className="main__template__container">

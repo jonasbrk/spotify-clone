@@ -63,7 +63,7 @@ export const CollectionAlbums = () => {
               <DisplayFull
                 title="Albums"
                 type="albums"
-                data={userAlbums.items}
+                data={userAlbums.items.map((e) => e.album)}
               />
             ) : (
               <div className="no_info">
