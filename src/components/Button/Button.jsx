@@ -7,11 +7,20 @@ export const Button = (props) => {
 
   return (
     <>
-      {type === 'nav' && (
+      {type === 'nav' && to && (
         <Link to={to} className={`button--nav ${custom ? custom : ''}`}>
           {src && <div className="button__icon">{src}</div>}
           {children && <span className="button__title">{children}</span>}
         </Link>
+      )}
+      {type === 'nav' && onClick && (
+        <button
+          onClick={onClick}
+          className={`button--nav ${custom ? custom : ''}`}
+        >
+          {src && <div className="button__icon">{src}</div>}
+          {children && <span className="button__title">{children}</span>}
+        </button>
       )}
 
       {type === 'login' && (

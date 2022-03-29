@@ -52,7 +52,7 @@ export const GenreTemplate = () => {
             <h1>{pageData.name}</h1>
           </div>
           <div className="genre__template">
-            <DisplayFull type="playlists" data={data.playlists.items} />
+            <DisplayFull type="playlist" data={data.playlists.items} />
           </div>
         </div>
       )}

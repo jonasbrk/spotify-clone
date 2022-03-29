@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './PlaylistTemplate.styles.css';
-import { Loading, PageBanner, TrackList } from '../../components';
+import { Loading, PageBanner, TrackList, AddSongs } from '../../components';
 import { generateRandomColor } from '../../utils';
 import axios from 'axios';
 import {
@@ -8,6 +8,7 @@ import {
   PlayerContext,
   TokenContext,
   TrackContext,
+  UserContext,
 } from '../../utils/context';
 import { useParams } from 'react-router-dom';
 import { SpotifyApi } from '../../utils';
@@ -16,6 +17,7 @@ export const PlaylistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
+  const { currentUser } = useContext(UserContext);
   const { player } = useContext(PlayerContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,35 +27,53 @@ export const PlaylistTemplate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get(`https://api.spotify.com/v1/playlists/${id}`, {
+    setData('');
+    setPageData('');
+    setLoading(true);
+
+    Promise.all([
+      axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
-      })
-      .then((e) => {
-        const { name, images, type, owner, uri, tracks } = e.data;
-        setData({
-          uri: uri,
-          name: name,
-          id: id,
-          type: type,
-          tracks: tracks.items.map((e) => {
-            return e.track;
-          }),
-        });
+      }),
+      axios.get(
+        `https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${currentUser.id}`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        },
+      ),
+    ]).then((e) => {
+      const [data, isLiked] = e;
+      const { name, images, type, owner, uri, tracks, description } = data.data;
 
-        setPageData({
-          color: generateRandomColor(),
-          title: type,
-          description: 'oi',
-          name: name,
-          cover: images,
-          type: type,
-          owner: owner.display_name,
-        });
-        setLoading(false);
+      console.log(e);
+      setData({
+        uri: uri,
+        name: name,
+        id: id,
+        type: type,
+        tracks: tracks.items.map((e) => {
+          return e.track;
+        }),
+        isLiked: isLiked.data[0],
       });
+
+      setPageData({
+        color: generateRandomColor(),
+        title: type,
+        description: description,
+        name: name,
+        cover: images.length ? images : undefined,
+        type: type,
+        owner: owner.display_name,
+        editable: owner.id == currentUser.id,
+      });
+
+      setLoading(false);
+    });
   }, [id]);
 
   const handlePlay = () => {
@@ -91,10 +111,17 @@ export const PlaylistTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner pageData={pageData} play={[handlePlay, isPlaying]} />
+          <PageBanner
+            id={data.id}
+            pageData={pageData}
+            play={[handlePlay, isPlaying]}
+            editable={pageData.editable}
+            data={data}
+          />
           <div className="playlist__template">
             <div className="main__template__container">
               <TrackList var1="ÁLBUM" data={data} />
+              {pageData.editable && <AddSongs data={data} id={data.id} />}
             </div>
           </div>
         </div>

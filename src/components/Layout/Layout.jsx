@@ -9,6 +9,7 @@ import {
   PlayerContext,
   DeviceContext,
   UserContext,
+  PlaylistContext,
 } from '../../utils/context';
 
 export const Layout = (props) => {
@@ -19,6 +20,7 @@ export const Layout = (props) => {
   const [player, setPlayer] = useState('');
   const [currentDeviceId, setCurrentDeviceId] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+  const [userPlaylists, setUserPlaylists] = useState('');
 
   useEffect(() => {
     console.log(currentTrack);
@@ -29,22 +31,26 @@ export const Layout = (props) => {
       <UserContext.Provider value={{ currentUser, setCurrentUser }}>
         <PlayerContext.Provider value={{ player, setPlayer }}>
           <AlbumContext.Provider value={{ albumInfo, setAlbumInfo }}>
-            <TrackContext.Provider value={{ currentTrack, setCurrentTrack }}>
-              <isCoverOpen.Provider value={{ coverOpen, setCoverOpen }}>
-                <main className="layout">
-                  <div className="main__section">
-                    <SideMenu />
-                    <div className="main__wrapper">
-                      <Header />
-                      <main className="display">
-                        <Routes>{children}</Routes>
-                      </main>
+            <PlaylistContext.Provider
+              value={{ userPlaylists, setUserPlaylists }}
+            >
+              <TrackContext.Provider value={{ currentTrack, setCurrentTrack }}>
+                <isCoverOpen.Provider value={{ coverOpen, setCoverOpen }}>
+                  <main className="layout">
+                    <div className="main__section">
+                      <SideMenu />
+                      <div className="main__wrapper">
+                        <Header />
+                        <main className="display">
+                          <Routes>{children}</Routes>
+                        </main>
+                      </div>
                     </div>
-                  </div>
-                  <Player />
-                </main>
-              </isCoverOpen.Provider>
-            </TrackContext.Provider>
+                    <Player />
+                  </main>
+                </isCoverOpen.Provider>
+              </TrackContext.Provider>
+            </PlaylistContext.Provider>
           </AlbumContext.Provider>
         </PlayerContext.Provider>
       </UserContext.Provider>

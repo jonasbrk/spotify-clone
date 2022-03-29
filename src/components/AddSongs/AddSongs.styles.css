@@ -1,0 +1,28 @@
+.add__song {
+  padding-top: 10px;
+  margin: 0 24px;
+  border-top: 1px solid #282828;
+}
+
+.add__song h2 {
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  text-transform: none;
+  letter-spacing: -0.04em;
+  box-sizing: border-box;
+}
+
+.add__song__input input {
+  border-radius: 4px;
+}
+
+.add__song__main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.add__song__main .main__template__list {
+  padding: 0;
+}

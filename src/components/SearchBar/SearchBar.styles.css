@@ -23,6 +23,19 @@
   letter-spacing: normal;
 }
 
+.theme--black .search__input {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.theme--black {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.theme--black svg {
+  fill: rgba(255, 255, 255, 0.7);
+}
+
 .search__icon,
 .search__clean__icon {
   display: flex;

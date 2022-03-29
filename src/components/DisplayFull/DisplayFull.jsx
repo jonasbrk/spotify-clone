@@ -21,7 +21,7 @@ export const DisplayFull = (props) => {
         {data ? (
           data.map((e, index) => {
             if (type == 'card') return <Card itemInfo={e} key={index} />;
-            if (type == 'playlists') {
+            if (type == 'playlist') {
               return <CardPlaylist itemInfo={e} key={index} />;
             }
             if (type == 'artists') {

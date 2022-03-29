@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './SearchBar.styles.css';
 import { CloseImg, SearchImg } from '../../assets/svg';
 
-export const SearchBar = ({ onChange }) => {
+export const SearchBar = ({ onChange, custom, theme }) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleInput = (value) => {
@@ -15,7 +15,9 @@ export const SearchBar = ({ onChange }) => {
   }, [inputValue]);
 
   return (
-    <div className="searchBar">
+    <div
+      className={`searchBar ${theme && 'theme--' + theme} ${custom && custom}`}
+    >
       <input
         onChange={(e) => {
           handleInput(e.target.value);

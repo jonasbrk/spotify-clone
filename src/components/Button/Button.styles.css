@@ -12,6 +12,7 @@
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  background: none;
 }
 
 .button--nav:hover {
