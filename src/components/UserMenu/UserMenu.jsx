@@ -30,19 +30,15 @@ export const UserMenu = () => {
   return (
     <>
       {accessToken && (
-        <>
+        <div ref={ref1} className="user__menu">
           <button
-            ref={ref1}
             className="user__menu__btn"
             onClick={() => {
-              setIsComponentVisible(
-                (isComponentVisible) => !isComponentVisible,
-              );
-              console.log(isComponentVisible);
+              setIsComponentVisible(!isComponentVisible);
             }}
           >
             <div className="user__picture">
-              {currentUser.images == [] ? (
+              {currentUser.images.length ? (
                 <img
                   aria-hidden="false"
                   draggable="false"
@@ -64,7 +60,6 @@ export const UserMenu = () => {
             </div>
           </button>
           <div
-            ref={ref2}
             className={`user__menu__options ${
               isComponentVisible ? 'user--open' : ''
             }`}
@@ -102,7 +97,7 @@ export const UserMenu = () => {
               </li>
             </ul>
           </div>
-        </>
+        </div>
       )}
     </>
   );
