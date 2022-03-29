@@ -7,14 +7,12 @@ import axios from 'axios';
 
 export const OptionsDropdown = ({
   data,
-  type,
   openModal,
   editable,
   isLiked,
   setIsLiked,
 }) => {
   const { accessToken } = useContext(TokenContext);
-  const { currentDeviceId } = useContext(DeviceContext);
 
   const handleAddQueue = () => {
     axios(`https://api.spotify.com/v1/me/player/queue?uri=${data.uri}`, {
@@ -50,25 +48,23 @@ export const OptionsDropdown = ({
       position={data.type == 'track' ? 'left' : 'right'}
     >
       <ul className="buttons__wrapper">
-        {editable && data.type != 'track' && (
+        {data.type != 'track' && (
           <li>
-            <button onClick={() => openModal(true)}>
-              <span>Editar os detalhes</span>
+            <button
+              onClick={() => (editable ? openModal(true) : handleFollow())}
+            >
+              {editable ? (
+                <span>Editar os detalhes</span>
+              ) : (
+                <span>
+                  {isLiked
+                    ? 'Remover da sua biblioteca'
+                    : 'Adicionar a biblioteca'}
+                </span>
+              )}
             </button>
           </li>
         )}
-        {!editable && data.type != 'track' && (
-          <li>
-            <button onClick={() => handleFollow()}>
-              <span>
-                {isLiked
-                  ? 'Remover da sua biblioteca'
-                  : 'Adicionar a biblioteca'}
-              </span>
-            </button>
-          </li>
-        )}
-
         {data.type == 'track' && (
           <>
             <li>
