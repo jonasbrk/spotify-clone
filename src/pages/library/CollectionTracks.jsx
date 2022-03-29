@@ -112,6 +112,7 @@ export const CollectionTracks = () => {
             pageData={pageData}
             play={[handlePlay, isPlaying]}
             colection
+            data={data}
           />
           <div className="playlist__template">
             <div className="main__template__container">

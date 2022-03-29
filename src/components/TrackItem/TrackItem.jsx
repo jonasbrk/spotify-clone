@@ -49,7 +49,10 @@ export const TrackItem = (props) => {
         'https://api.spotify.com/v1/me/player/play?device_id=' +
           currentDeviceId,
         {
-          context_uri: type == 'search' ? data.album.uri : trackList.uri,
+          context_uri:
+            type == 'search' || type == 'search--playlist'
+              ? data.album.uri
+              : trackList.uri,
           offset: { position: index },
           position_ms: 0,
         },

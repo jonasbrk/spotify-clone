@@ -59,10 +59,20 @@ export const CardLiked = (props) => {
 
   const navigate = useNavigate();
 
+  const navigateTo = (url, target) => {
+    if (
+      (cardRef.current &&
+        target.target.className == cardRef.current.className) ||
+      target.target.offsetParent.className == 'card__img'
+    ) {
+      navigate(url);
+    }
+  };
+
   return (
     <div
       onClick={(e) => {
-        navigate('/collection/tracks');
+        navigateTo('/collection/tracks', e);
       }}
       className="card__type--song card__type--liked"
       ref={cardRef}

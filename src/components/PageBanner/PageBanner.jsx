@@ -167,7 +167,7 @@ export const PageBanner = ({
             }}
           />
         )}
-        {data && (
+        {data && !colection && (
           <OptionsDropdown
             data={data}
             editable={editable}

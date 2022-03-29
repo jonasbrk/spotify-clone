@@ -42,11 +42,11 @@ export const CardPlaylist = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (currentTrack.context.uri == itemInfo.uri && currentTrack.play) {
-  //     setIsPlaying(true);
-  //   } else setIsPlaying(false);
-  // }, [currentTrack]);
+  useEffect(() => {
+    if (currentTrack.context.uri == itemInfo.uri && currentTrack.play) {
+      setIsPlaying(true);
+    } else setIsPlaying(false);
+  }, [currentTrack]);
 
   const navigate = useNavigate();
 

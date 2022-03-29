@@ -57,8 +57,8 @@ export const ArtistTemplate = () => {
     ]).then((e) => {
       console.log(e);
       const [artist, isLiked, tracksData] = e;
-      const { tracks, id, uri } = tracksData.data;
-      const { name, images, type, followers, description } = artist.data;
+      const { tracks, uri } = tracksData.data;
+      const { name, id, images, type, followers, description } = artist.data;
       setData({
         uri: uri,
         name: name,
