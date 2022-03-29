@@ -25,76 +25,41 @@ export const Controls = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
 
-  const handleRepeatMode = () => {
-    if (!playbackState.repeat_state) {
+  const handleFunction = (type) => {
+    let state = {
+      shuffle: !playbackState.shuffle,
+      repeat: playbackState.repeat_state ? 'off' : 'track',
+    };
+
+    if (currentTrack) {
       SpotifyApi(
         'PUT',
         accessToken,
-        'https://api.spotify.com/v1/me/player/repeat?state=context',
-      );
-    } else {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/repeat?state=off',
+        `https://api.spotify.com/v1/me/player/${type}?device_id=${currentDeviceId}&state=${state[type]}`,
       );
     }
-    console.log('ativando repeat');
   };
 
-  const handleShuffleMode = () => {
-    SpotifyApi(
-      'PUT',
-      accessToken,
-      'https://api.spotify.com/v1/me/player/shuffle?state=' +
-        !playbackState.shuffle,
-    );
-
-    console.log('ativando repeat');
-  };
-
-  const handlePlay = () => {
-    if (!playbackState) {
-      axios(
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-          data: {
-            context_uri: currentTrack.album.uri,
-            offset: { position: currentTrack.track_number - 1 },
-            position_ms: 0,
-          },
-          method: 'PUT',
-        },
-      ).then(() => {
-        player.pause().then(() => {
-          console.log('Paused!');
-        });
-      });
-    } else {
-      player.togglePlay().then(() => {
-        console.log('Toggled playback!');
-      });
-    }
-  };
   return (
-    <div className="player__section--1">
+    <div
+      className={`player__section--1 ${
+        !currentTrack && 'player__controls__disabled'
+      }`}
+    >
       <Button
         type="player"
         src={<RandomImg />}
-        onClick={() => handleShuffleMode()}
+        onClick={() => handleFunction('shuffle')}
         custom={playbackState.shuffle && 'button__player--active'}
       />
       <Button
         type="player"
         src={<BackTrackImg />}
         onClick={() => {
-          player.previousTrack().then(() => {
-            console.log('Set to previous track!');
-          });
+          currentTrack &&
+            player.previousTrack().then(() => {
+              console.log('Set to previous track!');
+            });
         }}
       />
       <Button
@@ -102,22 +67,26 @@ export const Controls = (props) => {
         custom="Play--buton"
         src={!currentTrack.play ? <PlayImg /> : <Pause />}
         onClick={() => {
-          handlePlay();
+          currentTrack &&
+            player.togglePlay().then(() => {
+              console.log('Toggled playback!');
+            });
         }}
       />
       <Button
         type="player"
         src={<NextTrackImg />}
         onClick={() => {
-          player.nextTrack().then(() => {
-            console.log('Skipped to next track!');
-          });
+          currentTrack &&
+            player.nextTrack().then(() => {
+              console.log('Skipped to next track!');
+            });
         }}
       />
       <Button
         type="player"
         src={<LoopTrackImg />}
-        onClick={() => handleRepeatMode()}
+        onClick={() => handleFunction('repeat')}
         custom={playbackState.repeat_state && 'button__player--active'}
       />
     </div>
