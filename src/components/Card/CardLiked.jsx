@@ -9,7 +9,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../../utils/context';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const CardLiked = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);

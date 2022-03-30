@@ -95,7 +95,7 @@
   width: 100%;
 }
 
-.card__info .card__autor {
+.card__info .card__descripton {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #a7a7a7;
   font-size: 0.875rem;
@@ -132,7 +132,7 @@
   line-height: 2.25rem;
   letter-spacing: -0.04em;
 }
-.card__type--liked .card__info .card__autor {
+.card__type--liked .card__info .card__descripton {
   font-size: 0.875rem;
   line-height: 1rem;
   color: white;

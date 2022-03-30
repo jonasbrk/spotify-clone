@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import './Card.styles.css';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
 import { SpotifyApi } from '../../utils/';
-import { Link, useNavigate } from 'react-router-dom';
 import {
   DeviceContext,
   PlayerContext,
@@ -11,18 +10,20 @@ import {
   TrackContext,
 } from '../../utils/context';
 
+import './Card.styles.css';
+
 export const Card = (props) => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
   const { accessToken } = useContext(TokenContext);
-  const { itemInfo } = props;
+  const { data } = props;
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const { id, uri, name, description, images, type } = data;
   const cardRef = useRef(null);
-  const handlePlay = (e) => {
-    console.log(currentTrack);
-    if (currentTrack.uri != itemInfo.uri || currentTrack.init_load) {
+
+  const handlePlay = () => {
+    if (currentTrack.uri != uri) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -30,8 +31,8 @@ export const Card = (props) => {
           currentDeviceId,
 
         {
-          context_uri: itemInfo.album.uri,
-          offset: { position: itemInfo.track_number - 1 },
+          context_uri: type == 'track' ? data.album.uri : uri,
+          offset: { position: type == 'track' ? data.index - 1 : 0 },
           position_ms: 0,
         },
       );
@@ -43,33 +44,32 @@ export const Card = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
+    if (currentTrack.uri == uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
 
   const navigate = useNavigate();
 
-  const navigateTo = (url, target) => {
+  const navigateTo = (id, target) => {
     if (
-      (cardRef.current &&
-        target.target.className == cardRef.current.className) ||
-      target.target.offsetParent.className == 'card__img'
+      (cardRef.current && target.className == cardRef.current.className) ||
+      target.offsetParent.className == 'card__img'
     ) {
-      navigate('/album/' + url);
+      navigate(`/${type == 'track' ? 'album' : type}/${id}`);
     }
   };
 
   return (
     <div
       ref={cardRef}
-      className="card__type--song"
-      onClick={(e) => {
-        navigateTo(itemInfo.album.id, e);
+      className={`card__type--song ${type == 'artist' && 'card__type--artist'}`}
+      onClick={(event) => {
+        navigateTo(type == 'track' ? data.album.id : id, event.target);
       }}
     >
       <div className="card__img">
-        <img src={itemInfo.album.images[1].url} alt="" />
+        <img src={images.length && images[0].url} alt="" />
         <Button
           onClick={() => {
             handlePlay();
@@ -83,15 +83,22 @@ export const Card = (props) => {
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/album/${itemInfo.album.id}`}>{itemInfo.album.name}</Link>
+          <Link to={`/album/${id}`}>{name}</Link>
         </span>
-        <span className="card__autor">
-          {itemInfo.artists.map((e, index) => (
+        <span className="card__descripton">
+          {description ? (
+            description
+          ) : (
             <>
-              {e.name}
-              {index < itemInfo.artists.length - 1 && ', '}
+              {data.artist &&
+                data.artist.map((e, index) => (
+                  <>
+                    {e.name}
+                    {index < data.artist.length - 1 && ', '}
+                  </>
+                ))}
             </>
-          ))}
+          )}
         </span>
       </div>
     </div>
