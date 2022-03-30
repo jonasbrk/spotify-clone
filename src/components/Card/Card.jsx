@@ -19,7 +19,7 @@ export const Card = (props) => {
   const { accessToken } = useContext(TokenContext);
   const { data } = props;
   const [isPlaying, setIsPlaying] = useState(false);
-  const { id, uri, name, description, images, type } = data;
+  const { id, uri, name, type } = data;
   const cardRef = useRef(null);
 
   const handlePlay = () => {
@@ -32,7 +32,7 @@ export const Card = (props) => {
 
         {
           context_uri: type == 'track' ? data.album.uri : uri,
-          offset: { position: type == 'track' ? data.index - 1 : 0 },
+          offset: { position: type == 'track' ? data.track_number - 1 : 0 },
           position_ms: 0,
         },
       );
@@ -69,7 +69,10 @@ export const Card = (props) => {
       }}
     >
       <div className="card__img">
-        <img src={images.length && images[0].url} alt="" />
+        <img
+          src={type == 'track' ? data.album.images[0].url : data.images[0].url}
+          alt=""
+        />
         <Button
           onClick={() => {
             handlePlay();
@@ -86,19 +89,15 @@ export const Card = (props) => {
           <Link to={`/album/${id}`}>{name}</Link>
         </span>
         <span className="card__descripton">
-          {description ? (
-            description
-          ) : (
-            <>
-              {data.artist &&
-                data.artist.map((e, index) => (
-                  <>
-                    {e.name}
-                    {index < data.artist.length - 1 && ', '}
-                  </>
-                ))}
-            </>
-          )}
+          {data.description && data.description}
+          {type == 'artist' && 'Artist'}
+          {data.artists &&
+            data.artists.map((e, index) => (
+              <>
+                {e.name}
+                {index < data.artists.length - 1 && ', '}
+              </>
+            ))}
         </span>
       </div>
     </div>

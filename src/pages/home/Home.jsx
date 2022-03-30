@@ -4,6 +4,7 @@ import { TokenContext } from '../../utils/context';
 import axios from 'axios';
 import qs from 'qs';
 import './Home.styles.css';
+import { useResponseFormater } from '../../utils';
 const Home = () => {
   const homeRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
@@ -45,24 +46,11 @@ const Home = () => {
             },
           })
           .then((response) =>
-            response.data.items.map((element) => ({
-              id: element.track.id,
-              uri: element.track.uri,
-              artist: element.track.artists,
-              name: element.track.name,
-              description: '',
-              images: element.track.album.images,
-              type: element.track.type,
-              index: element.track.track_number,
-              context: element.context,
-              album: {
-                id: element.track.album.id,
-                uri: element.track.album.uri,
-                artist: element.track.album.artists,
-                name: element.track.album.name,
-              },
-            })),
-          ),
+            response.data.items.map((element) =>
+              useResponseFormater(element.track),
+            ),
+          )
+          .catch((e) => console.log(e)),
         axios
           .get('https://api.spotify.com/v1/me/top/tracks', {
             headers: {
@@ -78,23 +66,7 @@ const Home = () => {
             },
           })
           .then((response) =>
-            response.data.items.map((element) => ({
-              id: element.id,
-              uri: element.uri,
-              artist: element.artists,
-              name: element.name,
-              description: '',
-              images: element.album.images,
-              type: element.type,
-              index: element.track_number,
-              context: null,
-              album: {
-                id: element.album.id,
-                uri: element.album.uri,
-                artist: element.album.artists,
-                name: element.album.name,
-              },
-            })),
+            response.data.items.map((element) => useResponseFormater(element)),
           ),
 
         axios
@@ -112,15 +84,7 @@ const Home = () => {
             },
           })
           .then((response) =>
-            response.data.items.map((element) => ({
-              id: element.id,
-              uri: element.uri,
-              name: element.name,
-              description: 'Artist',
-              images: element.images,
-              type: element.type,
-              genres: element.genres,
-            })),
+            response.data.items.map((element) => useResponseFormater(element)),
           ),
 
         axios
@@ -130,15 +94,9 @@ const Home = () => {
             },
           })
           .then((response) =>
-            response.data.albums.items.map((element) => ({
-              id: element.id,
-              uri: element.uri,
-              artist: element.artists,
-              name: element.name,
-              description: '',
-              images: element.images,
-              type: element.type,
-            })),
+            response.data.albums.items.map((element) =>
+              useResponseFormater(element),
+            ),
           ),
       ])
         .then((data) => {
@@ -172,7 +130,7 @@ const Home = () => {
             });
 
           const recomendationDataRequest = qs.stringify({
-            seed_artists: recent_played[0].artist[0].id,
+            seed_artists: recent_played[0].artists[0].id,
             seed_genres: top_user_genres[0],
             seed_tracks: top_user_tracks[0].id,
           });
@@ -189,26 +147,13 @@ const Home = () => {
                 },
               )
               .then((response) =>
-                response.data.tracks.map((element) => ({
-                  id: element.id,
-                  uri: element.uri,
-                  artist: element.artists,
-                  name: element.name,
-                  description: '',
-                  images: element.album.images,
-                  type: element.type,
-                  index: element.track_number,
-                  album: {
-                    id: element.album.id,
-                    uri: element.album.uri,
-                    artist: element.album.artists,
-                    name: element.album.name,
-                  },
-                })),
+                response.data.tracks.map((element) =>
+                  useResponseFormater(element),
+                ),
               ),
             axios
               .get(
-                `https://api.spotify.com/v1/browse/categories/${top_user_genres[0]}/playlists`,
+                `https://api.spotify.com/v1/browse/categories/${top_user_genres[0]}/playlists?country=BR`,
                 {
                   headers: {
                     Authorization: 'Bearer ' + accessToken,
@@ -216,21 +161,13 @@ const Home = () => {
                 },
               )
               .then((response) =>
-                response.data.playlists.items.map((element) => ({
-                  id: element.id,
-                  uri: element.uri,
-                  artist: element.artists,
-                  name: element.name,
-                  description: element.description,
-                  images: element.images,
-                  type: element.type,
-                  index: 0,
-                  owner: element.owner,
-                })),
+                response.data.playlists.items.map((element) =>
+                  useResponseFormater(element),
+                ),
               ),
             axios
               .get(
-                'https://api.spotify.com/v1/browse/categories/toplists/playlists',
+                'https://api.spotify.com/v1/browse/categories/toplists/playlists?country=BR',
                 {
                   headers: {
                     Authorization: 'Bearer ' + accessToken,
@@ -238,21 +175,13 @@ const Home = () => {
                 },
               )
               .then((response) =>
-                response.data.playlists.items.map((element) => ({
-                  id: element.id,
-                  uri: element.uri,
-                  artist: element.artists,
-                  name: element.name,
-                  description: element.description,
-                  images: element.images,
-                  type: element.type,
-                  index: 0,
-                  owner: element.owner,
-                })),
+                response.data.playlists.items.map((element) =>
+                  useResponseFormater(element),
+                ),
               ),
             axios
               .get(
-                'https://api.spotify.com/v1/browse/categories/mood/playlists',
+                'https://api.spotify.com/v1/browse/categories/mood/playlists?country=BR',
                 {
                   headers: {
                     Authorization: 'Bearer ' + accessToken,
@@ -260,19 +189,9 @@ const Home = () => {
                 },
               )
               .then((response) =>
-                response.data.playlists.items.map((element) => ({
-                  id: element.id,
-                  uri: element.uri,
-                  artist: element.artists,
-                  name: element.name,
-                  description: element.description.search('<a')
-                    ? element.name
-                    : element.description,
-                  images: element.images,
-                  type: element.type,
-                  index: 0,
-                  owner: element.owner,
-                })),
+                response.data.playlists.items.map((element) =>
+                  useResponseFormater(element),
+                ),
               ),
           ])
 
