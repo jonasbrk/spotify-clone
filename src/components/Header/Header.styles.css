@@ -15,6 +15,7 @@ header {
   display: flex;
   gap: 16px;
   pointer-events: all;
+  align-items: center;
 }
 
 .header__wrapper .button--icon {

@@ -37,3 +37,42 @@
   text-transform: none;
   color: white;
 }
+
+
+.card__type--category {
+  display: flex;
+  position: relative;
+  min-width: 180px;
+  width: 230px;
+  max-width: 230px;
+  min-height: 180px;
+  height: 230px;
+  max-height: 230px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.card__type--category .card__img {
+  height: 128px;
+  width: 128px;
+  position: absolute;
+  transform: rotate(25deg) translate(18%, -2%);
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
+  bottom: 0;
+  right: 0;
+  border-radius: 4px;
+}
+
+.card__type--category .card__title {
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  line-height: 1.3em;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  padding: 16px;
+  position: absolute;
+  color: white;
+  margin: 0;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+}

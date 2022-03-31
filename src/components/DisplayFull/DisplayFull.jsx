@@ -11,12 +11,9 @@ export const DisplayFull = (props) => {
         <h2>{title}</h2>
       </div>
       <div className="main__full--main">
-        {children}
-        {data ? (
-          data.map((e, index) => <Card itemInfo={e} key={index} />)
-        ) : (
-          <h1>loading</h1>
-        )}
+        {children
+          ? children
+          : data.map((e, index) => <Card itemInfo={e} key={index} />)}
       </div>
     </div>
   );
