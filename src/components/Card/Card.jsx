@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '..';
-import { PlayImg, Pause } from '../../assets/svg';
+import { PlayImg, Pause, SongImg } from '../../assets/svg';
 import { SpotifyApi } from '../../utils/';
 import {
   DeviceContext,
@@ -32,7 +32,9 @@ export const Card = (props) => {
 
         {
           context_uri: type == 'track' ? data.album.uri : uri,
-          offset: { position: type == 'track' ? data.track_number - 1 : 0 },
+          offset: type == 'artist' && {
+            position: type == 'track' ? data.track_number - 1 : 0,
+          },
           position_ms: 0,
         },
       );
@@ -54,7 +56,8 @@ export const Card = (props) => {
   const navigateTo = (id, target) => {
     if (
       (cardRef.current && target.className == cardRef.current.className) ||
-      target.offsetParent.className == 'card__img'
+      target.offsetParent.className == 'card__img' ||
+      target.offsetParent.className == 'card__img__wrapper'
     ) {
       navigate(`/${type == 'track' ? 'album' : type}/${id}`);
     }
@@ -70,12 +73,20 @@ export const Card = (props) => {
     >
       <div className="card__img">
         <div className="card__img__wrapper">
-          <img
-            src={
-              type == 'track' ? data.album.images[0].url : data.images[0].url
-            }
-            alt=""
-          />
+          {type == 'playlist' && data.images == undefined ? (
+            <div className="undefined__cover--card">
+              <div className="undefined__icon">
+                <SongImg />
+              </div>
+            </div>
+          ) : (
+            <img
+              src={
+                type == 'track' ? data.album.images[0].url : data.images[0].url
+              }
+              alt=""
+            />
+          )}
         </div>
 
         <Button
