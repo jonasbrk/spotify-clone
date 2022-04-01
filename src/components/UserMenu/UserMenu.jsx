@@ -12,6 +12,7 @@ import axios from 'axios';
 export const UserMenu = () => {
   const { accessToken } = useContext(TokenContext);
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
   const { ref1, ref2, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -24,12 +25,13 @@ export const UserMenu = () => {
       })
       .then((e) => {
         setCurrentUser(e.data);
+        setIsLoading(false);
       });
   }, [accessToken]);
 
   return (
     <>
-      {accessToken && (
+      {!isLoading && (
         <div ref={ref1} className="user__menu">
           <button
             className="user__menu__btn"
