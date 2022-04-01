@@ -19,7 +19,7 @@ import { Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import { client_id, client_secret, uri, scope } from './credentials';
-import { Layout } from './components';
+import { Layout, Loading } from './components';
 import { TokenContext } from './utils/context';
 import { getCookie, setCookie } from './utils/useCookie';
 const App = () => {
@@ -90,28 +90,34 @@ const App = () => {
 
   return (
     <>
-      <TokenContext.Provider value={{ accessToken }}>
-        <Layout>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/playlist/:id" element={<PlaylistTemplate />} />
-          <Route path="/album/:id" element={<AlbumTemplate />} />
-          <Route path="/artist/:id" element={<ArtistTemplate />} />
-          <Route path="/genre/:id" element={<GenreTemplate />} />
-          <Route path="/collection/tracks" element={<CollectionTracks />} />
-          <Route
-            path="/collection/playlists"
-            element={<CollectionPlaylists />}
-          />
-          <Route
-            path="/collection/"
-            element={<Navigate to="/collection/playlists" replace />}
-          />
-          <Route path="/collection/albums" element={<CollectionAlbums />} />
-          <Route path="/collection/artists" element={<CollectionArtists />} />
-          <Route path="/search/" element={<SearchPage />} />
-          <Route path="/login" element={<Login useLogin={useLogin} />} />
-        </Layout>
-      </TokenContext.Provider>
+      {!accessToken ? (
+        <div className="loading__overlay">
+          <Loading />
+        </div>
+      ) : (
+        <TokenContext.Provider value={{ accessToken }}>
+          <Layout>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/playlist/:id" element={<PlaylistTemplate />} />
+            <Route path="/album/:id" element={<AlbumTemplate />} />
+            <Route path="/artist/:id" element={<ArtistTemplate />} />
+            <Route path="/genre/:id" element={<GenreTemplate />} />
+            <Route path="/collection/tracks" element={<CollectionTracks />} />
+            <Route
+              path="/collection/playlists"
+              element={<CollectionPlaylists />}
+            />
+            <Route
+              path="/collection/"
+              element={<Navigate to="/collection/playlists" replace />}
+            />
+            <Route path="/collection/albums" element={<CollectionAlbums />} />
+            <Route path="/collection/artists" element={<CollectionArtists />} />
+            <Route path="/search/" element={<SearchPage />} />
+            <Route path="/login" element={<Login useLogin={useLogin} />} />
+          </Layout>
+        </TokenContext.Provider>
+      )}
     </>
   );
 };
