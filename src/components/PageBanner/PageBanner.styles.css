@@ -73,6 +73,8 @@
   line-height: 1rem;
   text-transform: none;
   letter-spacing: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
 }
 
 .page__info a {
@@ -85,6 +87,18 @@
   margin: 0px 4px;
 }
 
+.page__info .page__owner .span--after::after,
+.page__info .page__owner .span--after--bold::after {
+  content: '•';
+  margin: 0px 4px;
+}
+.page__info .page__owner span span {
+  color: rgba(255,255,255,.7);
+  }
+
+.page__info .page__owner .span--after--bold{
+  font-weight: 700;
+}
 .info__container {
   z-index: 1;
 }

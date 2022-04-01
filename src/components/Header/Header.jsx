@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Header.styles.css';
 import { Button, UserMenu } from '../index';
 import { ArrowLeftImg, ArrowRigthImg } from '../../assets/svg/index';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useSearchParams,
+  NavLink,
+} from 'react-router-dom';
+import { SearchBar } from '../SearchBar/SearchBar';
 
 export const Header = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
   const navigateTo = (index) => {
     if (location.pathname == '/' && index == -1) return;
     navigate(index);
+  };
+  const handleSearch = (q) => {
+    setSearchParams(q && { q });
   };
   return (
     <header>
@@ -28,6 +38,40 @@ export const Header = () => {
             navigateTo(+1);
           }}
         />
+        {location.pathname == '/search' && (
+          <SearchBar onChange={handleSearch} />
+        )}
+
+        {(location.pathname == '/collection/albums' ||
+          location.pathname == '/collection/playlists' ||
+          location.pathname == '/collection/artists') && (
+          <div className="collection__nav">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? 'collection__nav--active' : ''
+              }
+              to="/collection/playlists"
+            >
+              <span>Playlists</span>{' '}
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? 'collection__nav--active' : ''
+              }
+              to="/collection/artists"
+            >
+              <span>Artists</span>
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? 'collection__nav--active' : ''
+              }
+              to="/collection/albums"
+            >
+              <span>Albums</span>
+            </NavLink>
+          </div>
+        )}
       </div>
       <div className="header__wrapper">
         <UserMenu />

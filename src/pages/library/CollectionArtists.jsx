@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+
 import { NoArtistImg } from '../../assets/svg';
 import { DisplayFull, PageHeader, Loading } from '../../components';
+
 import { TokenContext } from '../../utils/context';
-import './styles/CollectionPlaylists.styles.css';
+import { useResponseFormater } from '../../utils';
+
+import './styles/Collection.styles.css';
 
 export const CollectionArtists = () => {
   const { accessToken } = useContext(TokenContext);
@@ -12,16 +16,19 @@ export const CollectionArtists = () => {
   const [userArtists, setUserArtists] = useState();
 
   useEffect(() => {
-    axios
-      .get('https://api.spotify.com/v1/me/following?type=artist', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      })
-      .then((e) => {
-        setUserArtists(e.data);
-        setLoading(false);
-      });
+    if (accessToken)
+      axios
+        .get('https://api.spotify.com/v1/me/following?type=artist', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        })
+        .then((e) => {
+          setUserArtists(
+            e.data.artists.items.map((item) => useResponseFormater(item)),
+          );
+          setLoading(false);
+        });
   }, [accessToken]);
 
   return (
@@ -30,47 +37,11 @@ export const CollectionArtists = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageHeader bgColor="rgb(18, 18, 18)" disabled={true}>
-            <div className="collection__nav">
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/playlists"
-              >
-                <span>Playlists</span>{' '}
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/artists"
-              >
-                <span>Artists</span>
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/albums"
-              >
-                <span>Albums</span>
-              </NavLink>
-            </div>
-          </PageHeader>
-          <div className="collection__playlists">
-            {/* <DisplayFull
-              title="Artists"
-              type="artists"
-              data={userArtists.artists.items}
-            /> */}
+          <PageHeader bgColor="rgb(18, 18, 18)" disabled={true} />
 
-            {userArtists.artists.items.length > 0 ? (
-              <DisplayFull
-                title="Artists"
-                type="artists"
-                data={userArtists.artists.items}
-              />
+          <div className="collection">
+            {userArtists.length > 0 ? (
+              <DisplayFull title="Artists" data={userArtists} />
             ) : (
               <div className="no_info">
                 <div className="no_info__img">

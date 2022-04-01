@@ -1,31 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-export const useContainerDimensions = () => {
+export function useContainerDimensions() {
+  const ref = useRef(null);
   const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
 
-  const handleResize = (e) => {
-    setDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-    console.log(window.innerWidth);
-    let width = window.offsetWidth;
-    if (window.offsetWidth) console.log('cu');
+  useEffect(() => {
+    if (ref.current != null) {
+      setDimensions({
+        width: ref.current.offsetWidth,
+        height: ref.current.offsetHeight,
+      });
+    }
+  }, []);
+
+  const handleResize = () => {
+    if (ref.current) {
+      setDimensions({
+        width: ref.current.offsetWidth,
+        height: ref.current.offsetHeight,
+      });
+    }
   };
 
   useEffect(() => {
-    window.addEventListener('resize', (e) => {
-      handleResize(e);
-    });
-    return () => {
-      window.removeEventListener('resize', (e) => {
-        handleResize(e);
+    if (ref.current) {
+      window.addEventListener('resize', () => {
+        handleResize();
       });
-    };
-  });
+      return () => {
+        window.removeEventListener('resize', () => {
+          handleResize();
+        });
+      };
+    }
+  }, [ref]);
 
-  return dimensions;
-};
+  return { dimensions, ref };
+}

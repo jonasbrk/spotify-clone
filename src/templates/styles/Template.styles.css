@@ -4,6 +4,16 @@
   position: relative;
   overflow-y: auto;
 }
+.page__template {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.main__template__container {
+  z-index: 0;
+}
+
 .genre__template {
   display: flex;
   flex-direction: column;

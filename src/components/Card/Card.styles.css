@@ -95,7 +95,7 @@
   width: 100%;
 }
 
-.card__info .card__autor {
+.card__info .card__descripton {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #a7a7a7;
   font-size: 0.875rem;
@@ -132,7 +132,7 @@
   line-height: 2.25rem;
   letter-spacing: -0.04em;
 }
-.card__type--liked .card__info .card__autor {
+.card__type--liked .card__info .card__descripton {
   font-size: 0.875rem;
   line-height: 1rem;
   color: white;
@@ -143,43 +143,6 @@
 }
 .card__type--artist .card__img img {
   border-radius: 500px;
-}
-
-.card__type--category {
-  display: flex;
-  position: relative;
-  min-width: 180px;
-  width: 230px;
-  max-width: 230px;
-  min-height: 180px;
-  height: 230px;
-  max-height: 230px;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.card__type--category .card__img {
-  height: 128px;
-  width: 128px;
-  position: absolute;
-  transform: rotate(25deg) translate(18%, -2%);
-  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
-  bottom: 0;
-  right: 0;
-}
-
-.card__type--category .card__title {
-  font-size: 24px;
-  letter-spacing: -0.04em;
-  line-height: 1.3em;
-  max-width: 100%;
-  overflow-wrap: break-word;
-  padding: 16px;
-  position: absolute;
-  color: white;
-  margin: 0;
-  box-sizing: border-box;
-  white-space: pre-wrap;
 }
 
 .card__img__wrapper {
@@ -196,4 +159,31 @@
   left: 0;
   object-fit: cover;
   object-position: center;
+}
+
+
+.undefined__cover--card {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: #282828;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+.undefined__icon {
+  height: 48px;
+  width: 48px;
+}
+
+.undefined__icon svg {
+  height: 100%;
+  width: 100%;
+  color: #7f7f7f;
+  transition: opacity 0.1s ease;
+}
+
+.cover:hover .undefined__icon svg {
+  opacity: 0;
 }

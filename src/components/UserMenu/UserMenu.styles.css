@@ -15,6 +15,10 @@
   position: relative;
 }
 
+.user__menu{
+  height: 100%;
+}
+
 .user__menu__btn:hover {
   background-color: #282828;
 }

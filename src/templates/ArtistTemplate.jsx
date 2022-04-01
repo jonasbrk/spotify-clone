@@ -1,86 +1,80 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './ArtistTemplate.styles.css';
-import { Loading, PageBanner, TrackList } from '../../components';
-import { generateRandomColor } from '../../utils';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+
+import { Loading, PageBanner, TrackList } from '../components';
+
+import { generateRandomColor } from '../utils';
 import {
   DeviceContext,
   PlayerContext,
   TokenContext,
   TrackContext,
-  UserContext,
-} from '../../utils/context';
-import { useParams } from 'react-router-dom';
-import { SpotifyApi } from '../../utils';
+} from '../utils/context';
+import { SpotifyApi } from '../utils';
+
+import './styles/Template.styles.css';
 
 export const ArtistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { currentTrack } = useContext(TrackContext);
-  const { currentUser } = useContext(UserContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
-  const [pageData, setPageData] = useState('');
 
   const { id } = useParams();
 
   useEffect(() => {
     setData('');
-    setPageData('');
     setLoading(true);
-    Promise.all([
-      axios.get(`https://api.spotify.com/v1/artists/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }),
-
-      axios.get(
-        `https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`,
-        {
+    if (accessToken)
+      Promise.all([
+        axios.get(`https://api.spotify.com/v1/artists/${id}`, {
           headers: {
             Authorization: 'Bearer ' + accessToken,
           },
-        },
-      ),
+        }),
 
-      axios.get(
-        `https://api.spotify.com/v1/artists/${id}/top-tracks?market=BR`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
+        axios.get(
+          `https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
           },
-        },
-      ),
-    ]).then((e) => {
-      console.log(e);
-      const [artist, isLiked, tracksData] = e;
-      const { tracks, id, uri } = tracksData.data;
-      const { name, images, type, followers, description } = artist.data;
-      setData({
-        uri: uri,
-        name: name,
-        id: id,
-        type: type,
-        tracks: tracks,
-        isLiked: isLiked.data[0],
-      });
+        ),
 
-      setPageData({
-        color: generateRandomColor(),
-        title: type,
-        description: description,
-        name: name,
-        cover: images,
-        type: type,
-        owner: `${followers.total} Subscriptions`,
-      });
+        axios.get(
+          `https://api.spotify.com/v1/artists/${id}/top-tracks?market=BR`,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          },
+        ),
+      ]).then((e) => {
+        console.log(e);
+        const [artist, isLiked, tracksData] = e;
+        const { tracks, uri } = tracksData.data;
+        const { name, id, images, type, followers, description } = artist.data;
+        setData({
+          uri: uri,
+          name: name,
+          id: id,
+          type: type,
+          tracks: tracks,
+          isLiked: isLiked.data[0],
+          color: generateRandomColor(),
+          description: description,
+          cover: images,
+          followers: followers,
+        });
 
-      setLoading(false);
-    });
-  }, [id]);
+        setLoading(false);
+      });
+  }, [id, accessToken]);
 
   const handlePlay = () => {
     if (
@@ -134,13 +128,8 @@ export const ArtistTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner
-            id={data.id}
-            pageData={pageData}
-            play={[handlePlay, isPlaying]}
-            data={data}
-          />
-          <div className="playlist__template">
+          <PageBanner play={[handlePlay, isPlaying]} data={data} />
+          <div className="page__template">
             <div className="main__template__container">
               <TrackList var1="ÁLBUM" data={data} />
             </div>

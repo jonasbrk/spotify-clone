@@ -22,8 +22,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  /* gap: 24px;
-    padding: 24px 32px 0; */
   background-color: #121212;
   overflow-x: hidden;
   overflow-y: auto;
@@ -32,6 +30,7 @@
 .main__wrapper {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 270px);
+  max-width: calc(100% - 270px);
   position: relative;
 }

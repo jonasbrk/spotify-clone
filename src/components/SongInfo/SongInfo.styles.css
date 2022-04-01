@@ -1,16 +1,16 @@
-.song__cover,
-.song__img {
+.song__player__cover,
+.song__player__img {
   height: 56px;
   width: 56px;
 }
 
-.song__cover {
+.song__player__cover {
   position: relative;
   cursor: pointer;
   display: flex;
 }
 
-.expand__cover {
+.expand__song__player__cover {
   position: absolute;
   height: 24px;
   width: 24px;
@@ -19,47 +19,47 @@
   opacity: 0;
   visibility: hidden;
 }
-.expand__cover svg {
+.expand__song__player__cover svg {
   transform: rotate(90deg);
 }
 
-.song__cover:hover .expand__cover {
+.song__player__cover:hover .expand__song__player__cover {
   opacity: 1;
   visibility: inherit;
 }
 
-.expand__cover:hover {
+.expand__song__player__cover:hover {
   transform: scale(1.1);
 }
 
-.song__info {
+.song__player__info {
   display: flex;
   flex-direction: column;
   margin: 0 14px;
 }
 
-.song__title,
-.song__autor {
+.song__player__title,
+.song__player__autor {
   font-size: 0.875rem;
   line-height: 1rem;
   text-transform: none;
   letter-spacing: normal;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-.song__autor {
+.song__player__autor {
   font-size: 0.6875rem;
 }
 
-.song__info a {
+.song__player__info a {
   text-decoration: none;
   color: white;
 }
 
-.song__info .song__autor a {
+.song__player__info .song__player__autor a {
   color: #b3b3b3;
 }
 
-.song__info a:hover {
+.song__player__info a:hover {
   text-decoration: underline;
   color: white;
 }

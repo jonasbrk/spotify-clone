@@ -20,6 +20,12 @@
   fill: white;
 }
 
+.button--active {
+  color: white;
+  fill: white;
+  opacity: 1;
+}
+
 .button--nav svg {
   height: 24px;
   width: 24px;

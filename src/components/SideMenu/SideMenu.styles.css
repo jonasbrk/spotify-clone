@@ -3,12 +3,10 @@
   flex-direction: column;
   height: 100%;
   width: 270px;
-  min-width: 130px;
-  max-width: 395px;
+  min-width: 270px;
   padding-top: 24px;
   box-sizing: border-box;
   background-color: black;
-  resize: horizontal;
   overflow: hidden;
   position: relative;
 }

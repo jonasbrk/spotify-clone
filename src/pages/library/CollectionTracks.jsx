@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './styles/CollectionTracks.styles.css';
-import { Loading, PageBanner, TrackList } from '../../components';
 import axios from 'axios';
+
+import { Loading, PageBanner, TrackList } from '../../components';
+
 import {
   DeviceContext,
   PlayerContext,
@@ -10,6 +11,8 @@ import {
   UserContext,
 } from '../../utils/context';
 import { SpotifyApi } from '../../utils';
+
+import './styles/Collection.styles.css';
 
 export const CollectionTracks = () => {
   const { accessToken } = useContext(TokenContext);
@@ -20,40 +23,33 @@ export const CollectionTracks = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
-  const [pageData, setPageData] = useState('');
 
   useEffect(() => {
-    axios
-      .get('https://api.spotify.com/v1/me/tracks', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      })
-      .then((e) => {
-        const { items } = e.data;
-        setData({
-          name: 'Liked Songs',
-          type: 'playlist',
-          tracks: items.map((e) => {
-            return e.track;
-          }),
+    if (accessToken)
+      axios
+        .get('https://api.spotify.com/v1/me/tracks', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        })
+        .then((e) => {
+          const { items } = e.data;
+          setData({
+            name: 'Liked Songs',
+            type: 'playlist',
+            tracks: items.map((e) => {
+              return e.track;
+            }),
+            owner: currentUser.display_name,
+            color: 'rgb(80, 56, 160)',
+            cover: [
+              {
+                url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
+              },
+            ],
+          });
+          setLoading(false);
         });
-
-        setPageData({
-          color: 'rgb(80, 56, 160)',
-          title: 'playlist',
-          description: 'oi',
-          name: 'Liked Songs',
-          cover: [
-            {
-              url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
-            },
-          ],
-          type: 'playlist',
-          owner: currentUser.display_name,
-        });
-        setLoading(false);
-      });
   }, [accessToken]);
 
   const handlePlay = () => {
@@ -108,11 +104,7 @@ export const CollectionTracks = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner
-            pageData={pageData}
-            play={[handlePlay, isPlaying]}
-            colection
-          />
+          <PageBanner play={[handlePlay, isPlaying]} colection data={data} />
           <div className="playlist__template">
             <div className="main__template__container">
               <TrackList var1="ÁLBUM" data={data} />
