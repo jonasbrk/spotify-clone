@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+
 import { NoAlbumImg } from '../../assets/svg';
 import { DisplayFull, PageHeader, Loading } from '../../components';
+
 import { TokenContext } from '../../utils/context';
-import './styles/CollectionPlaylists.styles.css';
+import { useResponseFormater } from '../../utils';
+
+import './styles/Collection.styles.css';
 
 export const CollectionAlbums = () => {
   const { accessToken } = useContext(TokenContext);
@@ -19,52 +23,26 @@ export const CollectionAlbums = () => {
         },
       })
       .then((e) => {
-        setUserAlbums(e.data);
+        setUserAlbums(
+          e.data.items
+            .map((e) => e.album)
+            .map((item) => useResponseFormater(item)),
+        );
         setLoading(false);
       });
   }, [accessToken]);
 
+  useEffect(() => console.log(userAlbums), [userAlbums]);
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageHeader bgColor="rgb(18, 18, 18)" disabled={true}>
-            <div className="collection__nav">
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/playlists"
-              >
-                <span>Playlists</span>{' '}
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/artists"
-              >
-                <span>Artists</span>
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'collection__nav--active' : ''
-                }
-                to="/collection/albums"
-              >
-                <span>Albums</span>
-              </NavLink>
-            </div>
-          </PageHeader>
-          <div className="collection__playlists">
-            {userAlbums.items.length ? (
-              <DisplayFull
-                title="Albums"
-                type="albums"
-                data={userAlbums.items.map((e) => e.album)}
-              />
+          <PageHeader bgColor="rgb(18, 18, 18)" disabled={true} />
+          <div className="collection">
+            {userAlbums.length ? (
+              <DisplayFull title="Albums" type="albums" data={userAlbums} />
             ) : (
               <div className="no_info">
                 <div className="no_info__img">
