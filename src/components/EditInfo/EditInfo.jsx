@@ -4,9 +4,8 @@ import { AttentionImg } from '../../assets/svg';
 import { TokenContext } from '../../utils/context';
 import './EditInfo.styles.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
+export const EditInfo = ({ isOpen, setIsOpen, data }) => {
   const { color, title, name, cover, type, owner, total_tracks } = data;
   const { accessToken } = useContext(TokenContext);
   const [titleInput, setTitleInput] = useState('');
@@ -31,7 +30,7 @@ export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
       setAlert('');
       console.log(isOpen);
     }
-  }, [isOpen, id, data]);
+  }, [isOpen, data]);
 
   function handleReaderLoaded(readerEvent) {
     let binaryString = readerEvent.target.result;
@@ -50,11 +49,10 @@ export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
     }
   };
 
-  const navigate = useNavigate(null);
   const handleSaveChange = () => {
     Promise.all([
       base64 &&
-        axios(`https://api.spotify.com/v1/playlists/${id}/images`, {
+        axios(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
           headers: {
             Authorization: 'Bearer ' + accessToken,
             'Content-Type': 'image/jpeg',
@@ -62,7 +60,7 @@ export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
           method: 'PUT',
           data: base64,
         }),
-      axios(`https://api.spotify.com/v1/playlists/${id}`, {
+      axios(`https://api.spotify.com/v1/playlists/${data.id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
@@ -74,10 +72,7 @@ export const EditInfo = ({ isOpen, setIsOpen, data, id }) => {
       }),
     ]).then(() => {
       console.log('feito');
-      navigate('/');
-      setTimeout(() => {
-        navigate('/playlist/' + id);
-      }, 0);
+      window.location.reload();
     });
   };
 
