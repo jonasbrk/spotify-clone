@@ -25,30 +25,31 @@ export const CollectionTracks = () => {
   const [data, setData] = useState('');
 
   useEffect(() => {
-    axios
-      .get('https://api.spotify.com/v1/me/tracks', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      })
-      .then((e) => {
-        const { items } = e.data;
-        setData({
-          name: 'Liked Songs',
-          type: 'playlist',
-          tracks: items.map((e) => {
-            return e.track;
-          }),
-          owner: currentUser.display_name,
-          color: 'rgb(80, 56, 160)',
-          cover: [
-            {
-              url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
-            },
-          ],
+    if (accessToken)
+      axios
+        .get('https://api.spotify.com/v1/me/tracks', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        })
+        .then((e) => {
+          const { items } = e.data;
+          setData({
+            name: 'Liked Songs',
+            type: 'playlist',
+            tracks: items.map((e) => {
+              return e.track;
+            }),
+            owner: currentUser.display_name,
+            color: 'rgb(80, 56, 160)',
+            cover: [
+              {
+                url: 'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png',
+              },
+            ],
+          });
+          setLoading(false);
         });
-        setLoading(false);
-      });
   }, [accessToken]);
 
   const handlePlay = () => {

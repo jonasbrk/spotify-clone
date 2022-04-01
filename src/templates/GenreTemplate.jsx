@@ -17,34 +17,37 @@ export const GenreTemplate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Promise.all([
-      axios
-        .get(
-          `https://api.spotify.com/v1/browse/categories/${id}/playlists?limit=50`,
-          {
+    setData('');
+    setLoading(true);
+    if (accessToken)
+      Promise.all([
+        axios
+          .get(
+            `https://api.spotify.com/v1/browse/categories/${id}/playlists?limit=50`,
+            {
+              headers: {
+                Authorization: 'Bearer ' + accessToken,
+              },
+            },
+          )
+          .then((e) => {
+            setData(
+              e.data.playlists.items.map((item) => useResponseFormater(item)),
+            );
+          }),
+        axios
+          .get(`https://api.spotify.com/v1/browse/categories/${id}`, {
             headers: {
               Authorization: 'Bearer ' + accessToken,
             },
-          },
-        )
-        .then((e) => {
-          setData(
-            e.data.playlists.items.map((item) => useResponseFormater(item)),
-          );
-        }),
-      axios
-        .get(`https://api.spotify.com/v1/browse/categories/${id}`, {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        })
-        .then((e) => {
-          setPageData(e.data);
-        }),
-    ]).then(() => {
-      setLoading(false);
-    });
-  }, [id]);
+          })
+          .then((e) => {
+            setPageData(e.data);
+          }),
+      ]).then(() => {
+        setLoading(false);
+      });
+  }, [id, accessToken]);
 
   return (
     <>

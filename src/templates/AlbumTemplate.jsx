@@ -27,46 +27,49 @@ export const AlbumTemplate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Promise.all([
-      axios.get(`https://api.spotify.com/v1/albums/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }),
-      axios.get(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }),
-    ]).then((e) => {
-      const [data, isLiked] = e;
-      const {
-        name,
-        description,
-        images,
-        type,
-        artists,
-        total_tracks,
-        tracks,
-        id,
-        uri,
-      } = data.data;
-      setData({
-        uri: uri,
-        name: name,
-        id: id,
-        type: type,
-        tracks: tracks.items,
-        isLiked: isLiked.data[0],
-        color: generateRandomColor(),
-        description: description,
-        cover: images,
-        artists: artists,
-        total_tracks: total_tracks,
+    setData('');
+    setLoading(true);
+    if (accessToken)
+      Promise.all([
+        axios.get(`https://api.spotify.com/v1/albums/${id}`, {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }),
+        axios.get(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }),
+      ]).then((e) => {
+        const [data, isLiked] = e;
+        const {
+          name,
+          description,
+          images,
+          type,
+          artists,
+          total_tracks,
+          tracks,
+          id,
+          uri,
+        } = data.data;
+        setData({
+          uri: uri,
+          name: name,
+          id: id,
+          type: type,
+          tracks: tracks.items,
+          isLiked: isLiked.data[0],
+          color: generateRandomColor(),
+          description: description,
+          cover: images,
+          artists: artists,
+          total_tracks: total_tracks,
+        });
+        setLoading(false);
       });
-      setLoading(false);
-    });
-  }, [id]);
+  }, [id, accessToken]);
 
   const handlePlay = () => {
     if (currentTrack.context.uri != data.uri || currentTrack.init_load) {

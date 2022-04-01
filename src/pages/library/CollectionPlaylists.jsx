@@ -15,38 +15,39 @@ export const CollectionPlaylists = () => {
   const [userLiked, setUserLiked] = useState('');
 
   useEffect(() => {
-    Promise.all([
-      axios
-        .get('https://api.spotify.com/v1/me/playlists', {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        })
-        .then((e) => {
-          setUserPlaylists(
-            e.data.items.map((item) => useResponseFormater(item)),
-          );
-        }),
+    if (accessToken)
+      Promise.all([
+        axios
+          .get('https://api.spotify.com/v1/me/playlists', {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          })
+          .then((e) => {
+            setUserPlaylists(
+              e.data.items.map((item) => useResponseFormater(item)),
+            );
+          }),
 
-      axios
-        .get('https://api.spotify.com/v1/me/tracks', {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        })
-        .then((e) => {
-          const { items } = e.data;
-          setUserLiked({
-            name: 'Liked Songs',
-            type: 'playlist',
-            tracks: items.map((e) => {
-              return e.track;
-            }),
-          });
-        }),
-    ]).then(() => {
-      setLoading(false);
-    });
+        axios
+          .get('https://api.spotify.com/v1/me/tracks', {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          })
+          .then((e) => {
+            const { items } = e.data;
+            setUserLiked({
+              name: 'Liked Songs',
+              type: 'playlist',
+              tracks: items.map((e) => {
+                return e.track;
+              }),
+            });
+          }),
+      ]).then(() => {
+        setLoading(false);
+      });
   }, [accessToken]);
   return (
     <>

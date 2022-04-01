@@ -31,46 +31,54 @@ export const PlaylistTemplate = () => {
   useEffect(() => {
     setData('');
     setLoading(true);
-
-    Promise.all([
-      axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }),
-      axios.get(
-        `https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${currentUser.id}`,
-        {
+    if (accessToken)
+      Promise.all([
+        axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
           headers: {
             Authorization: 'Bearer ' + accessToken,
           },
-        },
-      ),
-    ]).then((e) => {
-      const [data, isLiked] = e;
-      const { name, images, type, owner, uri, tracks, description, followers } =
-        data.data;
-
-      setData({
-        uri: uri,
-        name: name,
-        id: id,
-        type: type,
-        owner: owner.display_name,
-        tracks: tracks.items.map((e) => {
-          return e.track;
         }),
-        description: description,
-        followers: followers,
-        isLiked: isLiked.data[0],
-        editable: owner.id == currentUser.id,
-        cover: images.length ? images : undefined,
-        color: generateRandomColor(),
-      });
+        axios.get(
+          `https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${currentUser.id}`,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          },
+        ),
+      ]).then((e) => {
+        const [data, isLiked] = e;
+        const {
+          name,
+          images,
+          type,
+          owner,
+          uri,
+          tracks,
+          description,
+          followers,
+        } = data.data;
 
-      setLoading(false);
-    });
-  }, [id]);
+        setData({
+          uri: uri,
+          name: name,
+          id: id,
+          type: type,
+          owner: owner.display_name,
+          tracks: tracks.items.map((e) => {
+            return e.track;
+          }),
+          description: description,
+          followers: followers,
+          isLiked: isLiked.data[0],
+          editable: owner.id == currentUser.id,
+          cover: images.length ? images : undefined,
+          color: generateRandomColor(),
+        });
+
+        setLoading(false);
+      });
+  }, [id, accessToken]);
 
   const handlePlay = () => {
     if (currentTrack.context.uri != data.uri) {

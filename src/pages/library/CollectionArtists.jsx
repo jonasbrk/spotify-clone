@@ -16,18 +16,19 @@ export const CollectionArtists = () => {
   const [userArtists, setUserArtists] = useState();
 
   useEffect(() => {
-    axios
-      .get('https://api.spotify.com/v1/me/following?type=artist', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      })
-      .then((e) => {
-        setUserArtists(
-          e.data.artists.items.map((item) => useResponseFormater(item)),
-        );
-        setLoading(false);
-      });
+    if (accessToken)
+      axios
+        .get('https://api.spotify.com/v1/me/following?type=artist', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        })
+        .then((e) => {
+          setUserArtists(
+            e.data.artists.items.map((item) => useResponseFormater(item)),
+          );
+          setLoading(false);
+        });
   }, [accessToken]);
 
   return (

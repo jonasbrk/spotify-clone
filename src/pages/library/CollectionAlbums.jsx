@@ -16,23 +16,23 @@ export const CollectionAlbums = () => {
   const [userAlbums, setUserAlbums] = useState({});
 
   useEffect(() => {
-    axios
-      .get('https://api.spotify.com/v1/me/albums', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      })
-      .then((e) => {
-        setUserAlbums(
-          e.data.items
-            .map((e) => e.album)
-            .map((item) => useResponseFormater(item)),
-        );
-        setLoading(false);
-      });
+    if (accessToken)
+      axios
+        .get('https://api.spotify.com/v1/me/albums', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        })
+        .then((e) => {
+          setUserAlbums(
+            e.data.items
+              .map((e) => e.album)
+              .map((item) => useResponseFormater(item)),
+          );
+          setLoading(false);
+        });
   }, [accessToken]);
 
-  useEffect(() => console.log(userAlbums), [userAlbums]);
   return (
     <>
       {loading ? (

@@ -29,51 +29,52 @@ export const ArtistTemplate = () => {
   useEffect(() => {
     setData('');
     setLoading(true);
-    Promise.all([
-      axios.get(`https://api.spotify.com/v1/artists/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      }),
-
-      axios.get(
-        `https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`,
-        {
+    if (accessToken)
+      Promise.all([
+        axios.get(`https://api.spotify.com/v1/artists/${id}`, {
           headers: {
             Authorization: 'Bearer ' + accessToken,
           },
-        },
-      ),
+        }),
 
-      axios.get(
-        `https://api.spotify.com/v1/artists/${id}/top-tracks?market=BR`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
+        axios.get(
+          `https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
           },
-        },
-      ),
-    ]).then((e) => {
-      console.log(e);
-      const [artist, isLiked, tracksData] = e;
-      const { tracks, uri } = tracksData.data;
-      const { name, id, images, type, followers, description } = artist.data;
-      setData({
-        uri: uri,
-        name: name,
-        id: id,
-        type: type,
-        tracks: tracks,
-        isLiked: isLiked.data[0],
-        color: generateRandomColor(),
-        description: description,
-        cover: images,
-        followers: followers,
+        ),
+
+        axios.get(
+          `https://api.spotify.com/v1/artists/${id}/top-tracks?market=BR`,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          },
+        ),
+      ]).then((e) => {
+        console.log(e);
+        const [artist, isLiked, tracksData] = e;
+        const { tracks, uri } = tracksData.data;
+        const { name, id, images, type, followers, description } = artist.data;
+        setData({
+          uri: uri,
+          name: name,
+          id: id,
+          type: type,
+          tracks: tracks,
+          isLiked: isLiked.data[0],
+          color: generateRandomColor(),
+          description: description,
+          cover: images,
+          followers: followers,
+        });
+
+        setLoading(false);
       });
-
-      setLoading(false);
-    });
-  }, [id]);
+  }, [id, accessToken]);
 
   const handlePlay = () => {
     if (
