@@ -69,10 +69,15 @@ export const Card = (props) => {
       }}
     >
       <div className="card__img">
-        <img
-          src={type == 'track' ? data.album.images[0].url : data.images[0].url}
-          alt=""
-        />
+        <div className="card__img__wrapper">
+          <img
+            src={
+              type == 'track' ? data.album.images[0].url : data.images[0].url
+            }
+            alt=""
+          />
+        </div>
+
         <Button
           onClick={() => {
             handlePlay();
