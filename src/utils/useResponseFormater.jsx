@@ -11,6 +11,8 @@ export function useResponseFormater(response) {
     album: {},
     genres: [],
     owner: [],
+    duration_ms: '',
+    followers: {},
   };
 
   let formatedData = {};

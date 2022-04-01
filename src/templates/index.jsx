@@ -1,4 +1,4 @@
-export { PlaylistTemplate } from './PlaylistTemplate/PlaylistTemplate';
-export { AlbumTemplate } from './AlbumTemplate/AlbumTemplate';
-export { ArtistTemplate } from './ArtistTemplate/ArtistTemplate';
-export { GenreTemplate } from './GenreTemplate/GenreTemplate';
+export { PlaylistTemplate } from './PlaylistTemplate';
+export { AlbumTemplate } from './AlbumTemplate';
+export { ArtistTemplate } from './ArtistTemplate';
+export { GenreTemplate } from './GenreTemplate';

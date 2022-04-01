@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './GenreTemplate.styles.css';
-import { DisplayFull, Loading, PageHeader } from '../../components';
-
-import axios from 'axios';
-import { TokenContext } from '../../utils/context';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+import { DisplayFull, Loading, PageHeader } from '../components';
+
+import { TokenContext } from '../utils/context';
+import { useResponseFormater } from '../utils';
+
+import './styles/Template.styles.css';
 
 export const GenreTemplate = () => {
   const { accessToken } = useContext(TokenContext);
@@ -25,7 +28,9 @@ export const GenreTemplate = () => {
           },
         )
         .then((e) => {
-          setData(e.data);
+          setData(
+            e.data.playlists.items.map((item) => useResponseFormater(item)),
+          );
         }),
       axios
         .get(`https://api.spotify.com/v1/browse/categories/${id}`, {
@@ -47,12 +52,12 @@ export const GenreTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageHeader bgColor="rgb(18, 18, 18)" disabled={true} />
+          <PageHeader bgColor="rgb(18, 18, 18)" />
           <div className="genre__header">
             <h1>{pageData.name}</h1>
           </div>
           <div className="genre__template">
-            <DisplayFull type="playlist" data={data.playlists.items} />
+            <DisplayFull data={data} />
           </div>
         </div>
       )}

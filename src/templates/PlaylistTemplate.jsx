@@ -1,80 +1,79 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './AlbumTemplate.styles.css';
-import { Loading, PageBanner, TrackList } from '../../components';
-import { generateRandomColor } from '../../utils';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+
+import { Loading, PageBanner, TrackList, AddSongs } from '../components';
+
+import { generateRandomColor } from '../utils';
 import {
   DeviceContext,
   PlayerContext,
   TokenContext,
   TrackContext,
-} from '../../utils/context';
-import { useParams } from 'react-router-dom';
-import { SpotifyApi } from '../../utils';
+  UserContext,
+} from '../utils/context';
+import { SpotifyApi } from '../utils';
 
-export const AlbumTemplate = () => {
+import './styles/Template.styles.css';
+
+export const PlaylistTemplate = () => {
   const { accessToken } = useContext(TokenContext);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
+  const { currentUser } = useContext(UserContext);
   const { player } = useContext(PlayerContext);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
-  const [pageData, setPageData] = useState('');
 
   const { id } = useParams();
 
   useEffect(() => {
+    setData('');
+    setLoading(true);
+
     Promise.all([
-      axios.get(`https://api.spotify.com/v1/albums/${id}`, {
+      axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       }),
-      axios.get(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
+      axios.get(
+        `https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${currentUser.id}`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
         },
-      }),
+      ),
     ]).then((e) => {
       const [data, isLiked] = e;
-      const {
-        name,
-        description,
-        images,
-        type,
-        artists,
-        total_tracks,
-        tracks,
-        id,
-        uri,
-      } = data.data;
+      const { name, images, type, owner, uri, tracks, description, followers } =
+        data.data;
+
       setData({
         uri: uri,
         name: name,
         id: id,
         type: type,
-        tracks: tracks.items,
-        isLiked: isLiked.data[0],
-      });
-      console.log(e.data);
-      setPageData({
-        color: generateRandomColor(),
-        title: type,
+        owner: owner.display_name,
+        tracks: tracks.items.map((e) => {
+          return e.track;
+        }),
         description: description,
-        name: name,
-        cover: images,
-        type: type,
-        owner: artists != 'undefined' ? artists : [],
-        total_tracks: total_tracks,
+        followers: followers,
+        isLiked: isLiked.data[0],
+        editable: owner.id == currentUser.id,
+        cover: images.length ? images : undefined,
+        color: generateRandomColor(),
       });
-      console.log(pageData);
+
       setLoading(false);
     });
   }, [id]);
 
   const handlePlay = () => {
-    if (currentTrack.context.uri != data.uri || currentTrack.init_load) {
+    if (currentTrack.context.uri != data.uri) {
       SpotifyApi(
         'PUT',
         accessToken,
@@ -108,15 +107,12 @@ export const AlbumTemplate = () => {
         <Loading />
       ) : (
         <div className="page__wrapper">
-          <PageBanner
-            id={data.id}
-            pageData={pageData}
-            play={[handlePlay, isPlaying]}
-            data={data}
-          />
-          <div className="playlist__template">
+          <PageBanner play={[handlePlay, isPlaying]} data={data} />
+
+          <div className="page__template">
             <div className="main__template__container">
-              <TrackList data={data} />
+              <TrackList var1="ÁLBUM" data={data} />
+              {data.editable && <AddSongs data={data} id={data.id} />}
             </div>
           </div>
         </div>
