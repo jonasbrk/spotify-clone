@@ -7,7 +7,7 @@ export const useMinutesString = (ms, cursive) => {
     let min = Math.floor(ms / 60000);
     let seg = String(((ms % 60000) / 1000).toFixed(0)).padStart(2, 0);
 
-    formatedTime = `${min}${cursive ? 'min ' : ':'}${seg} ${
+    formatedTime = `${min}${cursive ? 'min ' : ':'}${seg}${
       cursive ? 'seg' : ''
     }`;
   } else {

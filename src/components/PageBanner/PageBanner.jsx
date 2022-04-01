@@ -1,28 +1,23 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import './PageBanner.styles.css';
-import { LikeImg, Pause, PlayImg } from '../../assets/svg';
-import { Button, Cover, EditInfo, OptionsDropdown } from '../';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import { LikeImg, Pause, PlayImg } from '../../assets/svg';
+import { Button, Cover, EditInfo, OptionsDropdown } from '../';
+
 import { TokenContext } from '../../utils/context';
-export const PageBanner = ({
-  pageData,
-  play,
-  disabled,
-  bgColor,
-  editable,
-  id,
-  data,
-  colection,
-}) => {
-  const { color, title, name, cover, type, owner, total_tracks } = pageData;
-  const [handlePlay, isPlaying] = play;
-  const { accessToken } = useContext(TokenContext);
+import { useMinutesString } from '../../utils';
+
+import './PageBanner.styles.css';
+
+export const PageBanner = ({ play, data, colection }) => {
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
-  const [opacity, setOpacity] = useState(0);
+  const { accessToken } = useContext(TokenContext);
+  const [handlePlay, isPlaying] = play;
   const [isOpen, setIsOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(data && data.isLiked);
+  const [opacity, setOpacity] = useState(0);
 
   const opacityHandler = () => {
     const grandienInfo = headerGradientRef.current.getBoundingClientRect();
@@ -30,7 +25,6 @@ export const PageBanner = ({
       1 -
       ((grandienInfo.bottom - 64) * 100) / ((grandienInfo.height - 64) * 100)
     ).toFixed(2);
-    console.log(opacitiyPercent);
 
     if (opacitiyPercent >= 1) setOpacity(1);
     if (opacitiyPercent > 0 && opacitiyPercent < 1) setOpacity(opacitiyPercent);
@@ -38,7 +32,6 @@ export const PageBanner = ({
   };
 
   useEffect(() => {
-    console.log(headerBgRef);
     headerBgRef.current.parentNode.addEventListener('scroll', () =>
       opacityHandler(),
     );
@@ -72,7 +65,7 @@ export const PageBanner = ({
         ref={headerBgRef}
         className="pageBanner__header"
         style={{
-          backgroundColor: color,
+          backgroundColor: data.color,
           opacity: opacity,
         }}
       >
@@ -80,62 +73,93 @@ export const PageBanner = ({
       </div>
 
       <div className="pageBanner">
-        <EditInfo
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          data={pageData}
-          id={id}
-        />
+        <EditInfo isOpen={isOpen} setIsOpen={setIsOpen} data={data} />
         <div
           className="pageBanner__color"
           style={
-            type == 'artist'
-              ? { backgroundImage: `url(${cover[0].url})` }
-              : { backgroundColor: color }
+            data.type == 'artist'
+              ? { backgroundImage: `url(${data.cover[0].url})` }
+              : { backgroundColor: data.color }
           }
         ></div>
         <div ref={headerGradientRef} className="pageBanner__gradient"></div>
-        {type != 'artist' && (
+        {data.type != 'artist' && (
           <Cover
-            src={cover == undefined ? cover : cover[0].url}
+            src={data.cover == undefined ? data.cover : data.cover[0].url}
             onClick={() => {
               setIsOpen(!isOpen);
             }}
-            editable={editable}
+            editable={data.editable}
           />
         )}
         <div className="info__container">
           <div className="page__type">
-            <span>{title}</span>
+            <span>{data.type}</span>
           </div>
           <div
-            className={`page__name ${editable && 'page__name--editable'}`}
+            className={`page__name ${data.editable && 'page__name--editable'}`}
             onClick={() => {
-              editable && setIsOpen(true);
+              data.editable && setIsOpen(true);
             }}
           >
-            <h2>{name}</h2>
+            <h2>{data.name}</h2>
           </div>
           <div className="page__info">
             <span className="page__owner">
-              {type == 'artist' || type == 'playlist' ? (
-                owner
-              ) : (
+              {data.type == 'artist' &&
+                data.followers.total.toLocaleString('pt-BR', {
+                  style: 'decimal',
+                }) + ' seguidores'}
+              {data.type == 'playlist' && !data.editable && !colection && (
                 <>
-                  {owner.map((e, index) => (
-                    <>
-                      <Link key={index} to={'/artist/' + e.id}>
-                        {e.name}
-                      </Link>
-                    </>
-                  ))}
+                  <span className="span--after--bold">{data.owner}</span>
+                  <span className="span--after">{`${data.followers.total.toLocaleString(
+                    'pt-BR',
+                    { style: 'decimal' },
+                  )} curtidas`}</span>
                   <span>
-                    {`${total_tracks} ${
-                      total_tracks > 1 ? 'músicas' : 'música'
-                    }`}
+                    {` ${data.tracks.length} ${
+                      data.tracks.length > 1 ? 'músicas' : 'música'
+                    },`}
+                    <span>
+                      {' ' + data.tracks.length != 0 &&
+                        useMinutesString(
+                          data.tracks
+                            .map((e) => e.duration_ms)
+                            .reduce((p, c) => p + c),
+                          true,
+                        )}
+                    </span>
                   </span>
                 </>
               )}
+              {data.type == 'playlist' && data.editable && (
+                <>
+                  <span className="span--after--bold">{data.owner}</span>
+                  <span>
+                    {` ${data.tracks.length} ${
+                      data.tracks.length > 1 ? 'músicas' : 'música'
+                    }${data.tracks.length >= 1 ? ', ' : ''}`}
+                    <span>
+                      {' ' + data.tracks.length != 0 &&
+                        useMinutesString(
+                          data.tracks
+                            .map((e) => e.duration_ms)
+                            .reduce((p, c) => p + c),
+                          true,
+                        )}
+                    </span>
+                  </span>
+                </>
+              )}
+              {data.type == 'album' &&
+                data.artists.map((e, index) => (
+                  <>
+                    <Link key={index} to={'/artist/' + e.id}>
+                      {e.name}
+                    </Link>
+                  </>
+                ))}
             </span>
           </div>
         </div>
@@ -143,7 +167,7 @@ export const PageBanner = ({
       <div className="pageBanner__buttons">
         <div
           className="pageBanner__buttons__gradient"
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: data.color }}
         ></div>
         {data.tracks.length && (
           <Button
@@ -157,7 +181,7 @@ export const PageBanner = ({
             src={isPlaying ? <Pause /> : <PlayImg />}
           />
         )}
-        {!editable && !colection && (
+        {!data.editable && !colection && (
           <Button
             type="player"
             src={<LikeImg />}
@@ -170,7 +194,7 @@ export const PageBanner = ({
         {data && !colection && (
           <OptionsDropdown
             data={data}
-            editable={editable}
+            editable={data.editable}
             openModal={setIsOpen}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
