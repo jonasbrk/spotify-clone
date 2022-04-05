@@ -7,6 +7,7 @@ import { Loading, PageBanner, TrackList } from '../components';
 import { generateRandomColor, requestWithToken } from '../utils';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
@@ -19,6 +20,7 @@ export const AlbumTemplate = () => {
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const { setMenssage } = useContext(Menssage);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
@@ -75,7 +77,7 @@ export const AlbumTemplate = () => {
   const handlePlay = async () => {
     if (!currentTrack || currentTrack.context.uri != data.uri) {
       try {
-        await requestWithToken(
+        const response = await requestWithToken(
           'PUT',
           'https://api.spotify.com/v1/me/player/play?device_id=' +
             currentDeviceId,
@@ -86,10 +88,17 @@ export const AlbumTemplate = () => {
             position_ms: 0,
           },
         );
+
+        if (response.status === 204) {
+          console.log('Playing album ' + data.name);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
       } catch (error) {
         console.log(error);
-      } finally {
-        console.log('Playing album ' + data.name);
       }
     } else {
       player.togglePlay().then(() => {

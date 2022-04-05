@@ -7,6 +7,7 @@ import { Loading, PageBanner, TrackList } from '../components';
 import { generateRandomColor } from '../utils';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
@@ -20,6 +21,7 @@ export const ArtistTemplate = () => {
   const { currentTrack } = useContext(TrackContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const { setMenssage } = useContext(Menssage);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
@@ -87,7 +89,7 @@ export const ArtistTemplate = () => {
         .includes(currentTrack.uri)
     ) {
       try {
-        await requestWithToken(
+        const response = await requestWithToken(
           'PUT',
           'https://api.spotify.com/v1/me/player/play?device_id=' +
             currentDeviceId,
@@ -100,10 +102,16 @@ export const ArtistTemplate = () => {
             position_ms: 0,
           },
         );
+        if (response.status === 204) {
+          console.log('Playing artist ' + data.name);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
       } catch (error) {
         console.log(error);
-      } finally {
-        console.log('Playing artist ' + data.name);
       }
     } else {
       player.togglePlay().then(() => {
