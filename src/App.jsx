@@ -1,5 +1,10 @@
-import './App.css';
 import React, { useEffect, useState } from 'react';
+import qs from 'qs';
+import axios from 'axios';
+import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+
+import { client_id, client_secret, uri, scope } from './credentials';
+
 import Home from './pages/home/Home';
 import { SearchPage } from './pages/search/SearchPage';
 import {
@@ -14,16 +19,18 @@ import {
   CollectionAlbums,
   CollectionArtists,
 } from './pages/library';
-import { Login } from './pages/login/Login';
-import { Route, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import qs from 'qs';
-import { client_id, client_secret, uri, scope } from './credentials';
+
 import { Layout, Loading } from './components';
+
 import { TokenContext } from './utils/context';
 import { getCookie, setCookie } from './utils/useCookie';
+
+import './App.css';
+
 const App = () => {
   const [accessToken, setAccessToken] = useState('');
+  const navigate = useNavigate(null);
+  const location = useLocation();
 
   const useLogin = () => {
     window.location.href =
@@ -41,31 +48,35 @@ const App = () => {
     if (!getCookie('refresh_token')) {
       const querryString = window.location.search;
       const urlParams = new URLSearchParams(querryString);
-
-      window.history.pushState('', '', uri);
-      const options = qs.stringify({
-        grant_type: 'authorization_code',
-        code: urlParams.get('code'),
-        redirect_uri: uri,
-        client_id: client_id,
-        client_secret: client_secret,
-      });
-      axios
-        .post('https://accounts.spotify.com/api/token', options, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Basic ' + btoa(client_id + ':' + client_secret),
-          },
-        })
-        .then(({ data }) => {
-          setAccessToken(data.access_token);
-          setCookie('access_token', data.access_token, data.expires_in);
-          setCookie('refresh_token', data.refresh_token);
-        })
-        .catch((e) => {
-          console.log(e.response);
+      if (!urlParams.get('code')) {
+        navigate('/login');
+      } else {
+        window.history.pushState('', '', uri);
+        const options = qs.stringify({
+          grant_type: 'authorization_code',
+          code: urlParams.get('code'),
+          redirect_uri: uri,
+          client_id: client_id,
+          client_secret: client_secret,
         });
+        axios
+          .post('https://accounts.spotify.com/api/token', options, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: 'Basic ' + btoa(client_id + ':' + client_secret),
+            },
+          })
+          .then(({ data }) => {
+            setAccessToken(data.access_token);
+            setCookie('access_token', data.access_token, data.expires_in);
+            setCookie('refresh_token', data.refresh_token);
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      }
     } else {
+      if (location.pathname == '/login') navigate('/');
       const options = qs.stringify({
         grant_type: 'refresh_token',
         refresh_token: getCookie('refresh_token'),
@@ -90,13 +101,13 @@ const App = () => {
 
   return (
     <>
-      {!accessToken ? (
+      {!accessToken && getCookie('refresh_token') ? (
         <div className="loading__overlay">
           <Loading />
         </div>
       ) : (
         <TokenContext.Provider value={{ accessToken }}>
-          <Layout>
+          <Layout login={useLogin}>
             <Route exact path="/" element={<Home />} />
             <Route path="/playlist/:id" element={<PlaylistTemplate />} />
             <Route path="/album/:id" element={<AlbumTemplate />} />
@@ -114,7 +125,6 @@ const App = () => {
             <Route path="/collection/albums" element={<CollectionAlbums />} />
             <Route path="/collection/artists" element={<CollectionArtists />} />
             <Route path="/search/" element={<SearchPage />} />
-            <Route path="/login" element={<Login useLogin={useLogin} />} />
           </Layout>
         </TokenContext.Provider>
       )}
