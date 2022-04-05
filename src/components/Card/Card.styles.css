@@ -109,6 +109,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
+  width: 100%;
 }
 
 .card__info a:hover {
