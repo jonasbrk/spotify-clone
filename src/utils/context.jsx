@@ -28,3 +28,5 @@ export const PlayContext = createContext(() => {});
 export const AlbumContext = createContext({});
 
 export const isCoverOpen = createContext(false);
+
+export const Menssage = createContext({});

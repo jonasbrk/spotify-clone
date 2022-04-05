@@ -1,0 +1,25 @@
+.menssage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 4px;
+    background: #2e77d0;
+    padding: 8px 16px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(10% + 16px);
+    z-index: 100;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.menssage--important {
+    background: #e91429;
+}
+
+.menssage--alert {
+    background: #e9a414;
+}
