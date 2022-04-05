@@ -1,5 +1,4 @@
 <h1 style="text-align: center;"> Spotify clone</h1>
-<h2 style="text-align: center;">🚧 work in progress 🚧</h2>
 
 <p style="text-align: center;">Recration of official Spotify UI </p>
 
@@ -11,7 +10,10 @@
 
 <h1>About</h1>
 <p>Reacreating Spotify UI with React JS and consuming its API</p>
-<img src="src/assets/images/homepage.png" style="height:350px" >
+
+<p style='color: yellow'>Click on the image down below to see the full project working</p>
+
+[![Alt text](https://img.youtube.com/vi/MdgzTv1W8G0/0.jpg)](https://www.youtube.com/watch?v=MdgzTv1W8G0)
 
   <h1>Built With</h1>
 
@@ -28,5 +30,6 @@ Spotify player, with all controls.
 
 <img src="src/assets/images/player.gif" style="height:350px">
 
-<h2 >🚧 work in progress 🚧</h2>
-<h3 >this is not the finished project yet</h3>
+<h2>To see all the functionalities click on the button down below</h2>
+
+<a href="https://youtu.be/MdgzTv1W8G0">Click here</a>
