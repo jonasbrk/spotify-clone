@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './DisplayRow.styles.css';
-import { Card } from '../index';
-import { useContainerDimensions } from '../../utils';
-import { Loading } from '../Loading/Loading';
 
-export const DisplayRow = (props) => {
+import { Card } from '../';
+import { Loading } from '../';
+
+import { useContainerDimensions } from '../../utils';
+
+import './CardRowSection.styles.css';
+
+export const CardRowSection = (props) => {
   const { title, data } = props;
   const [itensLength, setItensLength] = useState('');
   const [newArray, setNewArray] = useState(

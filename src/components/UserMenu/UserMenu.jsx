@@ -8,6 +8,7 @@ import {
 } from '../../assets/svg/index';
 import { TokenContext, UserContext } from '../../utils/context';
 import axios from 'axios';
+import { setCookie } from '../../utils/useCookie';
 
 export const UserMenu = () => {
   const { accessToken } = useContext(TokenContext);
@@ -28,6 +29,11 @@ export const UserMenu = () => {
         setIsLoading(false);
       });
   }, [accessToken]);
+
+  const handleLeave = () => {
+    setCookie('refresh_token', '', 0);
+    window.location.reload();
+  };
 
   return (
     <>
@@ -93,9 +99,9 @@ export const UserMenu = () => {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <button onClick={() => handleLeave()}>
                   <span>Sair</span>
-                </a>
+                </button>
               </li>
             </ul>
           </div>

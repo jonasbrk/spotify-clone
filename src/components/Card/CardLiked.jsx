@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Card.styles.css';
 import { Button } from '..';
 import { PlayImg, Pause } from '../../assets/svg';
-import { SpotifyApi } from '../../utils';
+import { requestWithToken } from '../../utils';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
@@ -16,34 +17,45 @@ export const CardLiked = (props) => {
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
   const { accessToken } = useContext(TokenContext);
+  const { setMenssage } = useContext(Menssage);
   const { itemInfo } = props;
   const [isPlaying, setIsPlaying] = useState(false);
   const cardRef = useRef(null);
 
-  const handlePlay = () => {
-    console.log(currentTrack);
+  const handlePlay = async () => {
     if (
+      !currentTrack ||
       !itemInfo.tracks
         .map((e) => {
           return e.uri;
         })
-        .includes(currentTrack.uri) ||
-      currentTrack.init_load
+        .includes(currentTrack.uri)
     ) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-
-        {
-          uris: itemInfo.tracks.map((e) => {
-            return e.uri;
-          }),
-          offset: { position: 0 },
-          position_ms: 0,
-        },
-      );
+      try {
+        const response = await requestWithToken(
+          'PUT',
+          'https://api.spotify.com/v1/me/player/play?device_id=' +
+            currentDeviceId,
+          accessToken,
+          {
+            uris: itemInfo.tracks.map((e) => {
+              return e.uri;
+            }),
+            offset: { position: 0 },
+            position_ms: 0,
+          },
+        );
+        if (response.status === 204) {
+          console.log('Playing liked songs');
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -52,7 +64,15 @@ export const CardLiked = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == itemInfo.uri && currentTrack.play) {
+    if (
+      currentTrack &&
+      itemInfo.tracks
+        .map((e) => {
+          return e.uri;
+        })
+        .includes(currentTrack.uri) &&
+      currentTrack.play
+    ) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);

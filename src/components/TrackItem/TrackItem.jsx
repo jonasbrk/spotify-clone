@@ -1,17 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './TrackItem.styles.css';
-import { useMinutesString, useDateFormater } from '../../utils';
+import {
+  useMinutesString,
+  useDateFormater,
+  requestWithToken,
+} from '../../utils';
 import { Button } from '..';
-import { PlayImg, Pause, LikeImg } from '../../assets/svg';
-import { SpotifyApi } from '../../utils';
+import { PlayImg, Pause } from '../../assets/svg';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
 } from '../../utils/context';
-import axios from 'axios';
 
 import { OptionsDropdown } from '../';
 
@@ -21,42 +24,70 @@ export const TrackItem = (props) => {
   const { accessToken } = useContext(TokenContext);
   const { currentDeviceId } = useContext(DeviceContext);
   const { player } = useContext(PlayerContext);
+  const { setMenssage } = useContext(Menssage);
   const [isPlaying, setIsPlaying] = useState(false);
-  const Navigate = useNavigate(null);
-  const handleAddToPlaylist = () => {
-    axios(
+
+  const handleAddToPlaylist = async () => {
+    const request = await requestWithToken(
+      'PUT',
       `https://api.spotify.com/v1/playlists/${trackList.id}/tracks?uris=` +
         data.uri,
-      {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-        method: 'POST',
-      },
-    ).then(() => {
-      Navigate('/');
-      setTimeout(() => {
-        Navigate('/playlist/' + trackList.id);
-      }, 0);
-    });
+      accessToken,
+    );
+    try {
+      request();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      window.location.reload();
+    }
   };
 
-  const handlePlay = () => {
-    if (currentTrack.uri != data.uri || currentTrack.init_load) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-        {
-          context_uri:
-            type == 'search' || type == 'search--playlist'
-              ? data.album.uri
-              : trackList.uri,
-          offset: { position: index },
-          position_ms: 0,
-        },
-      );
+  const handlePlay = async () => {
+    const options = {
+      context_uri:
+        trackList.type == 'search' || trackList.type == 'search--playlist'
+          ? data.album.uri
+          : trackList.uri,
+      offset: {
+        position:
+          trackList.type == 'search' || trackList.type == 'search--playlist'
+            ? data.track_number - 1
+            : index,
+      },
+      position_ms: 0,
+    };
+    const options_artist = {
+      uris: trackList.tracks.map((e) => {
+        return e.uri;
+      }),
+      offset: { position: index },
+      position_ms: 0,
+    };
+
+    if (!currentTrack || currentTrack.uri != data.uri) {
+      try {
+        const response = await requestWithToken(
+          'PUT',
+          'https://api.spotify.com/v1/me/player/play?device_id=' +
+            currentDeviceId,
+          accessToken,
+          props.collection || trackList.type == 'artist'
+            ? options_artist
+            : options,
+        );
+
+        if (response.status === 204) {
+          console.log('Playing ' + data.name);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -65,7 +96,7 @@ export const TrackItem = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == data.uri && currentTrack.play) {
+    if (currentTrack && currentTrack.uri == data.uri && currentTrack.play) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);

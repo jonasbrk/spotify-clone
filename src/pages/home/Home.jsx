@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { DisplayRow, Loading, PageHeader } from '../../components/index';
-import { TokenContext } from '../../utils/context';
 import axios from 'axios';
 import qs from 'qs';
-import './Home.styles.css';
+
+import { CardRowSection, Loading, PageHeader } from '../../components/index';
+
 import { useResponseFormater } from '../../utils';
+import { TokenContext } from '../../utils/context';
+
+import './Home.styles.css';
+
 const Home = () => {
   const homeRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
@@ -32,11 +36,6 @@ const Home = () => {
   } = homeData;
 
   useEffect(() => {
-    console.log(homeData);
-    console.log(homeRef);
-  }, [homeData, homeRef]);
-
-  useEffect(() => {
     if (accessToken) {
       Promise.all([
         axios
@@ -45,10 +44,8 @@ const Home = () => {
               Authorization: 'Bearer ' + accessToken,
             },
           })
-          .then((response) =>
-            response.data.items.map((element) =>
-              useResponseFormater(element.track),
-            ),
+          .then(({ data }) =>
+            data.items.map((element) => useResponseFormater(element.track)),
           )
           .catch((e) => console.log(e)),
         axios
@@ -56,17 +53,9 @@ const Home = () => {
             headers: {
               Authorization: 'Bearer ' + accessToken,
             },
-            data: {
-              items: [{}],
-              limit: 50,
-              next: null,
-              offset: 0,
-              previous: null,
-              total: 50,
-            },
           })
-          .then((response) =>
-            response.data.items.map((element) => useResponseFormater(element)),
+          .then(({ data }) =>
+            data.items.map((element) => useResponseFormater(element)),
           ),
 
         axios
@@ -74,17 +63,9 @@ const Home = () => {
             headers: {
               Authorization: 'Bearer ' + accessToken,
             },
-            data: {
-              items: [{}],
-              limit: 50,
-              next: null,
-              offset: 0,
-              previous: null,
-              total: 50,
-            },
           })
-          .then((response) =>
-            response.data.items.map((element) => useResponseFormater(element)),
+          .then(({ data }) =>
+            data.items.map((element) => useResponseFormater(element)),
           ),
 
         axios
@@ -93,10 +74,8 @@ const Home = () => {
               Authorization: 'Bearer ' + accessToken,
             },
           })
-          .then((response) =>
-            response.data.albums.items.map((element) =>
-              useResponseFormater(element),
-            ),
+          .then(({ data }) =>
+            data.albums.items.map((element) => useResponseFormater(element)),
           ),
       ])
         .then((data) => {
@@ -129,7 +108,7 @@ const Home = () => {
               return index === self.findIndex((t) => t === value);
             });
 
-          const recomendationDataRequest = qs.stringify({
+          const recomendationQuerry = qs.stringify({
             seed_artists: recent_played[0].artists[0].id,
             seed_genres: top_user_genres[0],
             seed_tracks: top_user_tracks[0].id,
@@ -139,17 +118,15 @@ const Home = () => {
             axios
               .get(
                 'https://api.spotify.com/v1/recommendations?' +
-                  recomendationDataRequest,
+                  recomendationQuerry,
                 {
                   headers: {
                     Authorization: 'Bearer ' + accessToken,
                   },
                 },
               )
-              .then((response) =>
-                response.data.tracks.map((element) =>
-                  useResponseFormater(element),
-                ),
+              .then(({ data }) =>
+                data.tracks.map((element) => useResponseFormater(element)),
               ),
             axios
               .get(
@@ -160,8 +137,8 @@ const Home = () => {
                   },
                 },
               )
-              .then((response) =>
-                response.data.playlists.items.map((element) =>
+              .then(({ data }) =>
+                data.playlists.items.map((element) =>
                   useResponseFormater(element),
                 ),
               ),
@@ -174,8 +151,8 @@ const Home = () => {
                   },
                 },
               )
-              .then((response) =>
-                response.data.playlists.items.map((element) =>
+              .then(({ data }) =>
+                data.playlists.items.map((element) =>
                   useResponseFormater(element),
                 ),
               ),
@@ -188,8 +165,8 @@ const Home = () => {
                   },
                 },
               )
-              .then((response) =>
-                response.data.playlists.items.map((element) =>
+              .then(({ data }) =>
+                data.playlists.items.map((element) =>
                   useResponseFormater(element),
                 ),
               ),
@@ -214,16 +191,6 @@ const Home = () => {
                 recommendation: recommendation,
               });
               setLoading(false);
-              console.log({
-                recent_played: recent_played,
-                top_user_tracks: top_user_tracks,
-                top_user_artists: top_user_artists,
-                new_releases: new_releases,
-                top_genre_playlists: top_genre_playlists,
-                top_list_category: top_list_category,
-                mood_category: mood_category,
-                recommendation: recommendation,
-              });
             })
             .catch((e) => console.log(e.response));
         })
@@ -242,7 +209,7 @@ const Home = () => {
           <div className="page__wrapper">
             <PageHeader bgColor="rgb(32, 120, 160)" />
             <div className="home" ref={homeRef}>
-              <DisplayRow
+              <CardRowSection
                 title="Tocado recentemente"
                 data={recent_played.filter(
                   (value, index, self) =>
@@ -250,19 +217,25 @@ const Home = () => {
                     self.findIndex((t) => t.album.id === value.album.id),
                 )}
               />
-              <DisplayRow title="Recomendados de hoje" data={recommendation} />
-              <DisplayRow
+              <CardRowSection
+                title="Recomendados de hoje"
+                data={recommendation}
+              />
+              <CardRowSection
                 title="As mais ouvidas por você"
                 data={top_user_tracks}
               />
-              <DisplayRow
+              <CardRowSection
                 title="Artistas mais ouvidos por você"
                 data={top_user_artists}
               />
-              <DisplayRow title="Pop" data={top_genre_playlists} />
-              <DisplayRow title="Seu astral" data={mood_category} />
-              <DisplayRow title="Tops do momento" data={top_list_category} />
-              <DisplayRow title="Lançamentos" data={new_releases} />
+              <CardRowSection title="Pop" data={top_genre_playlists} />
+              <CardRowSection title="Seu astral" data={mood_category} />
+              <CardRowSection
+                title="Tops do momento"
+                data={top_list_category}
+              />
+              <CardRowSection title="Lançamentos" data={new_releases} />
             </div>
           </div>
         </>

@@ -1,6 +1,6 @@
 export { Header } from './Header/Header';
-export { DisplayRow } from './DisplayRow/DisplayRow';
-export { DisplayFull } from './DisplayFull/DisplayFull';
+export { CardRowSection } from './CardRowSection/CardRowSection';
+export { CardFullSection } from './CardFullSection/CardFullSection';
 export { SideMenu } from './SideMenu/SideMenu';
 export { Player } from './Player/Player';
 export { Button } from './Button/Button';
@@ -26,3 +26,4 @@ export { EditInfo } from './EditInfo/EditInfo';
 export { DropdownMenu } from './DropdownMenu/DropdownMenu';
 export { OptionsDropdown } from './OptionsDropdown/OptionsDropdown';
 export { AddSongs } from './AddSongs/AddSongs';
+export { FlashMenssage } from './FlashMenssage/FlashMenssage';

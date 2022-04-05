@@ -28,12 +28,22 @@ export function useResponseFormater(response) {
             uri: response[key].uri,
             artists: response[key].artists,
             name: response[key].name,
-            images: response[key].images,
+            images: !response[key].images.length
+              ? undefined
+              : response[key].images,
           },
         };
-      }
-      if (key == 'description' && !response[key].search('<a') > 0) {
+      } else if (
+        key == 'description' &&
+        response.description.search('<a') >= 0
+      ) {
+        console.log(response.description);
         formatedData = { ...formatedData, [key]: response.name };
+      } else if (key == 'images') {
+        formatedData = {
+          ...formatedData,
+          [key]: response.images.length ? response.images : undefined,
+        };
       } else {
         formatedData = { ...formatedData, [key]: response[key] };
       }

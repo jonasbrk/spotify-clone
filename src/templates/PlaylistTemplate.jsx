@@ -4,15 +4,15 @@ import axios from 'axios';
 
 import { Loading, PageBanner, TrackList, AddSongs } from '../components';
 
-import { generateRandomColor } from '../utils';
+import { generateRandomColor, requestWithToken } from '../utils';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
   UserContext,
 } from '../utils/context';
-import { SpotifyApi } from '../utils';
 
 import './styles/Template.styles.css';
 
@@ -22,6 +22,7 @@ export const PlaylistTemplate = () => {
   const { currentDeviceId } = useContext(DeviceContext);
   const { currentUser } = useContext(UserContext);
   const { player } = useContext(PlayerContext);
+  const { setMenssage } = useContext(Menssage);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
@@ -31,7 +32,7 @@ export const PlaylistTemplate = () => {
   useEffect(() => {
     setData('');
     setLoading(true);
-    if (accessToken)
+    if (accessToken && currentUser)
       Promise.all([
         axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
           headers: {
@@ -78,22 +79,33 @@ export const PlaylistTemplate = () => {
 
         setLoading(false);
       });
-  }, [id, accessToken]);
+  }, [id, accessToken, currentUser]);
 
-  const handlePlay = () => {
-    if (currentTrack.context.uri != data.uri) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-
-        {
-          context_uri: data.uri,
-          offset: { position: 0 },
-          position_ms: 0,
-        },
-      );
+  const handlePlay = async () => {
+    if (!currentTrack || currentTrack.context.uri != data.uri) {
+      try {
+        const response = await requestWithToken(
+          'PUT',
+          'https://api.spotify.com/v1/me/player/play?device_id=' +
+            currentDeviceId,
+          accessToken,
+          {
+            context_uri: data.uri,
+            offset: { position: 0 },
+            position_ms: 0,
+          },
+        );
+        if (response.status === 204) {
+          console.log('Playing playlist ' + data.name);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -102,12 +114,14 @@ export const PlaylistTemplate = () => {
   };
 
   useEffect(() => {
-    if (currentTrack.context) {
-      if (currentTrack.context.uri == data.uri && currentTrack.play) {
-        setIsPlaying(true);
-      } else setIsPlaying(false);
-    }
-  }, [currentTrack]);
+    if (
+      currentTrack.context &&
+      currentTrack.context.uri == data.uri &&
+      currentTrack.play
+    ) {
+      setIsPlaying(true);
+    } else setIsPlaying(false);
+  }, [currentTrack, data]);
 
   return (
     <>

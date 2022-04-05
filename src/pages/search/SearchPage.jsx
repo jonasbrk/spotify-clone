@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
-  DisplayFull,
+  CardFullSection,
   TrackList,
   PageHeader,
   Loading,
-  SearchBar,
-  DisplayRow,
+  CardRowSection,
 } from '../../components';
 import { TokenContext } from '../../utils/context';
 import { generateRandomColor, useResponseFormater } from '../../utils';
@@ -88,15 +87,15 @@ export const SearchPage = () => {
                     }}
                   />
                 </div>
-                <DisplayRow
+                <CardRowSection
                   title="Artists"
-                  data={searchData.artists.filter((e) => e.images.length != 0)}
+                  data={searchData.artists.filter((e) => e.images != undefined)}
                 />
-                <DisplayRow title="Albums" data={searchData.albums} />
-                <DisplayRow title="Playlists" data={searchData.playlists} />
+                <CardRowSection title="Albums" data={searchData.albums} />
+                <CardRowSection title="Playlists" data={searchData.playlists} />
               </>
             ) : (
-              <DisplayFull title="Navegar por todas as seções">
+              <CardFullSection title="Navegar por todas as seções">
                 {categoriesData.categories.items.map((e, index) => (
                   <Link
                     style={{ backgroundColor: generateRandomColor() }}
@@ -111,7 +110,7 @@ export const SearchPage = () => {
                     </div>
                   </Link>
                 ))}
-              </DisplayFull>
+              </CardFullSection>
             )}
           </div>
         </div>

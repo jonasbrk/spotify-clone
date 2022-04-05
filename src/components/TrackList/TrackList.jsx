@@ -3,7 +3,7 @@ import { TrackItem } from '../';
 import { ClockImg } from '../../assets/svg';
 import './TrackList.styles.css';
 
-export const TrackList = ({ data, var1, var2 }) => {
+export const TrackList = ({ data, var1, var2, collection }) => {
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -63,6 +63,7 @@ export const TrackList = ({ data, var1, var2 }) => {
                 key={index}
                 index={index}
                 data={e}
+                collection={collection}
               />
             );
           })}
