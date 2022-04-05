@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { DisplayFull, PageHeader, Loading, CardLiked } from '../../components';
+import {
+  CardFullSection,
+  PageHeader,
+  Loading,
+  CardLiked,
+} from '../../components';
 
 import { TokenContext } from '../../utils/context';
 import { useResponseFormater } from '../../utils';
@@ -23,10 +28,11 @@ export const CollectionPlaylists = () => {
               Authorization: 'Bearer ' + accessToken,
             },
           })
-          .then((e) => {
+          .then(({ data }) => {
             setUserPlaylists(
-              e.data.items.map((item) => useResponseFormater(item)),
+              data.items.map((item) => useResponseFormater(item)),
             );
+            console.log(data.items.map((item) => useResponseFormater(item)));
           }),
 
         axios
@@ -58,14 +64,14 @@ export const CollectionPlaylists = () => {
           <PageHeader bgColor="rgb(18, 18, 18)" disabled={true} />
 
           <div className="collection">
-            <DisplayFull
+            <CardFullSection
               title="Playlists"
               data={userPlaylists.map((e) => {
                 return { ...e, description: `De ${e.owner.display_name}` };
               })}
             >
               <CardLiked itemInfo={userLiked} />
-            </DisplayFull>
+            </CardFullSection>
           </div>
         </div>
       )}

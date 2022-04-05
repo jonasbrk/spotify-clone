@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { NoArtistImg } from '../../assets/svg';
-import { DisplayFull, PageHeader, Loading } from '../../components';
+import { CardFullSection, PageHeader, Loading } from '../../components';
 
 import { TokenContext } from '../../utils/context';
 import { useResponseFormater } from '../../utils';
@@ -41,7 +41,7 @@ export const CollectionArtists = () => {
 
           <div className="collection">
             {userArtists.length > 0 ? (
-              <DisplayFull title="Artists" data={userArtists} />
+              <CardFullSection title="Artists" data={userArtists} />
             ) : (
               <div className="no_info">
                 <div className="no_info__img">

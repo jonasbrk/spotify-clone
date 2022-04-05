@@ -8,6 +8,13 @@
   background-color: #181818;
   border-top: 1px solid #282828;
 }
+
+.player__controls__disabled button,
+.player__controls__disabled input {
+  cursor: not-allowed;
+  opacity: 0.5 !important;
+}
+
 .player__display,
 .player__options,
 .player__controls,

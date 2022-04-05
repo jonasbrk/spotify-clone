@@ -17,7 +17,7 @@ export const DeviceButton = () => {
 
   useEffect(() => {
     console.log(isComponentVisible);
-    if (!isComponentVisible) {
+    if (!isComponentVisible && accessToken) {
       axios
         .get('https://api.spotify.com/v1/me/player/devices', {
           headers: {
@@ -34,7 +34,7 @@ export const DeviceButton = () => {
           console.log(e.response);
         });
     }
-  }, [isComponentVisible]);
+  }, [isComponentVisible, accessToken]);
 
   return (
     <div className="devices__wrapper" ref={ref1}>

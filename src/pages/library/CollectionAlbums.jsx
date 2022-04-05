@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { NoAlbumImg } from '../../assets/svg';
-import { DisplayFull, PageHeader, Loading } from '../../components';
+import { CardFullSection, PageHeader, Loading } from '../../components';
 
 import { TokenContext } from '../../utils/context';
 import { useResponseFormater } from '../../utils';
@@ -42,7 +42,7 @@ export const CollectionAlbums = () => {
           <PageHeader bgColor="rgb(18, 18, 18)" disabled={true} />
           <div className="collection">
             {userAlbums.length ? (
-              <DisplayFull title="Albums" type="albums" data={userAlbums} />
+              <CardFullSection title="Albums" type="albums" data={userAlbums} />
             ) : (
               <div className="no_info">
                 <div className="no_info__img">

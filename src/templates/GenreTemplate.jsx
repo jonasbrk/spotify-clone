@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { DisplayFull, Loading, PageHeader } from '../components';
+import { CardFullSection, Loading, PageHeader } from '../components';
 
 import { TokenContext } from '../utils/context';
 import { useResponseFormater } from '../utils';
@@ -60,7 +60,7 @@ export const GenreTemplate = () => {
             <h1>{pageData.name}</h1>
           </div>
           <div className="genre__template">
-            <DisplayFull data={data} />
+            <CardFullSection data={data} />
           </div>
         </div>
       )}

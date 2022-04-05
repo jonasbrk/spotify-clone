@@ -10,7 +10,9 @@ export const PlaybackProgress = (props) => {
   const { currentTrack } = useContext(TrackContext);
 
   const [audioMaxLength, setAudioMaxLength] = useState(useMinutesString(0));
-  const [audioPlayedLength, setAudioPlayedLength] = useState(0);
+  const [audioPlayedLength, setAudioPlayedLength] = useState(
+    useMinutesString(0),
+  );
   const [audioValue, setAudioValue] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -24,7 +26,7 @@ export const PlaybackProgress = (props) => {
       setAudioValue(playbackState.progress);
       setAudioMaxLength(useMinutesString(currentTrack.duration_ms));
     }
-  }, [playbackState]);
+  }, [currentTrack]);
 
   useEffect(() => {
     const percentage = ((audioValue * 100) / currentTrack.duration_ms).toFixed(
@@ -56,7 +58,7 @@ export const PlaybackProgress = (props) => {
         clearTimeout(Counter);
       };
     }
-  }, [audioValue, playbackState.play, isDragging]);
+  }, [audioValue, currentTrack.play, isDragging]);
 
   return (
     <div className="player__section--2">
