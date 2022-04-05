@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import './DisplayFull.styles.css';
-import { Card } from '../index';
+import React from 'react';
 
-export const DisplayFull = (props) => {
+import { Card } from '../';
+
+import './CardFullSection.styles.css';
+
+export const CardFullSection = (props) => {
   const { title, data, type, children } = props;
 
   return (
