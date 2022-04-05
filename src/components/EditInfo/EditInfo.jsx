@@ -50,6 +50,14 @@ export const EditInfo = ({ isOpen, setIsOpen, data }) => {
   };
 
   const handleSaveChange = () => {
+    const option = {
+      name: titleInput,
+    };
+
+    const option_description = {
+      name: titleInput,
+      description: descriptionInput,
+    };
     Promise.all([
       base64 &&
         axios(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
@@ -65,10 +73,7 @@ export const EditInfo = ({ isOpen, setIsOpen, data }) => {
           Authorization: 'Bearer ' + accessToken,
         },
         method: 'PUT',
-        data: {
-          name: titleInput,
-          description: descriptionInput,
-        },
+        data: descriptionInput ? option_description : option,
       }),
     ]).then(() => {
       console.log('feito');

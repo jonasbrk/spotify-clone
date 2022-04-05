@@ -11,18 +11,21 @@ import {
 import {
   DeviceContext,
   isCoverOpen,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
 } from '../../utils/context';
 import { QueueImg, LikeImg } from '../../assets/svg/index';
 import axios from 'axios';
+import { requestWithToken } from '../../utils';
 
 export const Player = () => {
   const { accessToken } = useContext(TokenContext);
   const { setPlayer } = useContext(PlayerContext);
   const { setCurrentDeviceId } = useContext(DeviceContext);
   const { currentTrack, setCurrentTrack } = useContext(TrackContext);
+  const { setMenssage } = useContext(Menssage);
   const [playbackState, setPlaybackState] = useState('');
   const { coverOpen } = useContext(isCoverOpen);
   const [isLiked, setIsLiked] = useState(false);
@@ -30,33 +33,35 @@ export const Player = () => {
   const getPlayerInfo = () => {
     const getFunc = async () => {
       try {
-        const response = await axios.get(
+        const response = await requestWithToken(
+          'GET',
           'https://api.spotify.com/v1/me/player',
-          {
-            headers: {
-              Authorization: 'Bearer ' + accessToken,
-            },
-          },
+          accessToken,
         );
         if (response.status === 200) {
-          const { data } = response;
-          const { is_playing, item, progress_ms, repeat_state, shuffle_state } =
-            data;
-          setCurrentTrack({ ...item, play: is_playing });
+          const {
+            is_playing,
+            item,
+            progress_ms,
+            repeat_state,
+            shuffle_state,
+            context,
+          } = response.data;
+          setCurrentTrack({ ...item, play: is_playing, context: context });
           setPlaybackState((state) => ({
             ...state,
-            play: is_playing,
             shuffle: shuffle_state,
             repeat_state: repeat_state !== 'off',
-            duration: item.duration_ms,
             progress: progress_ms,
           }));
         } else if (response.status === 204) {
-          console.log(
-            'Please select a device to start listening on SPOTIFY CLONE',
-          );
+          setMenssage({
+            text: 'Please select a device to start listening on SPOTIFY CLONE',
+          });
         } else {
-          console.log('Error from Spotify Server');
+          setMenssage({
+            text: 'Error from Spotify Server',
+          });
         }
       } catch (error) {
         console.log(error);
@@ -103,7 +108,6 @@ export const Player = () => {
       try {
         if (state) {
           const {
-            duration,
             loading,
             paused,
             position,
@@ -112,27 +116,22 @@ export const Player = () => {
             track_window,
             context,
           } = state;
-          console.log(state);
-          const { current_track, previous_tracks, next_tracks } = track_window;
-          setCurrentTrack({
-            ...current_track,
-            play: !paused,
-            context: context,
-          });
-          console.log(repeat_mode);
+
+          const { current_track } = track_window;
+          if (!loading) {
+            setCurrentTrack({
+              ...current_track,
+              play: !paused,
+              context: context,
+            });
+          }
+
           setPlaybackState((state) => ({
             ...state,
             loading: loading,
-            play: !paused,
             shuffle: shuffle,
             repeat_state: repeat_mode !== 0,
             progress: position,
-            duration: duration,
-            track_window: {
-              current_track: current_track,
-              previous_tracks: [...previous_tracks, previous_tracks],
-              next_tracks: [...next_tracks, next_tracks],
-            },
           }));
         }
       } catch (error) {
@@ -163,30 +162,53 @@ export const Player = () => {
     // eslint-disable-next-line
 }, [accessToken]);
 
-  useEffect(() => {
-    axios
-      .get(
-        'https://api.spotify.com/v1/me/tracks/contains?ids=' + currentTrack.id,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        },
-      )
-      .then((e) => {
-        setIsLiked(e.data[0]);
-      });
+  useEffect(async () => {
+    if (currentTrack) {
+      try {
+        const response = await requestWithToken(
+          'GET',
+          'https://api.spotify.com/v1/me/tracks/contains?ids=' +
+            currentTrack.id,
+          accessToken,
+        );
+        if (response.status == 200) {
+          setIsLiked(response.data[0]);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }, [currentTrack]);
 
-  const handleLikeSong = () => {
-    axios('https://api.spotify.com/v1/me/tracks?ids=' + currentTrack.id, {
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-      },
-      method: isLiked ? 'DELETE' : 'PUT',
-    }).then((e) => {
-      setIsLiked(!isLiked);
-    });
+  const handleLikeSong = async () => {
+    try {
+      const response = await requestWithToken(
+        isLiked ? 'DELETE' : 'PUT',
+        'https://api.spotify.com/v1/me/tracks?ids=' + currentTrack.id,
+        accessToken,
+      );
+
+      if (response.status === 200) {
+        setIsLiked(!isLiked);
+        setMenssage({
+          text: !isLiked
+            ? 'Adicionado à sua biblioteca'
+            : 'Removido de sua biblioteca',
+        });
+      } else {
+        setMenssage({
+          text: 'Opps, something went wrong!',
+          type: 'important',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -196,7 +218,7 @@ export const Player = () => {
       >
         {currentTrack && (
           <>
-            <SongInfo />
+            {currentTrack && <SongInfo />}
             <Button
               type="player"
               src={<LikeImg />}
@@ -206,7 +228,11 @@ export const Player = () => {
           </>
         )}
       </div>
-      <div className="player__controls">
+      <div
+        className={` player__controls ${
+          !currentTrack && 'player__controls__disabled'
+        }`}
+      >
         <Controls playbackState={playbackState} />
         <PlaybackProgress playbackState={playbackState} />
       </div>

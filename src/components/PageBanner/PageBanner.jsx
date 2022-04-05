@@ -5,8 +5,8 @@ import axios from 'axios';
 import { LikeImg, Pause, PlayImg } from '../../assets/svg';
 import { Button, Cover, EditInfo, OptionsDropdown } from '../';
 
-import { TokenContext } from '../../utils/context';
-import { useMinutesString } from '../../utils';
+import { Menssage, TokenContext } from '../../utils/context';
+import { requestWithToken, useMinutesString } from '../../utils';
 
 import './PageBanner.styles.css';
 
@@ -14,6 +14,7 @@ export const PageBanner = ({ play, data, colection }) => {
   const headerBgRef = useRef(null);
   const headerGradientRef = useRef(null);
   const { accessToken } = useContext(TokenContext);
+  const { setMenssage } = useContext(Menssage);
   const [handlePlay, isPlaying] = play;
   const [isOpen, setIsOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(data && data.isLiked);
@@ -42,21 +43,36 @@ export const PageBanner = ({ play, data, colection }) => {
     };
   }, [headerBgRef]);
 
-  const handleFollow = () => {
+  const handleFollow = async () => {
     let url = {
       artist: `https://api.spotify.com/v1/me/following?type=artist&ids=${data.id}`,
       playlist: `https://api.spotify.com/v1/playlists/${data.id}/followers`,
       album: `https://api.spotify.com/v1/me/albums?ids=${data.id}`,
     };
 
-    axios(url[data.type], {
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-      },
-      method: isLiked ? 'DELETE' : 'PUT',
-    }).then(() => {
-      setIsLiked(!isLiked);
-    });
+    try {
+      const response = await requestWithToken(
+        isLiked ? 'DELETE' : 'PUT',
+        url[data.type],
+        accessToken,
+      );
+
+      if (response.status === 204 || response.status === 200) {
+        setIsLiked(!isLiked);
+        setMenssage({
+          text: !isLiked
+            ? 'Adicionado à sua biblioteca'
+            : 'Removido de sua biblioteca',
+        });
+      } else {
+        setMenssage({
+          text: 'Opps, something went wrong!',
+          type: 'important',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

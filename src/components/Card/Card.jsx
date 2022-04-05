@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '..';
+import { Button, setMenssage } from '..';
 import { PlayImg, Pause, SongImg } from '../../assets/svg';
-import { SpotifyApi } from '../../utils/';
+import { requestWithToken } from '../../utils/';
 import {
   DeviceContext,
+  Menssage,
   PlayerContext,
   TokenContext,
   TrackContext,
@@ -17,27 +18,48 @@ export const Card = (props) => {
   const { currentTrack } = useContext(TrackContext);
   const { player } = useContext(PlayerContext);
   const { accessToken } = useContext(TokenContext);
+  const { setMenssage } = useContext(Menssage);
   const { data } = props;
   const [isPlaying, setIsPlaying] = useState(false);
   const { id, uri, name, type } = data;
   const cardRef = useRef(null);
 
-  const handlePlay = () => {
-    if (currentTrack.uri != uri) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
+  const convertUri = (uri) => uri.substr(7, uri.length).replaceAll(':', '/');
 
-        {
-          context_uri: type == 'track' ? data.album.uri : uri,
-          offset: type == 'artist' && {
-            position: type == 'track' ? data.track_number - 1 : 0,
-          },
-          position_ms: 0,
+  const handlePlay = async () => {
+    if (!currentTrack || currentTrack.uri != uri) {
+      const options = {
+        context_uri: type == 'track' ? data.album.uri : uri,
+        offset: {
+          position: type == 'track' ? data.track_number - 1 : 0,
         },
-      );
+        position_ms: 0,
+      };
+      const options_artist = {
+        context_uri: type == 'track' ? data.album.uri : uri,
+        position_ms: 0,
+      };
+
+      try {
+        const response = await requestWithToken(
+          'PUT',
+          'https://api.spotify.com/v1/me/player/play?device_id=' +
+            currentDeviceId,
+          accessToken,
+          type == 'artist' ? options_artist : options,
+        );
+
+        if (response.status === 204) {
+          console.log('Playing ' + data.name);
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -46,7 +68,10 @@ export const Card = (props) => {
   };
 
   useEffect(() => {
-    if (currentTrack.uri == uri && currentTrack.play) {
+    if (
+      (currentTrack && currentTrack.uri == uri && currentTrack.play) ||
+      (currentTrack && currentTrack.context.uri == uri && currentTrack.play)
+    ) {
       setIsPlaying(true);
     } else setIsPlaying(false);
   }, [currentTrack]);
@@ -89,20 +114,26 @@ export const Card = (props) => {
           )}
         </div>
 
-        <Button
-          onClick={() => {
-            handlePlay();
-          }}
-          type="player"
-          custom={`play--buton--card ${
-            isPlaying && 'play--buton--card--playing'
-          }`}
-          src={isPlaying ? <Pause /> : <PlayImg />}
-        />
+        {!(type == 'artist') && (
+          <Button
+            onClick={() => {
+              handlePlay();
+            }}
+            type="player"
+            custom={`play--buton--card ${
+              isPlaying && 'play--buton--card--playing'
+            }`}
+            src={isPlaying ? <Pause /> : <PlayImg />}
+          />
+        )}
       </div>
       <div className="card__info">
         <span className="card__title">
-          <Link to={`/album/${id}`}>{name}</Link>
+          <Link
+            to={data.album ? convertUri(data.album.uri) : convertUri(data.uri)}
+          >
+            {name}
+          </Link>
         </span>
         <span className="card__descripton">
           {data.description && data.description}

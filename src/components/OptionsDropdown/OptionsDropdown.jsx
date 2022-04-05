@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ArrowUpMenuImg, OptionsImg } from '../../assets/svg';
+import { OptionsImg } from '../../assets/svg';
 import { DropdownMenu } from '../';
 import './OptionsDropdown.styles.css';
-import { DeviceContext, TokenContext } from '../../utils/context';
+import { Menssage, TokenContext } from '../../utils/context';
 import axios from 'axios';
+import { requestWithToken } from '../../utils';
 
 export const OptionsDropdown = ({
   data,
@@ -13,17 +14,31 @@ export const OptionsDropdown = ({
   setIsLiked,
 }) => {
   const { accessToken } = useContext(TokenContext);
+  const { setMenssage } = useContext(Menssage);
 
-  const handleAddQueue = () => {
-    axios(`https://api.spotify.com/v1/me/player/queue?uri=${data.uri}`, {
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-      },
-      method: 'POST',
-    });
+  const handleAddQueue = async () => {
+    try {
+      const response = await requestWithToken(
+        'POST',
+        `https://api.spotify.com/v1/me/player/queue?uri=${data.uri}`,
+        accessToken,
+      );
+      if (response.status === 204) {
+        setMenssage({
+          text: 'Na fila',
+        });
+      } else {
+        setMenssage({
+          text: 'Opps, something went wrong!',
+          type: 'important',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleFollow = () => {
+  const handleFollow = async () => {
     if (data.type != 'track') {
       let url = {
         artist: `https://api.spotify.com/v1/me/following?type=artist&ids=${data.id}`,
@@ -31,14 +46,29 @@ export const OptionsDropdown = ({
         album: `https://api.spotify.com/v1/me/albums?id=${data.id}`,
       };
 
-      axios(url[data.type], {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-        method: isLiked ? 'DELETE' : 'PUT',
-      }).then(() => {
-        setIsLiked(!isLiked);
-      });
+      try {
+        const response = await requestWithToken(
+          isLiked ? 'DELETE' : 'PUT',
+          url[data.type],
+          accessToken,
+        );
+
+        if (response.status === 204) {
+          setIsLiked(!isLiked);
+          setMenssage({
+            text: !isLiked
+              ? 'Adicionado à sua biblioteca'
+              : 'Removido de sua biblioteca',
+          });
+        } else {
+          setMenssage({
+            text: 'Opps, something went wrong!',
+            type: 'important',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

@@ -11,7 +11,7 @@ import {
   TokenContext,
   TrackContext,
 } from '../utils/context';
-import { SpotifyApi } from '../utils';
+import { requestWithToken } from '../utils';
 
 import './styles/Template.styles.css';
 
@@ -55,10 +55,10 @@ export const ArtistTemplate = () => {
           },
         ),
       ]).then((e) => {
-        console.log(e);
         const [artist, isLiked, tracksData] = e;
-        const { tracks, uri } = tracksData.data;
-        const { name, id, images, type, followers, description } = artist.data;
+        const { tracks } = tracksData.data;
+        const { name, id, images, type, followers, description, uri } =
+          artist.data;
         setData({
           uri: uri,
           name: name,
@@ -76,29 +76,35 @@ export const ArtistTemplate = () => {
       });
   }, [id, accessToken]);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (
+      !currentTrack ||
+      currentTrack.context.uri ||
       !data.tracks
         .map((e) => {
           return e.uri;
         })
-        .includes(currentTrack.uri) ||
-      currentTrack.init_load
+        .includes(currentTrack.uri)
     ) {
-      SpotifyApi(
-        'PUT',
-        accessToken,
-        'https://api.spotify.com/v1/me/player/play?device_id=' +
-          currentDeviceId,
-
-        {
-          uris: data.tracks.map((e) => {
-            return e.uri;
-          }),
-          offset: { position: 0 },
-          position_ms: 0,
-        },
-      );
+      try {
+        await requestWithToken(
+          'PUT',
+          'https://api.spotify.com/v1/me/player/play?device_id=' +
+            currentDeviceId,
+          accessToken,
+          {
+            uris: data.tracks.map((e) => {
+              return e.uri;
+            }),
+            offset: { position: 0 },
+            position_ms: 0,
+          },
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log('Playing artist ' + data.name);
+      }
     } else {
       player.togglePlay().then(() => {
         console.log('Toggled playback!');
@@ -107,20 +113,17 @@ export const ArtistTemplate = () => {
   };
 
   useEffect(() => {
-    if (currentTrack.context) {
+    if (currentTrack && data) {
+      console.log(data.tracks.map((e) => e.uri));
       if (
         !currentTrack.context.uri &&
-        data.tracks
-          .map((e) => {
-            return e.uri;
-          })
-          .includes(currentTrack.uri) &&
+        data.tracks.map((e) => e.uri).includes(currentTrack.uri) &&
         currentTrack.play
       ) {
         setIsPlaying(true);
       } else setIsPlaying(false);
     }
-  }, [currentTrack]);
+  }, [currentTrack, data]);
 
   return (
     <>
