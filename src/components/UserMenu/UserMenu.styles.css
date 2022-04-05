@@ -89,17 +89,29 @@
 }
 
 .menu__list,
-.menu__list a {
+.menu__list a,
+.menu__list button
+{
   text-decoration: none;
   outline: none;
   list-style: none;
 }
 
 .menu__list li,
-.menu__list li a {
+.menu__list li a,
+.menu__list li button
+ {
   width: 100%;
   height: 40px;
   color: white;
+}
+
+.menu__list li button{
+  background-color: transparent;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
 }
 
 .menu__list {
@@ -113,7 +125,9 @@
   display: flex;
   border-radius: 4px;
 }
-.menu__list li a {
+.menu__list li a,
+.menu__list li button
+{
   display: flex;
   align-items: center;
   padding: 12px;

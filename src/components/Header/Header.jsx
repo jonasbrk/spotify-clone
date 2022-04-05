@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import './Header.styles.css';
 import { Button, UserMenu } from '../index';
-import { ArrowLeftImg, ArrowRigthImg } from '../../assets/svg/index';
+import {
+  ArrowLeftImg,
+  ArrowRigthImg,
+  LogoSmallImg,
+} from '../../assets/svg/index';
 import {
   useLocation,
   useNavigate,
@@ -10,8 +14,8 @@ import {
 } from 'react-router-dom';
 import { SearchBar } from '../SearchBar/SearchBar';
 
-export const Header = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+export const Header = ({ login }) => {
+  const [, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
   const navigateTo = (index) => {
@@ -74,7 +78,16 @@ export const Header = () => {
         )}
       </div>
       <div className="header__wrapper">
-        <UserMenu />
+        {location.pathname == '/login' ? (
+          <button className="login__button" onClick={() => login()}>
+            <div className="button__icon">
+              <LogoSmallImg />
+            </div>
+            Login on Spotify
+          </button>
+        ) : (
+          <UserMenu />
+        )}
       </div>
     </header>
   );

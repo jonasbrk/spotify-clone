@@ -47,3 +47,31 @@ header {
 }
 
 
+.login__button {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  width: 180px;
+  padding: 4px;
+  gap: calc(40px - 30px);
+  border-radius: 50px;
+  color: black;
+  border: transparent;
+  font-weight: 700;
+  color: black;
+  background: white;
+
+}
+
+.login__button:hover {
+  transform: scale(1.1);
+}
+
+.login__button .button__icon {
+  height: fit-content;
+  width: fit-content;
+}
+.login__button svg {
+  height: 30px;
+  width: 30px;
+}
